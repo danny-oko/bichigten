@@ -15,7 +15,7 @@ model User {
   createdAt      DateTime             @default(now())
   updatedAt      DateTime             @updatedAt
   name           String?
-  speechAttempts SpeechAttempts[]
+  speechAttempts SpeechAttempt[]
   lessonProgress UserLessonProgress[]
 
   @@map("users_table")
