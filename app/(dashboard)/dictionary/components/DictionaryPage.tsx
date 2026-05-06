@@ -122,14 +122,23 @@ export const DictionaryPage = ({ characters }: { characters: Character[] }) => {
 
           <aside className="hidden min-w-0 xl:block">
             {selectedCharacter && (
-              <CharacterDetail character={selectedCharacter} compact />
+              <CharacterDetail
+                key={selectedCharacter.id}
+                character={selectedCharacter}
+                compact
+              />
             )}
           </aside>
         </div>
       </div>
 
       <BottomSheet isOpen={isSheetOpen} onClose={() => setIsSheetOpen(false)}>
-        {selectedCharacter && <CharacterDetail character={selectedCharacter} />}
+        {selectedCharacter && (
+          <CharacterDetail
+            key={selectedCharacter.id}
+            character={selectedCharacter}
+          />
+        )}
       </BottomSheet>
     </div>
   );

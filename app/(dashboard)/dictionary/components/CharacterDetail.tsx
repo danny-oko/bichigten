@@ -109,7 +109,16 @@ export const CharacterDetail = ({
                       : "border-[#ead9bb] bg-[#fffdf7]",
                   ].join(" ")}
                 >
-                  <span className="mongol-script text-2xl text-[#3b2f2f]">
+                  {/* <span className="mongol-script text-2xl text-[#3b2f2f]">
+                    {form.glyph}
+                  </span> */}
+                  <span
+                    className="mongol-script text-2xl text-[#3b2f2f]"
+                    style={{
+                      unicodeBidi: "isolate",
+                      display: "inline-block",
+                    }}
+                  >
                     {form.glyph}
                   </span>
                 </div>
@@ -141,13 +150,6 @@ export const CharacterDetail = ({
             compact ? "h-32" : "h-48",
           ].join(" ")}
         >
-          {/*  Dynamic SVG animation */}
-          {/* {character.forms[0]?.strokePath ? (
-            <StrokeAnimation path={character.forms[0].strokePath} play={play} />
-          ) : (
-            <span className="text-sm text-[#a98958]">No stroke data</span>
-          )} */}
-
           {selectedForm?.strokePath ? (
             <StrokeAnimation path={selectedForm.strokePath} play={play} />
           ) : (
@@ -155,24 +157,6 @@ export const CharacterDetail = ({
           )}
         </div>
       </section>
-      {/* 
-      <section className="space-y-2">
-        {forms.map((form) => (
-          <div
-            key={form.type}
-            className="flex items-center justify-between rounded-xl border border-[#ead9bb] bg-[#fffdf7] p-3"
-          > */}
-      {/* <div>
-              <h4 className="font-balsamiq font-bold text-[#3b2f2f]">
-                {FORM_LABELS[form.type]} Form
-              </h4>
-              <p className="text-sm text-[#7a5930]">
-                {FORM_DESCRIPTIONS[form.type]}
-              </p>
-            </div> */}
-      {/* </div>
-        ))}
-      </section> */}
     </div>
   );
 };
