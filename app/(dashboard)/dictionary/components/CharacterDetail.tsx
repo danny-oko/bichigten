@@ -5,9 +5,9 @@ import { Character, Form } from "./LetterCard";
 import StrokeAnimation from "./StrokeAnimation";
 
 const FORM_LABELS: Record<string, string> = {
-  INITIAL: "Initial",
-  MEDIAL: "Medial",
-  FINAL: "Final",
+  INITIAL: "Эхэнд",
+  MEDIAL: "Дунд",
+  FINAL: "Адагт",
 };
 
 const FORM_DESCRIPTIONS: Record<string, string> = {
@@ -86,7 +86,7 @@ export const CharacterDetail = ({
 
       <section className={compact ? "mb-5" : "mb-8"}>
         <h3 className="mb-4 font-balsamiq text-xs font-bold uppercase text-[#7a5930]">
-          Forms Visualization
+          Дүрслэл
         </h3>
 
         <div className="grid grid-cols-3 gap-4">
@@ -142,31 +142,37 @@ export const CharacterDetail = ({
           ].join(" ")}
         >
           {/*  Dynamic SVG animation */}
-          {character.forms[0]?.strokePath ? (
+          {/* {character.forms[0]?.strokePath ? (
             <StrokeAnimation path={character.forms[0].strokePath} play={play} />
+          ) : (
+            <span className="text-sm text-[#a98958]">No stroke data</span>
+          )} */}
+
+          {selectedForm?.strokePath ? (
+            <StrokeAnimation path={selectedForm.strokePath} play={play} />
           ) : (
             <span className="text-sm text-[#a98958]">No stroke data</span>
           )}
         </div>
       </section>
-
+      {/* 
       <section className="space-y-2">
         {forms.map((form) => (
           <div
             key={form.type}
             className="flex items-center justify-between rounded-xl border border-[#ead9bb] bg-[#fffdf7] p-3"
-          >
-            <div>
+          > */}
+      {/* <div>
               <h4 className="font-balsamiq font-bold text-[#3b2f2f]">
                 {FORM_LABELS[form.type]} Form
               </h4>
               <p className="text-sm text-[#7a5930]">
                 {FORM_DESCRIPTIONS[form.type]}
               </p>
-            </div>
-          </div>
+            </div> */}
+      {/* </div>
         ))}
-      </section>
+      </section> */}
     </div>
   );
 };

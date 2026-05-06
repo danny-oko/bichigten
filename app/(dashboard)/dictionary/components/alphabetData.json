@@ -10,139 +10,519 @@
       {
         "type": "ISOLATE",
         "glyph": "ᠠ",
-        "strokePath": "M9.40175 1.26123C9.40175 1.26123 16.4017 5.76123 14.303 9.26123C12.2043 12.7612 -0.196993 18.2612 1.90175 18.2612C4.00049 18.2612 5.43946 17.7612 7.40182 17.7612C8.90182 17.7612 9.40175 17.2612 9.40175 19.2612C9.40175 21.2612 9.40179 23.7612 9.40175 25.7612C9.40171 27.7612 -0.598341 30.7612 1.90175 30.2612C4.40184 29.7612 5.24593 29.2263 6.90175 30.2612C7.60425 30.7003 8.40175 30.9328 8.40175 31.7612C8.40175 35.7612 8.40175 43.2612 8.40175 43.2612"
+        "strokePath": "M9.40175 1.26123..."
       },
-      { "type": "INITIAL", "glyph": "ᠠ" },
-      { "type": "MEDIAL", "glyph": "ᠠ\u180B" },
-      { "type": "FINAL", "glyph": "ᠠ\u180C" }
+      {
+        "type": "INITIAL",
+        "glyph": "ᠠ\u200D",
+        "strokePath": ""
+      },
+      {
+        "type": "MEDIAL",
+        "glyph": "\u200Dᠠ\u200D",
+        "strokePath": ""
+      },
+      {
+        "type": "FINAL",
+        "glyph": "\u200Dᠠ",
+        "strokePath": ""
+      }
     ]
   },
   {
     "id": "2",
-    "name": "E",
+    "name": "Э",
     "unicode": "U+1821",
-    "latinForm": "e",
+    "latinForm": "э",
     "type": "VOWEL",
     "order": 2,
     "forms": [
-      { "type": "ISOLATE", "glyph": "ᠡ" },
-      { "type": "INITIAL", "glyph": "ᠡ" },
-      { "type": "MEDIAL", "glyph": "ᠡ" },
-      { "type": "FINAL", "glyph": "ᠡ" }
+      {
+        "type": "ISOLATE",
+        "glyph": "ᠡ"
+      },
+      {
+        "type": "INITIAL",
+        "glyph": "ᠡ\u200D"
+      },
+      {
+        "type": "MEDIAL",
+        "glyph": "\u200Dᠡ\u200D"
+      },
+      {
+        "type": "FINAL",
+        "glyph": "\u200Dᠡ"
+      }
     ]
   },
   {
     "id": "3",
-    "name": "I",
+    "name": "И",
     "unicode": "U+1822",
-    "latinForm": "i",
+    "latinForm": "и",
     "type": "VOWEL",
     "order": 3,
     "forms": [
-      { "type": "ISOLATE", "glyph": "ᠢ" },
-      { "type": "INITIAL", "glyph": "ᠢ" },
-      { "type": "MEDIAL", "glyph": "ᠢ" },
-      { "type": "FINAL", "glyph": "ᠢ" }
+      {
+        "type": "ISOLATE",
+        "glyph": "ᠢ"
+      },
+      {
+        "type": "INITIAL",
+        "glyph": "ᠢ\u200D"
+      },
+      {
+        "type": "MEDIAL",
+        "glyph": "\u200Dᠢ\u200D"
+      },
+      {
+        "type": "FINAL",
+        "glyph": "\u200Dᠢ"
+      }
     ]
   },
 
   {
     "id": "5",
-    "name": "O, U",
-    "unicode": "U+1824",
-    "latinForm": "o, u",
+    "name": "О, У",
+    "unicode": "U+1823, U+1824",
+    "latinForm": "о, у",
     "type": "VOWEL",
     "order": 5,
     "forms": [
-      { "type": "ISOLATE", "glyph": "ᠤ" },
-      { "type": "INITIAL", "glyph": "ᠤ" },
-      { "type": "MEDIAL", "glyph": "ᠤ" },
-      { "type": "FINAL", "glyph": "ᠤ" }
+      {
+        "type": "ISOLATE",
+        "glyph": "ᠤ"
+      },
+      {
+        "type": "INITIAL",
+        "glyph": "ᠤ\u200D"
+      },
+      {
+        "type": "MEDIAL",
+        "glyph": "\u200Dᠤ\u200D"
+      },
+      {
+        "type": "FINAL",
+        "glyph": "\u200Dᠤ"
+      }
     ]
   },
 
   {
     "id": "7",
-    "name": "ö, Ü",
-    "unicode": "U+1826",
-    "latinForm": "ö, ü",
+    "name": "Ө, Ү",
+    "unicode": "U+1825, U+1826",
+    "latinForm": "ө, ү",
     "type": "VOWEL",
     "order": 7,
     "forms": [
-      { "type": "ISOLATE", "glyph": "ᠦ" },
-      { "type": "INITIAL", "glyph": "ᠦ" },
-      { "type": "MEDIAL", "glyph": "ᠦ" },
-      { "type": "FINAL", "glyph": "ᠦ" }
+      {
+        "type": "ISOLATE",
+        "glyph": "ᠦ"
+      },
+      {
+        "type": "INITIAL",
+        "glyph": "ᠦ\u200D"
+      },
+      {
+        "type": "MEDIAL",
+        "glyph": "\u200Dᠦ\u200D"
+      },
+      {
+        "type": "FINAL",
+        "glyph": "\u200Dᠦ"
+      }
     ]
   },
   {
     "id": "8",
-    "name": "N",
+    "name": "Н",
     "unicode": "U+1828",
-    "latinForm": "n",
+    "latinForm": "н",
     "type": "CONSONANT",
     "order": 8,
     "forms": [
-      { "type": "ISOLATE", "glyph": "ᠨ" },
-      { "type": "INITIAL", "glyph": "ᠨ" },
-      { "type": "MEDIAL", "glyph": "ᠨ" },
-      { "type": "FINAL", "glyph": "ᠨ" }
+      {
+        "type": "ISOLATE",
+        "glyph": "ᠨ"
+      },
+      {
+        "type": "INITIAL",
+        "glyph": "ᠨ\u200D"
+      },
+      {
+        "type": "MEDIAL",
+        "glyph": "\u200Dᠨ\u200D"
+      },
+      {
+        "type": "FINAL",
+        "glyph": "\u200Dᠨ"
+      }
     ]
   },
   {
     "id": "9",
-    "name": "B",
-    "unicode": "U+182A",
-    "latinForm": "b",
+    "name": "М",
+    "unicode": "U+182E",
+    "latinForm": "м",
     "type": "CONSONANT",
     "order": 9,
     "forms": [
-      { "type": "ISOLATE", "glyph": "ᠪ" },
-      { "type": "INITIAL", "glyph": "ᠪ" },
-      { "type": "MEDIAL", "glyph": "ᠪ" },
-      { "type": "FINAL", "glyph": "ᠪ" }
+      {
+        "type": "ISOLATE",
+        "glyph": "ᠮ"
+      },
+      {
+        "type": "INITIAL",
+        "glyph": "ᠮ\u200D"
+      },
+      {
+        "type": "MEDIAL",
+        "glyph": "\u200Dᠮ\u200D"
+      },
+      {
+        "type": "FINAL",
+        "glyph": "\u200Dᠮ"
+      }
     ]
   },
   {
     "id": "10",
-    "name": "P",
-    "unicode": "U+182B",
-    "latinForm": "p",
+    "name": "Л",
+    "unicode": "U+182F",
+    "latinForm": "л",
     "type": "CONSONANT",
     "order": 10,
     "forms": [
-      { "type": "ISOLATE", "glyph": "ᠫ" },
-      { "type": "INITIAL", "glyph": "ᠫ" },
-      { "type": "MEDIAL", "glyph": "ᠫ" },
-      { "type": "FINAL", "glyph": "ᠫ" }
+      {
+        "type": "ISOLATE",
+        "glyph": "ᠯ"
+      },
+      {
+        "type": "INITIAL",
+        "glyph": "ᠯ\u200D"
+      },
+      {
+        "type": "MEDIAL",
+        "glyph": "\u200Dᠯ\u200D"
+      },
+      {
+        "type": "FINAL",
+        "glyph": "\u200Dᠯ"
+      }
     ]
   },
   {
     "id": "11",
-    "name": "Q",
-    "unicode": "U+182C",
-    "latinForm": "q",
+    "name": "Р",
+    "unicode": "U+1837",
+    "latinForm": "р",
     "type": "CONSONANT",
     "order": 11,
     "forms": [
-      { "type": "ISOLATE", "glyph": "ᠬ" },
-      { "type": "INITIAL", "glyph": "ᠬ" },
-      { "type": "MEDIAL", "glyph": "ᠬ" },
-      { "type": "FINAL", "glyph": "ᠬ" }
+      {
+        "type": "ISOLATE",
+        "glyph": "ᠷ"
+      },
+      {
+        "type": "INITIAL",
+        "glyph": "ᠷ\u200D"
+      },
+      {
+        "type": "MEDIAL",
+        "glyph": "\u200Dᠷ\u200D"
+      },
+      {
+        "type": "FINAL",
+        "glyph": "\u200Dᠷ"
+      }
     ]
   },
   {
     "id": "12",
-    "name": "G",
-    "unicode": "U+182D",
-    "latinForm": "g",
+    "name": "Я",
+    "unicode": "U+1836",
+    "latinForm": "я",
     "type": "CONSONANT",
     "order": 12,
     "forms": [
-      { "type": "ISOLATE", "glyph": "ᠭ" },
-      { "type": "INITIAL", "glyph": "ᠭ" },
-      { "type": "MEDIAL", "glyph": "ᠭ" },
-      { "type": "FINAL", "glyph": "ᠭ" }
+      {
+        "type": "ISOLATE",
+        "glyph": "ᠶ"
+      },
+      {
+        "type": "INITIAL",
+        "glyph": "ᠶ\u200D"
+      },
+      {
+        "type": "MEDIAL",
+        "glyph": "\u200Dᠶ\u200D"
+      },
+      {
+        "type": "FINAL",
+        "glyph": "\u200Dᠶ"
+      }
+    ]
+  },
+  {
+    "id": "13",
+    "name": "Г",
+    "unicode": "U+182D",
+    "latinForm": "г",
+    "type": "CONSONANT",
+    "order": 13,
+    "forms": [
+      {
+        "type": "ISOLATE",
+        "glyph": "ᠭ"
+      },
+      {
+        "type": "INITIAL",
+        "glyph": "ᠭ\u200D"
+      },
+      {
+        "type": "MEDIAL",
+        "glyph": "\u200Dᠭ\u200D"
+      },
+      {
+        "type": "FINAL",
+        "glyph": "\u200Dᠭ"
+      }
+    ]
+  },
+  {
+    "id": "14",
+    "name": "X",
+    "unicode": "U+182C",
+    "latinForm": "x",
+    "type": "CONSONANT",
+    "order": 14,
+    "forms": [
+      {
+        "type": "ISOLATE",
+        "glyph": "ᠬ"
+      },
+      {
+        "type": "INITIAL",
+        "glyph": "ᠬ\u200D"
+      },
+      {
+        "type": "MEDIAL",
+        "glyph": "\u200Dᠬ\u200D"
+      },
+      {
+        "type": "FINAL",
+        "glyph": "\u200Dᠬ"
+      }
+    ]
+  },
+  {
+    "id": "16",
+    "name": "Б",
+    "unicode": "U+182A",
+    "latinForm": "б",
+    "type": "CONSONANT",
+    "order": 16,
+    "forms": [
+      {
+        "type": "ISOLATE",
+        "glyph": "ᠪ"
+      },
+      {
+        "type": "INITIAL",
+        "glyph": "ᠪ\u200D"
+      },
+      {
+        "type": "MEDIAL",
+        "glyph": "\u200Dᠪ\u200D"
+      },
+      {
+        "type": "FINAL",
+        "glyph": "\u200Dᠪ"
+      }
+    ]
+  },
+  {
+    "id": "17",
+    "name": "В",
+    "unicode": "U+182B",
+    "latinForm": "в",
+    "type": "CONSONANT",
+    "order": 17,
+    "forms": [
+      {
+        "type": "ISOLATE",
+        "glyph": "ᠫ"
+      },
+      {
+        "type": "INITIAL",
+        "glyph": "ᠫ\u200D"
+      },
+      {
+        "type": "MEDIAL",
+        "glyph": "\u200Dᠫ\u200D"
+      },
+      {
+        "type": "FINAL",
+        "glyph": "\u200Dᠫ"
+      }
+    ]
+  },
+  {
+    "id": "18",
+    "name": "НГ",
+    "unicode": "U+1829",
+    "latinForm": "нг",
+    "type": "CONSONANT",
+    "order": 18,
+    "forms": [
+      {
+        "type": "ISOLATE",
+        "glyph": "ᠩ"
+      },
+      {
+        "type": "INITIAL",
+        "glyph": "ᠩ\u200D"
+      },
+      {
+        "type": "MEDIAL",
+        "glyph": "\u200Dᠩ\u200D"
+      },
+      {
+        "type": "FINAL",
+        "glyph": "\u200Dᠩ"
+      }
+    ]
+  },
+  {
+    "id": "19",
+    "name": "Д, Т",
+    "unicode": "U+1833, U+1832",
+    "latinForm": "д, т",
+    "type": "CONSONANT",
+    "order": 19,
+    "forms": [
+      {
+        "type": "ISOLATE",
+        "glyph": "ᠲ"
+      },
+      {
+        "type": "INITIAL",
+        "glyph": "ᠲ\u200D"
+      },
+      {
+        "type": "MEDIAL",
+        "glyph": "\u200Dᠲ\u200D"
+      },
+      {
+        "type": "FINAL",
+        "glyph": "\u200Dᠲ"
+      }
+    ]
+  },
+  {
+    "id": "20",
+    "name": "С",
+    "unicode": "U+1830",
+    "latinForm": "с",
+    "type": "CONSONANT",
+    "order": 20,
+    "forms": [
+      {
+        "type": "ISOLATE",
+        "glyph": "ᠰ"
+      },
+      {
+        "type": "INITIAL",
+        "glyph": "ᠰ\u200D"
+      },
+      {
+        "type": "MEDIAL",
+        "glyph": "\u200Dᠰ\u200D"
+      },
+      {
+        "type": "FINAL",
+        "glyph": "\u200Dᠰ"
+      }
+    ]
+  },
+  {
+    "id": "21",
+    "name": "Ш",
+    "unicode": "U+1831",
+    "latinForm": "ш",
+    "type": "CONSONANT",
+    "order": 21,
+    "forms": [
+      {
+        "type": "ISOLATE",
+        "glyph": "ᠱ"
+      },
+      {
+        "type": "INITIAL",
+        "glyph": "ᠱ\u200D"
+      },
+      {
+        "type": "MEDIAL",
+        "glyph": "\u200Dᠱ\u200D"
+      },
+      {
+        "type": "FINAL",
+        "glyph": "\u200Dᠱ"
+      }
+    ]
+  },
+  {
+    "id": "22",
+    "name": "З, Ж",
+    "unicode": "U+1835, U+183C",
+    "latinForm": "з, ж",
+    "type": "CONSONANT",
+    "order": 22,
+    "forms": [
+      {
+        "type": "ISOLATE",
+        "glyph": "ᠵ"
+      },
+      {
+        "type": "INITIAL",
+        "glyph": "ᠵ\u200D"
+      },
+      {
+        "type": "MEDIAL",
+        "glyph": "\u200Dᠵ\u200D"
+      },
+      {
+        "type": "FINAL",
+        "glyph": "\u200Dᠵ"
+      }
+    ]
+  },
+  {
+    "id": "23",
+    "name": "Ц, Ч",
+    "unicode": "U+1834, U+1834",
+    "latinForm": "ц, ч",
+    "type": "CONSONANT",
+    "order": 23,
+    "forms": [
+      {
+        "type": "ISOLATE",
+        "glyph": "ᠴ"
+      },
+      {
+        "type": "INITIAL",
+        "glyph": "ᠴ\u200D"
+      },
+      {
+        "type": "MEDIAL",
+        "glyph": "\u200Dᠴ\u200D"
+      },
+      {
+        "type": "FINAL",
+        "glyph": "\u200Dᠴ"
+      }
     ]
   }
 ]
