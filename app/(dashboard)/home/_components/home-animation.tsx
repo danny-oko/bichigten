@@ -7,12 +7,7 @@ import mazaalaiData from "@/public/animations/mazaalai.json";
 export default function Mascot() {
   return (
     <div className="w-full h-full">
-      <Lottie
-        animationData={mazaalaiData}
-        loop={true}
-        autoplay={true}
-        className="drop-shadow-[0_10px_20px_rgba(34,197,94,0.4)]"
-      />
+      <Lottie animationData={mazaalaiData} loop={true} autoplay={true} />
     </div>
   );
 }

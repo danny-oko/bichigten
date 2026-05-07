@@ -3,7 +3,6 @@ import { unauthorizedApiResponse } from "@/lib/server/dev-postman-bypass";
 import { getClerkUserIdFromRequest } from "@/lib/server/get-current-app-user";
 import { NextRequest, NextResponse } from "next/server";
 
-// GET /api/progress?lessonId=… (user from session or dev impersonation)
 export const GET = async (req: NextRequest) => {
   const lessonId = req.nextUrl.searchParams.get("lessonId");
   const userId = await getClerkUserIdFromRequest(req);
@@ -24,12 +23,12 @@ export const GET = async (req: NextRequest) => {
   return NextResponse.json(progress);
 };
 
-// POST /api/progress
 export const POST = async (req: NextRequest) => {
   const body = await req.json();
   const userId = await getClerkUserIdFromRequest(req);
   const { lessonId, status } = body;
-  const mistakeCount = Number(body.heartsRemaining ?? body.mistakeCount ?? 3);
+  const heartsRemaining =
+    body.heartsRemaining !== undefined ? Number(body.heartsRemaining) : null;
   const xpEarned = Number(body.xpEarned ?? 0);
   const nextStatusRaw = status ?? "IN_PROGRESS";
 
@@ -63,7 +62,6 @@ export const POST = async (req: NextRequest) => {
     where: { userId_lessonId: { userId, lessonId } },
     update: {
       status: nextStatus,
-      mistakeCount,
       xpEarned,
       completedAt: nextCompletedAt,
     },
@@ -71,19 +69,20 @@ export const POST = async (req: NextRequest) => {
       userId,
       lessonId,
       status: nextStatusRaw ?? "LOCKED",
-      mistakeCount,
       xpEarned,
       completedAt: nextStatusRaw === "COMPLETED" ? new Date() : null,
     },
   });
 
   const xpDelta = Math.max(0, xpEarned - (existing?.xpEarned ?? 0));
-  if (xpDelta > 0) {
-    await prisma.user.update({
-      where: { id: userId },
-      data: { totalXp: xpEarned },
-    });
-  }
+
+  await prisma.user.update({
+    where: { id: userId },
+    data: {
+      ...(heartsRemaining !== null && { heartsRemaining }),
+      ...(xpDelta > 0 && { totalXp: { increment: xpDelta } }),
+    },
+  });
 
   return NextResponse.json(progress, { status: 201 });
 };
