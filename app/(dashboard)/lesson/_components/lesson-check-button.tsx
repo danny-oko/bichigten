@@ -93,7 +93,7 @@ export function LessonCheckButton({
 
   return (
     <div className="w-full px-4 sm:px-8 py-8 sm:py-10">
-      <div className="mx-auto flex w-full max-w-5xl flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="mx-auto flex w-full max-w-5xl gap-4 items-center justify-between">
         <button
           onClick={onSkip}
           className="w-full sm:w-[300px] py-3.5 px-6 rounded-2xl font-black text-sm tracking-widest uppercase border-2 border-[#374151] text-[#6B7280] hover:border-[#4B5563] hover:text-[#9CA3AF] transition-colors"

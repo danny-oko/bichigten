@@ -26,7 +26,6 @@ export const PATCH = async (req: NextRequest, { params }: Params) => {
     where: { id },
     data: {
       ...(body.status && { status: body.status }),
-      ...(body.mistakeCount !== undefined && { mistakeCount: parseInt(body.mistakeCount) }),
       ...(body.xpEarned !== undefined && { xpEarned: parseInt(body.xpEarned) }),
       ...(body.status === "COMPLETED" && { completedAt: new Date() }),
     },

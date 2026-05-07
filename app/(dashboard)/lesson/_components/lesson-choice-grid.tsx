@@ -302,7 +302,9 @@ export function LessonChoiceGrid({
               color: selected === choice.value ? "#8A5706" : "#000000",
             }}
           >
-            <span className="text-lg font-black">{choice.label}</span>
+            <span className="text-md sm:text-lg font-black">
+              {choice.label}
+            </span>
           </button>
         ))}
       </div>

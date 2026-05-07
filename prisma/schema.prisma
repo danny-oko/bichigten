@@ -15,6 +15,7 @@ model User {
   createdAt      DateTime             @default(now())
   updatedAt      DateTime             @updatedAt
   name           String?
+  heartsRemaining Int                  @default(5)
   speechAttempts SpeechAttempts[]
   lessonProgress UserLessonProgress[]
 
@@ -78,7 +79,6 @@ model UserLessonProgress {
   userId       String
   lessonId     String
   status       LessonStatus @default(LOCKED)
-  mistakeCount Int          @default(3)
   xpEarned     Int          @default(0)
   completedAt  DateTime?
   lesson       Lesson       @relation(fields: [lessonId], references: [id])

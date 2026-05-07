@@ -216,7 +216,7 @@ export function useLessonGame(lessonId: string, userId: string) {
     tasks: [],
     taskIndex: 0,
     phase: "teaching",
-    hearts: 3,
+    hearts: 5,
     selected: null,
     loading: true,
     reviewStats: null,
@@ -229,38 +229,33 @@ export function useLessonGame(lessonId: string, userId: string) {
   const earnedXpRef = useRef(0);
   const startRef = useRef(Date.now());
   const awardedXpTasksRef = useRef(new Set<string>());
+  const saveProgressCalledRef = useRef(false);
 
   useEffect(() => {
+    saveProgressCalledRef.current = false;
+    earnedXpRef.current = 0;
+    correctRef.current = 0;
+    totalRef.current = 0;
+    awardedXpTasksRef.current = new Set();
+
     Promise.all([
       fetch(`/api/lesson-contents?lessonId=${lessonId}`).then((r) => r.json()),
       fetch(`/api/tasks?lessonId=${lessonId}`).then((r) => r.json()),
-      fetch(`/api/progress?lessonId=${lessonId}&userId=${userId}`).then((r) =>
-        r.ok ? r.json() : null,
-      ),
-      fetch(`/api/progress?userId=${userId}`).then((r) =>
-        r.ok ? r.json() : [],
-      ),
+      fetch(`/api/users/${userId}`).then((r) => (r.ok ? r.json() : null)),
     ])
       .then(
-        ([contents, tasks, progress, allProgress]: [
+        ([contents, tasks, userData]: [
           LessonContent[],
           Task[],
-          { mistakeCount: number; xpEarned?: number } | null,
-          Array<{ mistakeCount: number }>,
+          { heartsRemaining: number } | null,
         ]) => {
-          const savedHeartsAcrossLessons =
-            Array.isArray(allProgress) && allProgress.length > 0
-              ? Math.min(...allProgress.map((item) => item.mistakeCount))
-              : null;
-          const heartsFromProgress =
-            progress?.mistakeCount ?? savedHeartsAcrossLessons ?? 3;
+          const heartsFromUser = userData?.heartsRemaining ?? 5;
           startRef.current = Date.now();
-          earnedXpRef.current = progress?.xpEarned ?? 0;
           setState((s) => ({
             ...s,
             contents: contents.sort((a, b) => a.order - b.order),
             tasks: tasks.sort((a, b) => a.order - b.order),
-            hearts: Math.max(0, Math.min(3, heartsFromProgress)),
+            hearts: Math.max(0, Math.min(5, heartsFromUser)),
             loading: false,
           }));
         },
@@ -412,7 +407,10 @@ export function useLessonGame(lessonId: string, userId: string) {
           selected: null,
         };
 
-      saveProgress(lessonId, userId, nextHearts, calcXp(), "COMPLETED");
+      if (!saveProgressCalledRef.current) {
+        saveProgressCalledRef.current = true;
+        saveProgress(lessonId, userId, nextHearts, calcXp(), "COMPLETED");
+      }
       return {
         ...s,
         hearts: nextHearts,
@@ -442,7 +440,11 @@ export function useLessonGame(lessonId: string, userId: string) {
           selected: null,
           matchFeedback: null,
         };
-      saveProgress(lessonId, userId, nextHearts, calcXp(), "COMPLETED");
+
+      if (!saveProgressCalledRef.current) {
+        saveProgressCalledRef.current = true;
+        saveProgress(lessonId, userId, nextHearts, calcXp(), "COMPLETED");
+      }
       return {
         ...s,
         hearts: nextHearts,
@@ -468,7 +470,7 @@ export function useLessonGame(lessonId: string, userId: string) {
   }
 
   async function refillHeartsForFirstWeek() {
-    const refillHearts = 3;
+    const refillHearts = 5;
     setState((s) => ({
       ...s,
       hearts: refillHearts,
