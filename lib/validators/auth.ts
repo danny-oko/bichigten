@@ -17,7 +17,11 @@ export const signUpNameSchema = z.object({
       /^[a-zA-Z0-9_]{3,20}$/,
       "Username must be 3-20 characters and use only letters, numbers, or underscore.",
     ),
-  email: z.string().trim().min(1, "Please enter your email.").email("Please enter a valid email address."),
+  email: z
+    .string()
+    .trim()
+    .min(1, "Please enter your email.")
+    .email("Please enter a valid email address."),
 });
 
 export const signUpPasswordSchema = z
@@ -37,6 +41,10 @@ export const ageSchema = z.coerce
   });
 
 export const signInSchema = z.object({
-  email: z.string().trim().min(1, "Please enter your email.").email("Please enter a valid email address."),
+  email: z
+    .string()
+    .trim()
+    .min(1, "Please enter your email.")
+    .email("Please enter a valid email address."),
   password: z.string().min(1, "Please enter your password."),
 });

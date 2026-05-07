@@ -1,77 +1,72 @@
-interface League {
-  label: string;
-  status: "done" | "current" | "locked";
-  icon: string;
-  xpRequired?: number;
-}
+// Inside LeagueProgression.tsx
+export default function WebLeaguePath({ userXp = 0 }: { userXp: number }) {
+  // We use your RANK_TIERS directly here
+  const RANK_TIERS = [
+    { minXp: 0, label: "Начин", icon: "🦅" },
+    { minXp: 350, label: "Харцага", icon: "🦅" },
+    { minXp: 560, label: "Заан", icon: "🐘" },
+    { minXp: 1000, label: "Гарьд", icon: "🦅" },
+    { minXp: 1560, label: "Арслан", icon: "🦁" },
+    { minXp: 1920, label: "Аварга", icon: "🏆" },
+    { minXp: 2550, label: "Даян Аварга", icon: "🔥" },
+    { minXp: 3700, label: "Дархан Аварга", icon: "👑" },
+  ];
 
-const LEAGUES: League[] = [
-  { label: "Bronze Mesa", status: "done", icon: "🥉" },
-  { label: "Silver Steppe", status: "current", icon: "⭐" },
-  { label: "Gold Steppe", status: "locked", icon: "🥇", xpRequired: 260 },
-  { label: "Platinum Sky", status: "locked", icon: "💎" },
-  { label: "Diamond Gobi", status: "locked", icon: "🔷" },
-];
+  const getStatus = (tierXp: number, index: number) => {
+    const nextTier = RANK_TIERS[index + 1];
+    if (userXp >= (nextTier?.minXp ?? Infinity)) return "done";
+    if (userXp >= tierXp) return "current";
+    return "locked";
+  };
 
-const STATUS_STYLES = {
-  done: {
-    bg: "bg-[#F0FFF0]",
-    border: "border-green-200",
-    badge: "bg-green-100 text-green-600",
-    label: "Done",
-  },
-  current: {
-    bg: "bg-[#FFF8EE]",
-    border: "border-[#E8940A]",
-    badge: "bg-[#E8940A] text-white",
-    label: "Current",
-  },
-  locked: {
-    bg: "bg-white",
-    border: "border-[#E8D9C0]",
-    badge: "bg-[#F4EFE8] text-[#999]",
-    label: "Locked",
-  },
-};
-
-export default function WebLeaguePath() {
   return (
-    <div className="bg-white rounded-2xl border border-[#E8D9C0] p-5">
-      <div className="flex items-center justify-between mb-4">
-        <p className="text-xs text-[#999] uppercase tracking-wide">
-          Таны лигийн замнал
-        </p>
-        <p className="text-xs text-[#E8940A] font-medium cursor-pointer hover:underline">
-          Нээхийн тулд дахиад 4 зүйл байна
-        </p>
-      </div>
+    <div className="bg-white rounded-2xl border border-[#E8D9C0] p-5 shadow-sm">
+      <h3 className="text-sm font-bold text-[#222] mb-5 px-1">Цолны нэршил</h3>
 
-      <p className="text-sm font-semibold text-[#222] mb-3">Лигүүд</p>
+      <div className="space-y-1">
+        {RANK_TIERS.map((rank, index) => {
+          const status = getStatus(rank.minXp, index);
+          const isCurrent = status === "current";
+          const isLocked = status === "locked";
 
-      <div className="flex flex-col gap-2">
-        {LEAGUES.map((league) => {
-          const style = STATUS_STYLES[league.status];
           return (
             <div
-              key={league.label}
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl border ${style.bg} ${style.border}`}
+              key={rank.label}
+              className="relative flex items-center gap-3 p-2 group"
             >
-              <span className="text-lg">{league.icon}</span>
+              {index !== RANK_TIERS.length - 1 && (
+                <div className="absolute left-[23px] top-10 w-[1px] h-6 bg-[#E8D9C0]/50" />
+              )}
+
+              <div
+                className={`w-9 h-9 rounded-full flex items-center justify-center border-2 transition-all z-10 ${
+                  isCurrent
+                    ? "bg-[#FFF8EE] border-[#E8940A] scale-110"
+                    : isLocked
+                      ? "bg-gray-50 border-gray-100 grayscale"
+                      : "bg-green-50 border-green-200"
+                }`}
+              >
+                <span className="text-sm">{isLocked ? "🔒" : rank.icon}</span>
+              </div>
+
               <div className="flex-1">
-                <p className="text-sm font-semibold text-[#222]">
-                  {league.label}
+                <p
+                  className={`text-xs font-bold ${isLocked ? "text-gray-400" : "text-[#222]"}`}
+                >
+                  {rank.label}
                 </p>
-                {league.xpRequired && league.status === "locked" && (
-                  <p className="text-[10px] text-[#999]">
-                    {league.xpRequired} XP шаардлагатай
+                {isCurrent && (
+                  <p className="text-[10px] text-[#E8940A] font-medium">
+                    Дараагийн цол хүртэл {RANK_TIERS[index + 1]?.minXp - userXp}{" "}
+                    XP
                   </p>
                 )}
               </div>
-              <span
-                className={`text-[10px] font-bold px-2.5 py-1 rounded-full ${style.badge}`}
-              >
-                {style.label}
-              </span>
+
+              {status === "done" && (
+                <span className="text-[10px] text-green-500 font-bold">✓</span>
+              )}
             </div>
           );
         })}

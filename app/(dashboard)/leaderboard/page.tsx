@@ -1,28 +1,36 @@
 import prisma from "@/lib/prisma";
+import { auth } from "@clerk/nextjs/server"; // Import Clerk auth
 import { getRankNameFromXp } from "@/lib/utils/getRankNameFromXp";
-import PodiumSection from "./_components/PodiumSection";
-import LeaderboardList from "./_components/LeaderboardList";
 import WebPodiumSection from "./_components/WebPodiumSection";
 import WebLeaderboardList from "./_components/WebLeaderboardList";
-import WebStandingCard from "./_components/UserRankSummary";
-import WebThisWeekCard from "./_components/WeeklyStatsCard";
 import WebNearbyPlayers from "./_components/SocialPeersList";
 import WebLeaguePath from "./_components/LeagueProgression";
 
 export default async function RankPage() {
-  const dbUsers = await prisma.user.findMany({
-    orderBy: { totalXp: "desc" },
-    select: {
-      id: true,
-      name: true,
-      userName: true,
-      totalXp: true,
-      avatarUrl: true,
-    },
-    take: 100,
-  });
+  // 1. Get the userId from Clerk Auth
+  const { userId } = await auth();
 
-  // Centralized mapping logic
+  // 2. Fetch data: Leaderboard and the Current User's XP
+  const [dbUsers, currentUser] = await Promise.all([
+    prisma.user.findMany({
+      orderBy: { totalXp: "desc" },
+      select: {
+        id: true,
+        name: true,
+        userName: true,
+        totalXp: true,
+        avatarUrl: true,
+      },
+      take: 100,
+    }),
+    userId
+      ? prisma.user.findUnique({
+          where: { id: userId },
+          select: { totalXp: true },
+        })
+      : null,
+  ]);
+
   const allUsers = dbUsers.map((user, index) => ({
     id: user.id,
     rank: index + 1,
@@ -30,7 +38,7 @@ export default async function RankPage() {
     xp: user.totalXp,
     title: getRankNameFromXp(user.totalXp),
     avatarUrl: user.avatarUrl || null,
-    isMe: false, // Replace with actual session logic later
+    isMe: user.id === userId, // Now we accurately know which row is "Me"
   }));
 
   const podiumUsers = allUsers.slice(0, 3);
@@ -38,19 +46,11 @@ export default async function RankPage() {
 
   return (
     <div className="min-h-screen bg-[#FFF8E7] pb-24 text-[#3b2f2f] md:pb-10">
-      {/* MOBILE VIEW */}
-      <div className="md:hidden flex flex-col">
-        {podiumUsers.length > 0 && <PodiumSection users={podiumUsers} />}
-        <LeaderboardList users={listUsers} />
-      </div>
-
-      {/* DESKTOP VIEW */}
       <div className="mx-auto hidden w-full max-w-[1220px] px-4 pt-5 md:block md:px-6 md:pt-8">
         <div className="grid w-full gap-4 md:grid-cols-[minmax(0,1fr)_320px] md:gap-5">
           <main className="min-w-0 space-y-4 md:space-y-5">
-            {/* Safety check: Only render if we have enough users */}
             {podiumUsers.length >= 3 ? (
-              <WebPodiumSection users={podiumUsers as any} />
+              <WebPodiumSection users={podiumUsers} />
             ) : (
               <div className="p-10 text-center bg-white rounded-2xl border border-dashed border-[#E8D9C0]">
                 Лиг эхлэхэд илүү олон тоглогч хэрэгтэй...
@@ -60,28 +60,12 @@ export default async function RankPage() {
           </main>
 
           <aside className="min-w-0 space-y-4 md:space-y-5">
-            <WebStandingCard
-              league="Silver Steppe League"
-              rank={allUsers.findIndex((u) => u.isMe) + 1 || 1}
-              total={allUsers.length}
-              promotionPercent={82}
-              xpToPromote={260}
-            />
-            <WebThisWeekCard
-              totalXp={allUsers[0]?.xp || 0}
-              xpChange={120}
-              dayStreak={5}
-              isPersonalBest={true}
-              xpToday={45}
-              isAboveAvg={true}
-              daysActive={4}
-              totalDays={7}
-              isGoodPace={true}
-            />
             <WebNearbyPlayers
               players={allUsers.slice(0, 5).map((u) => ({ ...u, xpChange: 0 }))}
             />
-            <WebLeaguePath />
+
+            {/* 3. Pass the actual XP from Prisma to your new clean League Path */}
+            <WebLeaguePath userXp={currentUser?.totalXp || 0} />
           </aside>
         </div>
       </div>
