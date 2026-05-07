@@ -11,7 +11,6 @@ const isPublicRoute = createRouteMatcher([
 
 const isAuthPageRoute = createRouteMatcher(["/sign-in(.*)", "/sign-up(.*)"]);
 
-/** Dev-only: Postman can call /api/* with x-postman-secret (see lib/server/dev-postman-bypass.ts). */
 function isDevPostmanApiBypass(request: NextRequest): boolean {
   if (process.env.NODE_ENV !== "development") {
     return false;
@@ -29,7 +28,6 @@ function isDevPostmanApiBypass(request: NextRequest): boolean {
 export default clerkMiddleware(async (auth, request) => {
   const { userId } = await auth();
 
-  // Signed-in users opening `/` go straight to `/home` (avoid `/` → `/sign-in` → `/home`).
   if (userId && request.nextUrl.pathname === "/") {
     return NextResponse.redirect(new URL("/home", request.url));
   }
