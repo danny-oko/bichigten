@@ -5,6 +5,7 @@ export interface Form {
   glyph: string;
   imgUrl?: string;
   strokePath?: string;
+  viewBox?: string;
 }
 
 export interface Character {

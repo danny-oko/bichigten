@@ -80,7 +80,7 @@ export const CharacterDetail = ({
           }}
           className="rounded-full bg-[#e8920a] px-5 py-2 font-balsamiq text-sm font-bold text-white shadow transition hover:bg-[#c97806] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e8920a] focus-visible:ring-offset-2"
         >
-          Play
+          Тоглуулах
         </button>
       </div>
 
@@ -140,7 +140,7 @@ export const CharacterDetail = ({
       >
         <div className="mb-4 flex items-center justify-between">
           <h3 className="font-balsamiq text-sm font-bold text-[#3b2f2f]">
-            Stroke Order
+            Бичиглэл
           </h3>
         </div>
 
@@ -151,7 +151,11 @@ export const CharacterDetail = ({
           ].join(" ")}
         >
           {selectedForm?.strokePath ? (
-            <StrokeAnimation path={selectedForm.strokePath} play={play} />
+            <StrokeAnimation
+              path={selectedForm.strokePath}
+              play={play}
+              viewBox={selectedForm.viewBox ?? "0 0 21 49"}
+            />
           ) : (
             <span className="text-sm text-[#a98958]">No stroke data</span>
           )}
