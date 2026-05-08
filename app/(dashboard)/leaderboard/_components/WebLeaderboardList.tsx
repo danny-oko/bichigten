@@ -3,23 +3,18 @@
 import { useMemo, useState } from "react";
 
 interface WebLeaderboardUser {
+  id: string;
   rank: number;
   name: string;
-  title: string;
   xp: number;
-  xpChange?: number;
-  avatarUrl?: string;
-  isMe?: boolean;
-  isNew?: boolean;
+  title: string;
+  avatarUrl: string | null; // Change from 'undefined' to 'null'
+  isMe: boolean;
 }
 
 interface WebLeaderboardListProps {
   users: WebLeaderboardUser[];
-  maxXp?: number;
-  initialVisibleCount?: number;
-  loadStep?: number;
 }
-
 function WebListItem({
   user,
   maxXp,
@@ -27,6 +22,7 @@ function WebListItem({
   user: WebLeaderboardUser;
   maxXp: number;
 }) {
+
   const progressPercent = Math.min((user.xp / maxXp) * 100, 100);
 
   return (

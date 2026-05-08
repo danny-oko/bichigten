@@ -1,13 +1,11 @@
-// Ranks //
-
 const RANK_TIERS: readonly { minXp: number; name: string }[] = [
-  { minXp: 3000, name: "Дархан Аварга" },
-  { minXp: 2000, name: "Даян Аварга" },
-  { minXp: 1000, name: "Аварга" },
-  { minXp: 750, name: "Арслан" },
-  { minXp: 500, name: "Гарьд" },
-  { minXp: 250, name: "Заан" },
-  { minXp: 100, name: "Харцага" },
+  { minXp: 3700, name: "Дархан Аварга" },
+  { minXp: 2550, name: "Даян Аварга" },
+  { minXp: 1920, name: "Аварга" },
+  { minXp: 1560, name: "Арслан" },
+  { minXp: 1000, name: "Гарьд" },
+  { minXp: 560, name: "Заан" },
+  { minXp: 350, name: "Харцага" },
   { minXp: 0, name: "Начин" },
 ];
 

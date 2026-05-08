@@ -24,13 +24,14 @@ export const GET = async (req: NextRequest) => {
   return NextResponse.json(progress);
 };
 
-// POST /api/progress
 export const POST = async (req: NextRequest) => {
   const body = await req.json();
   const userId = await getClerkUserIdFromRequest(req);
   const { lessonId, status } = body;
-  const mistakeCount = Number(body.heartsRemaining ?? body.mistakeCount ?? 3);
+  const heartsRemaining =
+    body.heartsRemaining !== undefined ? Number(body.heartsRemaining) : null;
   const xpEarned = Number(body.xpEarned ?? 0);
+  const nextStatusRaw = status ?? "IN_PROGRESS";
 
   if (!userId) return unauthorizedApiResponse(req);
 
@@ -49,39 +50,39 @@ export const POST = async (req: NextRequest) => {
   });
 
   const nextStatus =
-    existing?.status === "COMPLETED" && status !== "COMPLETED"
+    existing?.status === "COMPLETED" && nextStatusRaw !== "COMPLETED"
       ? "COMPLETED"
-      : (status ?? existing?.status ?? "LOCKED");
+      : (nextStatusRaw ?? existing?.status ?? "LOCKED");
   const nextCompletedAt =
     nextStatus === "COMPLETED"
-      ? existing?.completedAt ?? new Date()
-      : existing?.completedAt ?? null;
+      ? (existing?.completedAt ?? new Date())
+      : (existing?.completedAt ?? null);
 
   const progress = await prisma.userLessonProgress.upsert({
     where: { userId_lessonId: { userId, lessonId } },
     update: {
       status: nextStatus,
-      mistakeCount,
       xpEarned,
       completedAt: nextCompletedAt,
     },
     create: {
       userId,
       lessonId,
-      status: status ?? "LOCKED",
-      mistakeCount,
+      status: nextStatusRaw ?? "LOCKED",
       xpEarned,
-      completedAt: status === "COMPLETED" ? new Date() : null,
+      completedAt: nextStatusRaw === "COMPLETED" ? new Date() : null,
     },
   });
 
   const xpDelta = Math.max(0, xpEarned - (existing?.xpEarned ?? 0));
-  if (xpDelta > 0) {
-    await prisma.user.update({
-      where: { id: userId },
-      data: { totalXp: { increment: xpDelta } },
-    });
-  }
+
+  await prisma.user.update({
+    where: { id: userId },
+    data: {
+      ...(heartsRemaining !== null && { heartsRemaining }),
+      ...(xpDelta > 0 && { totalXp: { increment: xpDelta } }),
+    },
+  });
 
   return NextResponse.json(progress, { status: 201 });
 };

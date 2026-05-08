@@ -1,10 +1,11 @@
 interface NearbyPlayer {
+  id: string;
   rank: number;
   name: string;
   xp: number;
-  xpChange?: number;
-  avatarUrl?: string;
-  isMe?: boolean;
+  xpChange: number;
+  avatarUrl: string | null; // Change 'undefined' to 'null' here
+  isMe: boolean;
 }
 
 interface WebNearbyPlayersProps {

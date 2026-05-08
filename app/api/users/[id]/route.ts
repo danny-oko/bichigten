@@ -12,10 +12,10 @@ export const GET = async (_req: NextRequest, { params }: Params) => {
     select: {
       id: true,
       name: true,
-      displayName: true,
       userName: true,
       avatarUrl: true,
       totalXp: true,
+      heartsRemaining: true,
     },
   });
 

@@ -52,28 +52,30 @@ export function LessonReviewScreen({
           </h1>
         </div>
 
-        <div className="w-full flex items-center justify-center gap-4">
-          <div className="h-[100px] w-[280px] rounded-[24px] border-[3px] border-[#F4C400] bg-white overflow-hidden">
-            <div className="bg-[#F4C400] py-1 text-center text-sm font-black tracking-wide text-white">
-              TOTAL XP
+        <div className="w-full flex flex-col items-center justify-center gap-8">
+          <div className="w-full flex flex-col sm:flex-row items-center justify-center gap-4">
+            <div className="h-25 w-70 rounded-[24px] border-[3px] border-[#F4C400] bg-white overflow-hidden">
+              <div className="bg-[#F4C400] py-1 text-center text-xs font-black tracking-wide text-white">
+                XP EARNED
+              </div>
+              <div className="flex items-center justify-center gap-2 py-3">
+                <Star className="h-7 w-7 text-[#F4C400] fill-[#F4C400]" />
+                <span className="text-3xl font-black text-[#F4C400] leading-none">
+                  <AnimatedNumber target={xpEarned} />
+                </span>
+              </div>
             </div>
-            <div className="flex items-center justify-center gap-2 py-3">
-              <Star className="h-7 w-7 text-[#F4C400] fill-[#F4C400]" />
-              <span className="text-3xl font-black text-[#F4C400] leading-none">
-                <AnimatedNumber target={xpEarned} />
-              </span>
-            </div>
-          </div>
 
-          <div className="h-[100px] w-[280px] rounded-[24px] border-[3px] border-[#58CC02] bg-white overflow-hidden">
-            <div className="bg-[#58CC02] py-1 text-center text-sm font-black tracking-wide text-white">
-              {accuracyLabel}
-            </div>
-            <div className="flex items-center justify-center gap-2 py-3">
-              <Target className="h-7 w-7 text-[#58CC02]" />
-              <span className="text-3xl font-black text-[#58CC02] leading-none">
-                <AnimatedNumber target={accuracy} />%
-              </span>
+            <div className="h-25 w-70 rounded-[24px] border-[3px] border-[#58CC02] bg-white overflow-hidden">
+              <div className="bg-[#58CC02] py-1 text-center text-xs font-black tracking-wide text-white">
+                {accuracyLabel}
+              </div>
+              <div className="flex items-center justify-center gap-2 py-3">
+                <Target className="h-7 w-7 text-[#58CC02]" />
+                <span className="text-3xl font-black text-[#58CC02] leading-none">
+                  <AnimatedNumber target={accuracy} />%
+                </span>
+              </div>
             </div>
           </div>
         </div>

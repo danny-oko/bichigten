@@ -1,178 +1,73 @@
-import CtaBanner from "./_components/CtaBanner";
-import LeaderboardList from "./_components/LeaderboardList";
-import PodiumSection from "./_components/PodiumSection";
-import WebLeaderboardList from "./_components/WebLeaderboardList";
-import WebLeaguePath from "./_components/WebLeaguePath";
-import WebNearbyPlayers from "./_components/WebNearbyPlayers";
+import prisma from "@/lib/prisma";
+import { auth } from "@clerk/nextjs/server"; // Import Clerk auth
+import { getRankNameFromXp } from "@/lib/utils/getRankNameFromXp";
 import WebPodiumSection from "./_components/WebPodiumSection";
-import WebStandingCard from "./_components/WebStandingCard";
-import WebThisWeekCard from "./_components/WebThisWeekCard";
+import WebLeaderboardList from "./_components/WebLeaderboardList";
+import WebNearbyPlayers from "./_components/SocialPeersList";
+import WebLeaguePath from "./_components/LeagueProgression";
 
-export default function RankPage() {
+export default async function RankPage() {
+  // 1. Get the userId from Clerk Auth
+  const { userId } = await auth();
+
+  // 2. Fetch data: Leaderboard and the Current User's XP
+  const [dbUsers, currentUser] = await Promise.all([
+    prisma.user.findMany({
+      orderBy: { totalXp: "desc" },
+      select: {
+        id: true,
+        name: true,
+        userName: true,
+        totalXp: true,
+        avatarUrl: true,
+      },
+      take: 100,
+    }),
+    userId
+      ? prisma.user.findUnique({
+          where: { id: userId },
+          select: { totalXp: true },
+        })
+      : null,
+  ]);
+
+  const allUsers = dbUsers.map((user, index) => ({
+    id: user.id,
+    rank: index + 1,
+    name: user.userName || user.name || "Anonymous",
+    xp: user.totalXp,
+    title: getRankNameFromXp(user.totalXp),
+    avatarUrl: user.avatarUrl || null,
+    isMe: user.id === userId, // Now we accurately know which row is "Me"
+  }));
+
+  const podiumUsers = allUsers.slice(0, 3);
+  const listUsers = allUsers.slice(3);
+
   return (
     <div className="min-h-screen bg-[#FFF8E7] pb-24 text-[#3b2f2f] md:pb-10">
-      <div className="md:hidden flex flex-col">
-        <PodiumSection
-          users={[
-            { rank: 1, name: "MGL killer", xp: 3120 },
-            { rank: 2, name: "Batbayar", xp: 2840 },
-            { rank: 3, name: "Enkhmaa", xp: 2410 },
-          ]}
-        />
-        <LeaderboardList
-          users={[
-            {
-              rank: 4,
-              name: "Boldbaatar",
-              title: "Master Scribe",
-              xp: 1950,
-              isMe: false,
-            },
-            {
-              rank: 5,
-              name: "You (Tsolmon)",
-              title: "Scholar",
-              xp: 1820,
-              isMe: true,
-            },
-            {
-              rank: 6,
-              name: "Oyun-Erdene",
-              title: "Scribe Apprentice",
-              xp: 1680,
-              isMe: false,
-            },
-            {
-              rank: 7,
-              name: "Ganbaatar",
-              title: "Nomad Scholar",
-              xp: 1450,
-              isMe: false,
-            },
-          ]}
-        />
-        <CtaBanner
-          message="Complete 3 vertical script lessons to climb the ranks faster."
-          buttonText="Get Started"
-          href="/map"
-        />
-      </div>
-
       <div className="mx-auto hidden w-full max-w-[1220px] px-4 pt-5 md:block md:px-6 md:pt-8">
-        <div className="flex flex-col gap-4 md:gap-5">
-          {/* <WebLeaderboardHeader
-            name="Batu Munkh"
-            username="nomad_batu"
-            rank="Silver Steppe League"
-            streak={12}
-            league="Silver Steppe"
-            language="Mongolian"
-            xp={1240}
-            xpTotal={1500}
-            xpToPromote={260}
-            leaderboardRank={1}
-            leadGap={260}
-            endsIn="5d"
-          /> */}
-          {/* <WebTabToggle /> */}
-          {/* <WebLeagueFilter /> */}
+        <div className="grid w-full gap-4 md:grid-cols-[minmax(0,1fr)_320px] md:gap-5">
+          <main className="min-w-0 space-y-4 md:space-y-5">
+            {podiumUsers.length >= 3 ? (
+              <WebPodiumSection users={podiumUsers} />
+            ) : (
+              <div className="p-10 text-center bg-white rounded-2xl border border-dashed border-[#E8D9C0]">
+                Лиг эхлэхэд илүү олон тоглогч хэрэгтэй...
+              </div>
+            )}
+            <WebLeaderboardList users={listUsers} />
+          </main>
 
-          <div className="grid w-full gap-4 md:grid-cols-[minmax(0,1fr)_320px] md:gap-5">
-            <main className="min-w-0 space-y-4 md:space-y-5">
-              <WebPodiumSection
-                users={[
-                  { rank: 1, name: "Batu", xp: 1240, streak: 12 },
-                  { rank: 2, name: "Delger", xp: 980, streak: 5 },
-                  { rank: 3, name: "Otgon", xp: 720, streak: 3 },
-                ]}
-              />
-              <WebLeaderboardList
-                users={[
-                  {
-                    rank: 4,
-                    name: "Narantsetseg",
-                    title: "Basics 1",
-                    xp: 410,
-                    xpChange: 2,
-                    isNew: true,
-                  },
-                  {
-                    rank: 5,
-                    name: "Gantulga",
-                    title: "Script 2",
-                    xp: 325,
-                    xpChange: 0,
-                  },
-                  {
-                    rank: 6,
-                    name: "Solongo",
-                    title: "Basics 2",
-                    xp: 280,
-                    xpChange: -1,
-                  },
-                  {
-                    rank: 7,
-                    name: "Enkhtaivan",
-                    title: "Basics 1",
-                    xp: 215,
-                    xpChange: 1,
-                  },
-                  {
-                    rank: 8,
-                    name: "Munkhjargal",
-                    title: "Script 1",
-                    xp: 170,
-                    xpChange: 0,
-                  },
-                  {
-                    rank: 9,
-                    name: "Altantsetseg",
-                    title: "Intro",
-                    xp: 115,
-                    xpChange: -2,
-                  },
-                  {
-                    rank: 10,
-                    name: "Tserenpuntsag",
-                    title: "Intro",
-                    xp: 62,
-                    xpChange: -3,
-                    isNew: true,
-                  },
-                ]}
-              />
-            </main>
-            <aside className="min-w-0 space-y-4 md:space-y-5">
-              <WebStandingCard
-                league="Silver Steppe League"
-                rank={1}
-                total={24}
-                promotionPercent={82}
-                xpToPromote={260}
-              />
-              <WebThisWeekCard
-                totalXp={1240}
-                xpChange={320}
-                dayStreak={12}
-                isPersonalBest={true}
-                xpToday={47}
-                isAboveAvg={true}
-                daysActive={5}
-                totalDays={7}
-                isGoodPace={true}
-              />
-              <WebNearbyPlayers
-                players={[
-                  { rank: 1, name: "Batu", xp: 1240, isMe: true },
-                  { rank: 2, name: "Delger", xp: 980, xpChange: -260 },
-                  { rank: 3, name: "Otgon", xp: 720, xpChange: -520 },
-                ]}
-              />
-              <WebLeaguePath />
-            </aside>
-          </div>
+          <aside className="min-w-0 space-y-4 md:space-y-5">
+            <WebNearbyPlayers
+              players={allUsers.slice(0, 5).map((u) => ({ ...u, xpChange: 0 }))}
+            />
+
+            {/* 3. Pass the actual XP from Prisma to your new clean League Path */}
+            <WebLeaguePath userXp={currentUser?.totalXp || 0} />
+          </aside>
         </div>
-        <div className="h-8" />
       </div>
     </div>
   );

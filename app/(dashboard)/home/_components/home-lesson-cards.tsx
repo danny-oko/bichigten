@@ -91,29 +91,13 @@ export const useLessons = () => {
       });
   }, []);
 
-  function completeLesson() {
-    const next = completedUpTo + 1;
-
-    setCompletedUpTo(next);
-
-    setLessons((prev) => assignStatuses(prev, next));
-  }
-
-  return { lessons, completedUpTo, loading, completeLesson };
+  return { lessons, completedUpTo, loading };
 };
 
 export const LessonCards = ({
   lessons,
-
-  completedUpTo,
-
-  completeLesson,
 }: {
   lessons: ReturnType<typeof useLessons>["lessons"];
-
-  completedUpTo: number;
-
-  completeLesson: () => void;
 }) => {
   const router = useRouter();
 
@@ -149,7 +133,7 @@ export const LessonCards = ({
               onClick={() => {
                 if (!isLocked) router.push(`/lesson/${l.id}`);
               }}
-              className="relative flex items-center justify-center rounded-full transition-all duration-300"
+              className={`relative flex items-center justify-center rounded-full transition-all duration-300 ${isActive && !isLocked ? "hover:-translate-y-1 active:translate-y-0 active:brightness-90" : ""}`}
               style={{
                 width: isActive ? 80 : 72,
                 height: isActive ? 60 : 52,
@@ -160,7 +144,7 @@ export const LessonCards = ({
                     : "#58cc02",
                 border: isLocked ? "2px dashed #BFC9C1" : "none",
                 boxShadow: isDone
-                  ? "0 5px 0 #1E4601"
+                  ? "0 5px 0 #000000"
                   : isActive
                     ? "0 5px 0px rgba(0, 118, 255, 0.39)"
                     : "none",

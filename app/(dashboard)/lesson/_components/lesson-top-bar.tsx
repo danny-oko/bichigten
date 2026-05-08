@@ -1,4 +1,5 @@
-import { Heart, X } from "lucide-react";
+import Image from "next/image";
+import { X } from "lucide-react";
 
 interface LessonTopBarProps {
   progress: number;
@@ -26,7 +27,7 @@ export function LessonTopBar({ progress, hearts, onBack }: LessonTopBarProps) {
           />
         </div>
         <div className="flex items-center gap-1.5">
-          <img
+          <Image
             src="https://d35aaqx5ub95lt.cloudfront.net/images/hearts/7631e3ee734dd4fe7792626b59457fa4.svg"
             alt="Heart Icon"
             height={30}

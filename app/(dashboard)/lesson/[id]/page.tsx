@@ -28,9 +28,10 @@ export default async function LessonPage({ params }: Props) {
     where: { id: userId },
     select: { createdAt: true },
   });
-  const oneWeekMs = 7 * 24 * 60 * 60 * 1000;
+  const twoDaysMs = 2 * 24 * 60 * 60 * 1000;
+  const nowMs = new Date().getTime();
   const isFirstWeekUser = dbUser
-    ? Date.now() - new Date(dbUser.createdAt).getTime() <= oneWeekMs
+    ? nowMs - new Date(dbUser.createdAt).getTime() <= twoDaysMs
     : false;
 
   return (

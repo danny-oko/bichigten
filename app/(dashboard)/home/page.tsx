@@ -7,6 +7,7 @@ import { calculateDailyStreak } from "@/lib/server/daily-streak";
 
 export default async function HomeSection() {
   const { userId } = await auth();
+
   let xp = 0;
   let streak = 0;
   let heartsRemaining = 3;
@@ -23,42 +24,29 @@ export default async function HomeSection() {
       avatarUrl: clerkUser?.imageUrl,
     });
 
-    const [user, completedLessons, progressList] = await Promise.all([
+    const [user, completedLessons] = await Promise.all([
       prisma.user.findUnique({
         where: { id: userId },
-        select: { totalXp: true },
+        select: { totalXp: true, heartsRemaining: true },
       }),
       prisma.userLessonProgress.findMany({
         where: { userId, status: "COMPLETED", completedAt: { not: null } },
         select: { completedAt: true },
       }),
-      prisma.userLessonProgress.findMany({
-        where: { userId },
-        select: { mistakeCount: true },
-      }),
     ]);
 
     xp = user?.totalXp ?? 0;
+    heartsRemaining = user?.heartsRemaining ?? 5;
     streak = calculateDailyStreak(
       completedLessons
         .map((item) => item.completedAt)
         .filter((date): date is Date => Boolean(date)),
     );
-    heartsRemaining =
-      progressList.length > 0
-        ? Math.max(
-            0,
-            Math.min(
-              3,
-              Math.min(...progressList.map((item) => item.mistakeCount)),
-            ),
-          )
-        : 3;
   }
 
   return (
     <div className="flex min-h-full flex-col items-center bg-[#F0EDE3] pb-28 font-['Plus_Jakarta_Sans'] md:-ml-20 xl:-ml-65">
-      <Header streak={streak} xp={xp} heartsRemaining={heartsRemaining} />
+      <Header streak={streak} totalXp={xp} heartsRemaining={heartsRemaining} />
       <div className="flex min-h-0 flex-1 w-full flex-col items-center pt-20 sm:pt-24 md:pt-28">
         <HomePath />
       </div>

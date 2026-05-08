@@ -50,29 +50,22 @@ export function LessonPageClient({
 
   if (loading) return <LessonStatusScreen message="LOADING..." animated />;
   if (isFailed)
-    return (
-      isFirstWeekUser ? (
-        <LessonStatusScreen
-          message="You ran out of hearts. Have a free refill on us to keep going!"
-          actionLabel="Refill for free"
-          onAction={refillHeartsForFirstWeek}
-        />
-      ) : (
-        <LessonStatusScreen
-          message="You're out of hearts."
-          description="Try again after your hearts refill in 1 hour."
-          actionLabel="Back to lessons"
-          onAction={goHome}
-        />
-      )
-    );
-  if (reviewStats)
-    return (
-      <LessonReviewScreen
-        stats={reviewStats}
-        onContinue={goHome}
+    return isFirstWeekUser ? (
+      <LessonStatusScreen
+        message="You ran out of hearts. Have a free refill on us to keep going!"
+        actionLabel="Refill for free"
+        onAction={refillHeartsForFirstWeek}
+      />
+    ) : (
+      <LessonStatusScreen
+        message="You're out of hearts."
+        description="Try again after your hearts refill in 1 hour."
+        actionLabel="Back to lessons"
+        onAction={goHome}
       />
     );
+  if (reviewStats)
+    return <LessonReviewScreen stats={reviewStats} onContinue={goHome} />;
   if (phase === "teaching" && !currentContent)
     return <LessonStatusScreen message="No content found." />;
   if (phase === "tasks" && !currentTask)
@@ -110,6 +103,7 @@ export function LessonPageClient({
                 <>
                   <LessonTaskCard task={currentTask} />
                   <LessonChoiceGrid
+                    key={currentTask.id}
                     taskType={currentTask.type}
                     matchData={matchData}
                     choices={choices}
