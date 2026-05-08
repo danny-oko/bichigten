@@ -36,20 +36,28 @@ export async function getCurrentAppUser() {
     [clerkUser?.firstName, clerkUser?.lastName].filter(Boolean).join(" ").trim() ||
     username;
 
-  return prisma.user.upsert({
+  const existing = await prisma.user.findUnique({ where: { id: userId } });
+  if (!existing) {
+    return prisma.user.create({
+      data: {
+        id: userId,
+        email,
+        userName: username,
+        name,
+        avatarUrl: clerkUser?.imageUrl ?? undefined,
+      },
+    });
+  }
+
+  // Don't overwrite user-edited profile fields on every request.
+  // Only fill missing values from Clerk, while keeping email in sync.
+  return prisma.user.update({
     where: { id: userId },
-    update: {
+    data: {
       email,
-      userName: username,
-      name,
-      avatarUrl: clerkUser?.imageUrl ?? undefined,
-    },
-    create: {
-      id: userId,
-      email,
-      userName: username,
-      name,
-      avatarUrl: clerkUser?.imageUrl ?? undefined,
+      ...(existing.userName ? {} : { userName: username }),
+      ...(existing.name ? {} : { name }),
+      ...(existing.avatarUrl ? {} : { avatarUrl: clerkUser?.imageUrl ?? undefined }),
     },
   });
 }

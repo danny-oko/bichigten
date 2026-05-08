@@ -20,8 +20,10 @@ export default function WebLeaguePath({ userXp = 0 }: { userXp: number }) {
   };
 
   return (
-    <div className="bg-white rounded-2xl border border-[#E8D9C0] p-5 shadow-sm">
-      <h3 className="text-sm font-bold text-[#222] mb-5 px-1">Цолны нэршил</h3>
+    <div className="rounded-2xl border-2 border-[#E5E5E5] bg-white p-5 shadow-sm">
+      <h3 className="mb-5 border-b border-[#ECE7DE] px-1 pb-3 text-sm font-bold text-[#1C2B4A]">
+        Цолны нэршил
+      </h3>
 
       <div className="space-y-1">
         {RANK_TIERS.map((rank, index) => {
@@ -35,16 +37,16 @@ export default function WebLeaguePath({ userXp = 0 }: { userXp: number }) {
               className="relative flex items-center gap-3 p-2 group"
             >
               {index !== RANK_TIERS.length - 1 && (
-                <div className="absolute left-[23px] top-10 w-[1px] h-6 bg-[#E8D9C0]/50" />
+                <div className="absolute left-[23px] top-10 h-6 w-px bg-[#ECE7DE]" />
               )}
 
               <div
                 className={`w-9 h-9 rounded-full flex items-center justify-center border-2 transition-all z-10 ${
                   isCurrent
-                    ? "bg-[#FFF8EE] border-[#E8940A] scale-110"
+                    ? "scale-110 border-[#E8920A] bg-[#FFF8EE]"
                     : isLocked
                       ? "bg-gray-50 border-gray-100 grayscale"
-                      : "bg-green-50 border-green-200"
+                      : "border-[#BFE3D8] bg-[#ECF8F4]"
                 }`}
               >
                 <span className="text-sm">{isLocked ? "🔒" : rank.icon}</span>
@@ -52,12 +54,12 @@ export default function WebLeaguePath({ userXp = 0 }: { userXp: number }) {
 
               <div className="flex-1">
                 <p
-                  className={`text-xs font-bold ${isLocked ? "text-gray-400" : "text-[#222]"}`}
+                  className={`text-xs font-bold ${isLocked ? "text-gray-400" : "text-[#1C2B4A]"}`}
                 >
                   {rank.label}
                 </p>
                 {isCurrent && (
-                  <p className="text-[10px] text-[#E8940A] font-medium">
+                  <p className="text-[10px] font-medium text-[#E8920A]">
                     Дараагийн цол хүртэл {RANK_TIERS[index + 1]?.minXp - userXp}{" "}
                     XP
                   </p>
@@ -65,7 +67,7 @@ export default function WebLeaguePath({ userXp = 0 }: { userXp: number }) {
               </div>
 
               {status === "done" && (
-                <span className="text-[10px] text-green-500 font-bold">✓</span>
+                <span className="text-[10px] font-bold text-[#2E8B6F]">✓</span>
               )}
             </div>
           );

@@ -4,6 +4,7 @@ type HeaderProps = {
   heartsRemaining?: number;
   streak: number;
   totalXp: number;
+  fixedOnDesktop?: boolean;
 };
 
 const MAX_HEARTS = 5;
@@ -12,6 +13,7 @@ export const Header = ({
   heartsRemaining = MAX_HEARTS,
   streak,
   totalXp,
+  fixedOnDesktop = true,
 }: HeaderProps) => {
   const safeHeartsRemaining = Math.max(
     0,
@@ -22,9 +24,12 @@ export const Header = ({
 
   return (
     <div
-      className={`md:fixed right-20 top-4 z-100 pt-[env(safe-area-inset-top)] font-['Plus_Jakarta_Sans']`}
+      className={[
+        "w-full pt-[env(safe-area-inset-top)] font-['Plus_Jakarta_Sans']",
+        fixedOnDesktop ? "md:fixed right-20 top-4 z-100" : "",
+      ].join(" ")}
     >
-      <div className="max-w-lg">
+      <div className="w-full">
         <div className="flex items-center px-4 py-3 font-['Plus_Jakarta_Sans'] text-[#0F5238]">
           <div className="flex shrink-0 items-center gap-10">
             <div

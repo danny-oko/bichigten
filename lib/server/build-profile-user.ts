@@ -18,6 +18,7 @@ import {
 const XP_PER_LEVEL = 300;
 const DAY_MS = 24 * 60 * 60 * 1000;
 const DOW_LETTERS = ["S", "M", "T", "W", "T", "F", "S"] as const;
+const HEATMAP_DAYS = 70;
 
 function formatMemberSince(date: Date): string {
   return new Intl.DateTimeFormat("en", { month: "short", year: "numeric" }).format(date);
@@ -41,6 +42,40 @@ function buildLast7StreakDots(completionUtcMidnights: Set<number>) {
     });
   }
   return out;
+}
+
+function buildActivityHeatmap(completedRows: { completedAt: Date | null }[]) {
+  const today = toUtcDateOnly(new Date()).getTime();
+  const start = today - (HEATMAP_DAYS - 1) * DAY_MS;
+  const countByDay = new Map<number, number>();
+
+  for (const row of completedRows) {
+    if (!row.completedAt) continue;
+    const ts = toUtcDateOnly(row.completedAt).getTime();
+    if (ts < start || ts > today) continue;
+    countByDay.set(ts, (countByDay.get(ts) ?? 0) + 1);
+  }
+
+  const maxCount = Math.max(...Array.from(countByDay.values()), 0);
+  const getLevel = (count: number): 0 | 1 | 2 | 3 | 4 => {
+    if (count <= 0) return 0;
+    if (maxCount <= 1) return 2;
+    const ratio = count / maxCount;
+    if (ratio <= 0.34) return 1;
+    if (ratio <= 0.67) return 2;
+    if (ratio < 1) return 3;
+    return 4;
+  };
+
+  return Array.from({ length: HEATMAP_DAYS }, (_, i) => {
+    const t = start + i * DAY_MS;
+    const count = countByDay.get(t) ?? 0;
+    return {
+      dateKey: new Date(t).toISOString().slice(0, 10),
+      count,
+      level: getLevel(count),
+    };
+  });
 }
 
 function buildBadges(completedLessonCount: number, totalXp: number, currentStreak: number): ProfileBadge[] {
@@ -175,6 +210,7 @@ export async function buildProfileUser(
     completionDates.map((d) => toUtcDateOnly(d).getTime()),
   );
   const streakDays = buildLast7StreakDots(completionMidnightSet);
+  const activityHeatmap = buildActivityHeatmap(completedRows);
 
   const xpThisWeek = weeklyAgg._sum.xpEarned ?? 0;
   const lessonsDoneLast7Days = completedRows.filter(
@@ -298,6 +334,7 @@ export async function buildProfileUser(
       xpThisWeek,
       daysThisWeek,
     },
+    activityHeatmap,
     streak: {
       current: currentStreak,
       best: bestStreak,

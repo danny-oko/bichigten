@@ -1,9 +1,10 @@
-import Link from "next/link";
+"use client";
 
 import type { ProfileTab } from "../common/types";
 
 type ProfileTabsProps = {
   activeTab: ProfileTab;
+  onTabChange: (tab: ProfileTab) => void;
 };
 
 const tabs: Array<{ id: ProfileTab; label: string }> = [
@@ -13,24 +14,27 @@ const tabs: Array<{ id: ProfileTab; label: string }> = [
   { id: "settings", label: "Settings" },
 ];
 
-export default function ProfileTabs({ activeTab }: ProfileTabsProps) {
+export default function ProfileTabs({ activeTab, onTabChange }: ProfileTabsProps) {
   return (
     <nav className="flex items-center gap-6 border-b border-[#dfd6c6] px-1">
       {tabs.map((tab) => {
         const isActive = tab.id === activeTab;
         return (
-          <Link
+          <button
+            type="button"
             key={tab.id}
-            href={`/profile?tab=${tab.id}`}
-            scroll={false}
-            className={`border-b-2 pb-3 text-sm font-semibold transition-colors ${
+            onClick={() => onTabChange(tab.id)}
+            className={`relative pb-3 text-sm font-semibold transition-colors ${
               isActive
-                ? "border-[#d39a2f] text-[#433c31]"
-                : "border-transparent text-[#8d8270] hover:text-[#433c31]"
+                ? "text-[#433c31]"
+                : "text-[#8d8270] hover:text-[#433c31]"
             }`}
           >
             {tab.label}
-          </Link>
+            {isActive ? (
+              <span className="absolute inset-x-0 -bottom-px h-[2px] rounded-full bg-[#d39a2f]" />
+            ) : null}
+          </button>
         );
       })}
     </nav>

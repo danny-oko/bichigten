@@ -14,15 +14,15 @@ interface WebNearbyPlayersProps {
 
 export default function WebNearbyPlayers({ players }: WebNearbyPlayersProps) {
   return (
-    <div className="bg-white rounded-2xl border border-[#E8D9C0] p-5">
-      <div className="flex items-center justify-between mb-4">
-        <p className="text-xs text-[#999] uppercase tracking-wide">
+    <div className="rounded-2xl border-2 border-[#E5E5E5] bg-white p-5">
+      <div className="mb-4 flex items-center justify-between border-b border-[#ECE7DE] pb-3">
+        <p className="text-xs uppercase tracking-wide text-[#6F6658]">
           Ойролцоох тоглогчид
         </p>
-        <p className="text-xs text-[#999]">Ranks 1-3</p>
+        <p className="text-xs text-[#6F6658]">Ranks 1-3</p>
       </div>
 
-      <p className="text-sm font-semibold text-[#222] mb-3">
+      <p className="mb-3 text-sm font-semibold text-[#1C2B4A]">
         Таны эргэн тойронд
       </p>
 
@@ -31,7 +31,7 @@ export default function WebNearbyPlayers({ players }: WebNearbyPlayersProps) {
           <div
             key={player.rank}
             className={`flex items-center gap-3 px-3 py-2 rounded-xl ${
-              player.isMe ? "bg-[#FFF3DC]" : ""
+              player.isMe ? "bg-[#FFF8EE]" : ""
             }`}
           >
             <span className="text-sm font-semibold text-[#888] w-4 shrink-0">
@@ -41,7 +41,7 @@ export default function WebNearbyPlayers({ players }: WebNearbyPlayersProps) {
             <div
               className={`w-8 h-8 rounded-full shrink-0 flex items-center justify-center text-sm font-bold ${
                 player.isMe
-                  ? "bg-[#E8940A] text-white"
+                  ? "bg-[#E8920A] text-white"
                   : "bg-[#D3C4A8] text-[#7a6a50]"
               }`}
             >
@@ -62,7 +62,7 @@ export default function WebNearbyPlayers({ players }: WebNearbyPlayersProps) {
                   {player.name}
                 </p>
                 {player.isMe && (
-                  <span className="bg-[#E8940A] text-white text-[9px] font-bold px-1.5 py-0.5 rounded-full">
+                  <span className="rounded-full bg-[#1C2B4A] px-1.5 py-0.5 text-[9px] font-bold text-white">
                     Та
                   </span>
                 )}
@@ -75,7 +75,7 @@ export default function WebNearbyPlayers({ players }: WebNearbyPlayersProps) {
               </p>
               {player.xpChange !== undefined && (
                 <p
-                  className={`text-[10px] font-medium ${player.xpChange >= 0 ? "text-green-500" : "text-red-400"}`}
+                  className={`text-[10px] font-medium ${player.xpChange >= 0 ? "text-[#2E8B6F]" : "text-[#D63F3F]"}`}
                 >
                   {player.xpChange >= 0 ? "+" : ""}
                   {player.xpChange} XP
