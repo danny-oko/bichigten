@@ -11,6 +11,7 @@ const isPublicRoute = createRouteMatcher([
 
 const isAuthPageRoute = createRouteMatcher(["/sign-in(.*)", "/sign-up(.*)"]);
 
+/** Dev-only: Postman can call /api/* with x-postman-secret (see lib/server/dev-postman-bypass.ts). */
 function isDevPostmanApiBypass(request: NextRequest): boolean {
   if (process.env.NODE_ENV !== "development") {
     return false;

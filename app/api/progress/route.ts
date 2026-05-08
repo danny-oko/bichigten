@@ -3,6 +3,7 @@ import { unauthorizedApiResponse } from "@/lib/server/dev-postman-bypass";
 import { getClerkUserIdFromRequest } from "@/lib/server/get-current-app-user";
 import { NextRequest, NextResponse } from "next/server";
 
+// GET /api/progress?lessonId=… (user from session or dev impersonation)
 export const GET = async (req: NextRequest) => {
   const lessonId = req.nextUrl.searchParams.get("lessonId");
   const userId = await getClerkUserIdFromRequest(req);
@@ -32,11 +33,10 @@ export const POST = async (req: NextRequest) => {
   const xpEarned = Number(body.xpEarned ?? 0);
   const nextStatusRaw = status ?? "IN_PROGRESS";
 
-  if (!userId || !lessonId) {
-    return NextResponse.json(
-      { message: "Missing required fields" },
-      { status: 400 },
-    );
+  if (!userId) return unauthorizedApiResponse(req);
+
+  if (!lessonId) {
+    return NextResponse.json({ message: "Missing required fields" }, { status: 400 });
   }
 
   const user = await prisma.user.findUnique({ where: { id: userId } });
