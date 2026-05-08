@@ -21,24 +21,37 @@ export default function StrokeAnimation({
   const paths = path.split("|");
 
   useEffect(() => {
-    pathRefs.current.forEach((el, i) => {
-      if (!el) return;
-      const len = el.getTotalLength();
-      el.style.transition = "none";
-      el.style.strokeDasharray = `${len}`;
-      el.style.strokeDashoffset = `${len}`;
+    if (!play) return;
 
-      if (play) {
+    const elements = pathRefs.current.filter(Boolean) as SVGPathElement[];
+    const totalDuration = 2500; // давтах хугацаа (ms)
+
+    const runAnimation = () => {
+      // Бүх path-г reset
+      elements.forEach((el) => {
+        const len = el.getTotalLength();
+        el.style.transition = "none";
+        el.style.strokeDasharray = `${len}`;
+        el.style.strokeDashoffset = `${len}`;
+      });
+
+      // 2 frame дараа зурах
+      requestAnimationFrame(() => {
         requestAnimationFrame(() => {
-          requestAnimationFrame(() => {
-            // Хоёр дахь path нь нэгдүгээрхийн дараа эхэлнэ
+          elements.forEach((el, i) => {
+            const len = el.getTotalLength();
             const delay = i * 0.8;
             el.style.transition = `stroke-dashoffset 1s cubic-bezier(0.47, 0, 0.745, 0.715) ${delay}s`;
             el.style.strokeDashoffset = "0";
           });
         });
-      }
-    });
+      });
+    };
+
+    runAnimation();
+    const interval = setInterval(runAnimation, totalDuration);
+
+    return () => clearInterval(interval);
   }, [play, path]);
 
   return (
