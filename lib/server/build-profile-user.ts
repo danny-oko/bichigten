@@ -134,7 +134,6 @@ export async function buildProfileUser(
       select: {
         lessonId: true,
         status: true,
-        mistakeCount: true,
         xpEarned: true,
         completedAt: true,
       },
@@ -276,9 +275,12 @@ export async function buildProfileUser(
 
   return {
     id: appUser.id,
+    email: appUser.email,
     name: displayName,
     username: appUser.userName,
+    avatarUrl: appUser.avatarUrl,
     avatarInitial: displayName.charAt(0).toUpperCase() || "U",
+    heartsRemaining: appUser.heartsRemaining,
     memberSince: formatMemberSince(appUser.createdAt),
     rankTitle,
     language: "Mongolian",

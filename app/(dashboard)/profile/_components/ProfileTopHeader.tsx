@@ -11,8 +11,16 @@ export default function ProfileTopHeader({ user }: ProfileTopHeaderProps) {
     <section className="rounded-3xl border border-[#e6dece] bg-white px-5 py-5 shadow-[0_1px_1px_rgba(0,0,0,0.03)] md:px-8">
       <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
         <div className="flex items-start gap-4">
-          <div className="flex h-16 w-16 shrink-0 items-center justify-center rounded-full border-[3px] border-[#e8a131] bg-[#e19a1e] text-2xl font-bold text-white">
-            {user.avatarInitial}
+          <div className="flex h-16 w-16 shrink-0 items-center justify-center overflow-hidden rounded-full border-[3px] border-[#e8a131] bg-[#e19a1e] text-2xl font-bold text-white">
+            {user.avatarUrl ? (
+              <img
+                src={user.avatarUrl}
+                alt={user.name}
+                className="size-full object-cover"
+              />
+            ) : (
+              user.avatarInitial
+            )}
           </div>
           <div>
             <h1 className="text-3xl font-extrabold text-[#1f1c18]">{user.name}</h1>

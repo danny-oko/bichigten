@@ -100,7 +100,7 @@ export const CharacterDetail = ({
       <section
         className={[
           "rounded-2xl border border-[#ead9bb] bg-[#fffdf7]",
-          compact ? "mb-5 p-4" : "mb-8 p-6",
+          compact ? "mb-5 p-5" : "mb-8 p-6 md:p-8",
         ].join(" ")}
       >
         <div className="mb-4">
@@ -111,7 +111,9 @@ export const CharacterDetail = ({
         <div
           className={[
             "flex items-center justify-center rounded-[20px] bg-white",
-            compact ? "h-48" : "h-64",
+            compact
+              ? "h-52 p-4 sm:p-5"
+              : "h-72 p-5 sm:p-6 md:h-80 md:p-8 md:pb-10",
           ].join(" ")}
         >
           {selectedForm?.strokePath ? (

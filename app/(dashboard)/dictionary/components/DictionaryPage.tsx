@@ -196,8 +196,6 @@ export const DictionaryPage = ({ characters }: { characters: Character[] }) => {
               characters={filteredCharacters}
               selectedCharacter={selectedCharacter}
               onSelect={handleMobileSelect}
-              filter={filter}
-              onFilterChange={setFilter}
             />
           </section>
 

@@ -3,10 +3,11 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async (
   _: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ) => {
+  const { id } = await params;
   const content = await prisma.lessonContent.findUnique({
-    where: { id: params.id },
+    where: { id },
   });
   if (!content)
     return NextResponse.json({ message: "Not found" }, { status: 404 });
@@ -15,11 +16,12 @@ export const GET = async (
 
 export const PATCH = async (
   req: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ) => {
+  const { id } = await params;
   const body = await req.json();
   const content = await prisma.lessonContent.update({
-    where: { id: params.id },
+    where: { id },
     data: {
       ...(body.name && { name: body.name }),
       ...(body.text && { text: body.text }),
@@ -32,8 +34,9 @@ export const PATCH = async (
 
 export const DELETE = async (
   _: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ) => {
-  await prisma.lessonContent.delete({ where: { id: params.id } });
+  const { id } = await params;
+  await prisma.lessonContent.delete({ where: { id } });
   return NextResponse.json({ message: "Deleted" });
 };

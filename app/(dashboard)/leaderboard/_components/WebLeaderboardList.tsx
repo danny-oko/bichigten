@@ -10,10 +10,15 @@ interface WebLeaderboardUser {
   title: string;
   avatarUrl: string | null; // Change from 'undefined' to 'null'
   isMe: boolean;
+  isNew?: boolean;
+  xpChange?: number;
 }
 
 interface WebLeaderboardListProps {
   users: WebLeaderboardUser[];
+  maxXp?: number;
+  initialVisibleCount?: number;
+  loadStep?: number;
 }
 function WebListItem({
   user,
@@ -116,7 +121,7 @@ export default function WebLeaderboardList({
       {hasMore && (
         <button
           type="button"
-          onClick={() => setVisibleCount((current) => current + loadStep)}
+          onClick={() => setVisibleCount((current: number) => current + loadStep)}
           className="mt-2 self-center rounded-xl border border-[#D7B680] bg-[#F3E0BD] px-5 py-2 text-sm font-semibold text-[#7A5C2E] transition hover:bg-[#EFD4A2]"
         >
           Load more

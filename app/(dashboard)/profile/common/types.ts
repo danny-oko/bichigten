@@ -67,9 +67,12 @@ export type ProfileSettingItem = {
 
 export type ProfileUser = {
   id: string;
+  email: string;
   name: string;
   username: string;
+  avatarUrl: string | null;
   avatarInitial: string;
+  heartsRemaining: number;
   memberSince: string;
   rankTitle: string;
   language: string;

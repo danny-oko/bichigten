@@ -1,12 +1,14 @@
 import { Header } from "@/app/_components/Bar-Sections/header";
-import { HomePath } from "./_components/home-page-client";
-import { auth, currentUser } from "@clerk/nextjs/server";
 import prisma from "@/lib/prisma";
-import { ensureUser } from "@/lib/server/ensure-user";
 import { calculateDailyStreak } from "@/lib/server/daily-streak";
+import { ensureUser } from "@/lib/server/ensure-user";
+import { auth, currentUser } from "@clerk/nextjs/server";
+import { HomePath } from "./_components/home-page-client";
 
 export default async function HomeSection() {
   const { userId } = await auth();
+
+  console.log("user id:", userId);
 
   let xp = 0;
   let streak = 0;

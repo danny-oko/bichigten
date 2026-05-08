@@ -3,9 +3,10 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async (
   _: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ) => {
-  const task = await prisma.task.findUnique({ where: { id: params.id } });
+  const { id } = await params;
+  const task = await prisma.task.findUnique({ where: { id } });
   if (!task)
     return NextResponse.json({ message: "Not found" }, { status: 404 });
   return NextResponse.json(task);
@@ -13,11 +14,12 @@ export const GET = async (
 
 export const PATCH = async (
   req: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ) => {
+  const { id } = await params;
   const body = await req.json();
   const task = await prisma.task.update({
-    where: { id: params.id },
+    where: { id },
     data: {
       ...(body.question && { question: body.question }),
       ...(body.correctAnswer && { correctAnswer: body.correctAnswer }),
@@ -33,8 +35,9 @@ export const PATCH = async (
 
 export const DELETE = async (
   _: NextRequest,
-  { params }: { params: { id: string } },
+  { params }: { params: Promise<{ id: string }> },
 ) => {
-  await prisma.task.delete({ where: { id: params.id } });
+  const { id } = await params;
+  await prisma.task.delete({ where: { id } });
   return NextResponse.json({ message: "Deleted" });
 };
