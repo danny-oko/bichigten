@@ -5,6 +5,7 @@ export interface Form {
   glyph: string;
   imgUrl?: string;
   strokePath?: string;
+  viewBox?: string;
 }
 
 export interface Character {
@@ -37,7 +38,7 @@ export const LetterCard = ({
       type="button"
       onClick={() => onSelect(character)}
       className={[
-        "group flex aspect-square min-h-[112px] w-full items-center justify-center",
+        "group flex aspect-square min-h-[136px] w-full items-center justify-center",
         "rounded-2xl border bg-white text-center shadow-sm transition duration-200",
         "hover:scale-105 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e8920a] focus-visible:ring-offset-2",
         isSelected

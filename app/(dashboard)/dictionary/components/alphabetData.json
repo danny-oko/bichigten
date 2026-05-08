@@ -10,139 +10,545 @@
       {
         "type": "ISOLATE",
         "glyph": "ᠠ",
-        "strokePath": "M9.40175 1.26123C9.40175 1.26123 16.4017 5.76123 14.303 9.26123C12.2043 12.7612 -0.196993 18.2612 1.90175 18.2612C4.00049 18.2612 5.43946 17.7612 7.40182 17.7612C8.90182 17.7612 9.40175 17.2612 9.40175 19.2612C9.40175 21.2612 9.40179 23.7612 9.40175 25.7612C9.40171 27.7612 -0.598341 30.7612 1.90175 30.2612C4.40184 29.7612 5.24593 29.2263 6.90175 30.2612C7.60425 30.7003 8.40175 30.9328 8.40175 31.7612C8.40175 35.7612 8.40175 43.2612 8.40175 43.2612"
+        "strokePath": "M13.167 1L19.0657 8.25996C19.4023 8.67425 19.3542 9.27987 18.9564 9.6358L0.666992 26L7.65692 21.0659C8.30609 20.6077 9.2046 21.0531 9.23296 21.8472L9.6498 33.5186C9.66066 33.8228 9.53236 34.1154 9.30123 34.3135L2.66699 40L8.12623 36.4905C8.79175 36.0627 9.66699 36.5405 9.66699 37.3317V48"
       },
-      { "type": "INITIAL", "glyph": "ᠠ" },
-      { "type": "MEDIAL", "glyph": "ᠠ\u180B" },
-      { "type": "FINAL", "glyph": "ᠠ\u180C" }
+      {
+        "type": "INITIAL",
+        "glyph": "ᠠ\u200D",
+        "strokePath": "M13.167 1L19.0657 8.25996C19.4023 8.67425 19.3542 9.27987 18.9564 9.6358L0.666992 26L7.65692 21.0659C8.30609 20.6077 9.2046 21.0531 9.23296 21.8472L9.6498 33.5186C9.66066 33.8228 9.53236 34.1154 9.30123 34.3135L2.66699 40L8.12623 36.4905C8.79175 36.0627 9.66699 36.5405 9.66699 37.3317V48"
+      },
+      {
+        "type": "MEDIAL",
+        "glyph": "\u200Dᠠ\u200D",
+        "strokePath": "M7.24268 1V12.5841C7.24268 12.8503 7.13653 13.1055 6.94774 13.2932L0.705078 19.5L5.59891 15.3829C6.24936 14.8357 7.24268 15.2981 7.24268 16.1481V29.5",
+        "viewBox": "0 0 9 31"
+      },
+      {
+        "type": "FINAL",
+        "glyph": "\u200Dᠠ",
+        "strokePath": "M19.0376 1V24.5C19.0376 29 30.0376 38 42.0376 24.5|M29 37H34.8768C35.7227 37 36.1865 37.9848 35.6478 38.6369L18 60C18 60 8 69.5 1 60",
+        "viewBox": "0 0 44 66"
+      }
     ]
   },
   {
     "id": "2",
-    "name": "E",
+    "name": "Э",
     "unicode": "U+1821",
-    "latinForm": "e",
+    "latinForm": "э",
     "type": "VOWEL",
     "order": 2,
     "forms": [
-      { "type": "ISOLATE", "glyph": "ᠡ" },
-      { "type": "INITIAL", "glyph": "ᠡ" },
-      { "type": "MEDIAL", "glyph": "ᠡ" },
-      { "type": "FINAL", "glyph": "ᠡ" }
+      {
+        "type": "ISOLATE",
+        "glyph": "ᠡ"
+      },
+      {
+        "type": "INITIAL",
+        "glyph": "ᠡ\u200D",
+        "strokePath": "M13.9266 1.00024L18.3861 8.48625C18.6068 8.85674 18.5652 9.32698 18.2828 9.6529L0.755859 29.8802L9.18396 22.2848C9.82733 21.705 10.8534 22.1615 10.8534 23.0276V37.5002",
+        "viewBox": "0 0 20 39"
+      },
+      {
+        "type": "MEDIAL",
+        "glyph": "\u200Dᠡ\u200D",
+        "strokePath": "M7.24268 1V12.5841C7.24268 12.8503 7.13653 13.1055 6.94774 13.2932L0.705078 19.5L5.59891 15.3829C6.24936 14.8357 7.24268 15.2981 7.24268 16.1481V29.5",
+        "viewBox": "0 0 9 31"
+      },
+      {
+        "type": "FINAL",
+        "glyph": "\u200Dᠡ",
+        "strokePath": "M19.0376 1V24.5C19.0376 29 30.0376 38 42.0376 24.5|M29 37H34.8768C35.7227 37 36.1865 37.9848 35.6478 38.6369L18 60C18 60 8 69.5 1 60",
+        "viewBox": "0 0 44 66"
+      }
     ]
   },
   {
     "id": "3",
-    "name": "I",
+    "name": "И",
     "unicode": "U+1822",
-    "latinForm": "i",
+    "latinForm": "и",
     "type": "VOWEL",
     "order": 3,
     "forms": [
-      { "type": "ISOLATE", "glyph": "ᠢ" },
-      { "type": "INITIAL", "glyph": "ᠢ" },
-      { "type": "MEDIAL", "glyph": "ᠢ" },
-      { "type": "FINAL", "glyph": "ᠢ" }
+      {
+        "type": "ISOLATE",
+        "glyph": "ᠢ"
+      },
+      {
+        "type": "INITIAL",
+        "glyph": "ᠢ\u200D",
+        "strokePath": "M22.2881 1.00024L26.0651 8.21851C26.2988 8.66517 26.1635 9.21595 25.7494 9.5035L8.47412 21.5002L17.9068 16.7335C18.572 16.3974 19.3578 16.8808 19.3578 17.626V21.0095C19.3578 21.319 19.2145 21.6111 18.9697 21.8005L0.61195 36.0002L17.8349 25.4345C18.5012 25.0257 19.3578 25.5052 19.3578 26.2869V45.0002",
+        "viewBox": "0 0 28 46"
+      },
+      {
+        "type": "MEDIAL",
+        "glyph": "\u200Dᠢ\u200D",
+        "strokePath": "M16.7214 1V16.5977C16.7214 16.8558 16.6216 17.104 16.4428 17.2902L4.72119 29.5L15.1007 21.283C15.7563 20.764 16.7214 21.2309 16.7214 22.0671V41",
+        "viewBox": "0 0 22 50"
+      },
+      {
+        "type": "FINAL",
+        "glyph": "\u200Dᠢ",
+        "strokePath": "M6 1C6.09242 3.40285 5.89786 7.38407 4.95599 11M1 18C2.96018 16.5744 4.19927 13.9051 4.95599 11M4.95599 11C11.304 10.1667 20.4 12.4 6 28",
+        "viewBox": "0 0 15 29"
+      }
     ]
   },
 
   {
     "id": "5",
-    "name": "O, U",
-    "unicode": "U+1824",
-    "latinForm": "o, u",
+    "name": "О, У",
+    "unicode": "U+1823, U+1824",
+    "latinForm": "о, у",
     "type": "VOWEL",
     "order": 5,
     "forms": [
-      { "type": "ISOLATE", "glyph": "ᠤ" },
-      { "type": "INITIAL", "glyph": "ᠤ" },
-      { "type": "MEDIAL", "glyph": "ᠤ" },
-      { "type": "FINAL", "glyph": "ᠤ" }
+      {
+        "type": "ISOLATE",
+        "glyph": "ᠤ"
+      },
+      {
+        "type": "INITIAL",
+        "glyph": "ᠤ\u200D",
+        "strokePath": "M16.2866 1L22.7003 7.41374C23.2116 7.92498 23.028 8.79308 22.3536 9.05365L1.78658 17L11.2348 14.3554C11.8725 14.1769 12.5044 14.6562 12.5044 15.3183V19M12.5044 19L12.4505 33.108C12.4495 33.36 12.3548 33.6019 12.1805 33.7839C9.74833 36.3226 4.98348 40.4264 2.28658 38.5C-1.21342 36 2.50439 19 12.5044 19ZM12.5044 19L12.449 53.5",
+        "viewBox": "0 0 24 55"
+      },
+      {
+        "type": "MEDIAL",
+        "glyph": "\u200Dᠤ\u200D",
+        "strokePath": "M11.9025 1V8.5M11.9025 8.5V19.2106C11.9025 19.3997 11.8502 19.5835 11.7481 19.7426C9.67439 22.9735 5.24266 28.89 2.90253 28.5C-0.0974692 28 -1.09747 11 11.9025 8.5ZM11.9025 8.5V34",
+        "viewBox": "0 0 13 35"
+      },
+      {
+        "type": "FINAL",
+        "glyph": "\u200Dᠤ",
+        "strokePath": "M11.267 1.00024C11.711 2.55439 12.103 4.64328 12.2576 7.00024M12.2576 7.00024C12.2575 21.5002 9.26695 26.5002 4.26695 27.0002C-0.733281 27.0002 -1.34991 10.2002 12.2576 7.00024ZM12.2576 7.00024C16.2666 5.50024 28.2666 13.0002 10.2666 29.5002",
+        "viewBox": "0 0 21 31"
+      }
     ]
   },
 
   {
     "id": "7",
-    "name": "ö, Ü",
-    "unicode": "U+1826",
-    "latinForm": "ö, ü",
+    "name": "Ө, Ү",
+    "unicode": "U+1825, U+1826",
+    "latinForm": "ө, ү",
     "type": "VOWEL",
     "order": 7,
     "forms": [
-      { "type": "ISOLATE", "glyph": "ᠦ" },
-      { "type": "INITIAL", "glyph": "ᠦ" },
-      { "type": "MEDIAL", "glyph": "ᠦ" },
-      { "type": "FINAL", "glyph": "ᠦ" }
+      {
+        "type": "ISOLATE",
+        "glyph": "ᠦ"
+      },
+      {
+        "type": "INITIAL",
+        "glyph": "ᠦ\u200D",
+        "strokePath": "M20.9464 1L27.3602 7.41374C27.8714 7.92498 27.6879 8.79308 27.0134 9.05365L6.44642 17L16.1833 14.3445C16.8194 14.171 17.4464 14.6499 17.4464 15.3093V19M17.4464 19L17.1177 33.1193C17.112 33.3645 17.0176 33.5988 16.848 33.7759C14.4181 36.314 9.64613 40.4284 6.94642 38.5C3.44642 36 7.44641 19 17.4464 19ZM17.4464 19L16.9559 39.5954C16.9497 39.8549 16.8429 40.1018 16.6579 40.284L0.70166 56L15.8049 43.3724C16.4559 42.8281 17.4463 43.291 17.4463 44.1396V58",
+        "viewBox": "0 0 29 59"
+      },  
+      {
+        "type": "MEDIAL",
+        "glyph": "\u200Dᠦ\u200D",
+        "strokePath": "M11.9025 1V8.5M11.9025 8.5V19.2106C11.9025 19.3997 11.8502 19.5835 11.7481 19.7426C9.67439 22.9735 5.24266 28.89 2.90253 28.5C-0.0974692 28 -1.09747 11 11.9025 8.5ZM11.9025 8.5V34",
+        "viewBox": "0 0 13 35"
+      },
+      {
+        "type": "FINAL",
+        "glyph": "\u200Dᠦ",
+        "strokePath": "M11.267 1.00024C11.711 2.55439 12.103 4.64328 12.2576 7.00024M12.2576 7.00024C12.2575 21.5002 9.26695 26.5002 4.26695 27.0002C-0.733281 27.0002 -1.34991 10.2002 12.2576 7.00024ZM12.2576 7.00024C16.2666 5.50024 28.2666 13.0002 10.2666 29.5002",
+        "viewBox": "0 0 21 31"
+      }
     ]
   },
   {
     "id": "8",
-    "name": "N",
+    "name": "Н",
     "unicode": "U+1828",
-    "latinForm": "n",
+    "latinForm": "н",
     "type": "CONSONANT",
     "order": 8,
     "forms": [
-      { "type": "ISOLATE", "glyph": "ᠨ" },
-      { "type": "INITIAL", "glyph": "ᠨ" },
-      { "type": "MEDIAL", "glyph": "ᠨ" },
-      { "type": "FINAL", "glyph": "ᠨ" }
+      {
+        "type": "ISOLATE",
+        "glyph": "ᠨ"
+      },
+      {
+        "type": "INITIAL",
+        "glyph": "ᠨ\u200D"
+      },
+      {
+        "type": "MEDIAL",
+        "glyph": "\u200Dᠨ\u200D"
+      },
+      {
+        "type": "FINAL",
+        "glyph": "\u200Dᠨ"
+      }
     ]
   },
   {
     "id": "9",
-    "name": "B",
-    "unicode": "U+182A",
-    "latinForm": "b",
+    "name": "М",
+    "unicode": "U+182E",
+    "latinForm": "м",
     "type": "CONSONANT",
     "order": 9,
     "forms": [
-      { "type": "ISOLATE", "glyph": "ᠪ" },
-      { "type": "INITIAL", "glyph": "ᠪ" },
-      { "type": "MEDIAL", "glyph": "ᠪ" },
-      { "type": "FINAL", "glyph": "ᠪ" }
+      {
+        "type": "ISOLATE",
+        "glyph": "ᠮ"
+      },
+      {
+        "type": "INITIAL",
+        "glyph": "ᠮ\u200D"
+      },
+      {
+        "type": "MEDIAL",
+        "glyph": "\u200Dᠮ\u200D"
+      },
+      {
+        "type": "FINAL",
+        "glyph": "\u200Dᠮ"
+      }
     ]
   },
   {
     "id": "10",
-    "name": "P",
-    "unicode": "U+182B",
-    "latinForm": "p",
+    "name": "Л",
+    "unicode": "U+182F",
+    "latinForm": "л",
     "type": "CONSONANT",
     "order": 10,
     "forms": [
-      { "type": "ISOLATE", "glyph": "ᠫ" },
-      { "type": "INITIAL", "glyph": "ᠫ" },
-      { "type": "MEDIAL", "glyph": "ᠫ" },
-      { "type": "FINAL", "glyph": "ᠫ" }
+      {
+        "type": "ISOLATE",
+        "glyph": "ᠯ"
+      },
+      {
+        "type": "INITIAL",
+        "glyph": "ᠯ\u200D"
+      },
+      {
+        "type": "MEDIAL",
+        "glyph": "\u200Dᠯ\u200D"
+      },
+      {
+        "type": "FINAL",
+        "glyph": "\u200Dᠯ"
+      }
     ]
   },
   {
     "id": "11",
-    "name": "Q",
-    "unicode": "U+182C",
-    "latinForm": "q",
+    "name": "Р",
+    "unicode": "U+1837",
+    "latinForm": "р",
     "type": "CONSONANT",
     "order": 11,
     "forms": [
-      { "type": "ISOLATE", "glyph": "ᠬ" },
-      { "type": "INITIAL", "glyph": "ᠬ" },
-      { "type": "MEDIAL", "glyph": "ᠬ" },
-      { "type": "FINAL", "glyph": "ᠬ" }
+      {
+        "type": "ISOLATE",
+        "glyph": "ᠷ"
+      },
+      {
+        "type": "INITIAL",
+        "glyph": "ᠷ\u200D"
+      },
+      {
+        "type": "MEDIAL",
+        "glyph": "\u200Dᠷ\u200D"
+      },
+      {
+        "type": "FINAL",
+        "glyph": "\u200Dᠷ"
+      }
     ]
   },
   {
     "id": "12",
-    "name": "G",
-    "unicode": "U+182D",
-    "latinForm": "g",
+    "name": "Я",
+    "unicode": "U+1836",
+    "latinForm": "я",
     "type": "CONSONANT",
     "order": 12,
     "forms": [
-      { "type": "ISOLATE", "glyph": "ᠭ" },
-      { "type": "INITIAL", "glyph": "ᠭ" },
-      { "type": "MEDIAL", "glyph": "ᠭ" },
-      { "type": "FINAL", "glyph": "ᠭ" }
+      {
+        "type": "ISOLATE",
+        "glyph": "ᠶ"
+      },
+      {
+        "type": "INITIAL",
+        "glyph": "ᠶ\u200D"
+      },
+      {
+        "type": "MEDIAL",
+        "glyph": "\u200Dᠶ\u200D"
+      },
+      {
+        "type": "FINAL",
+        "glyph": "\u200Dᠶ"
+      }
+    ]
+  },
+  {
+    "id": "13",
+    "name": "Г",
+    "unicode": "U+182D",
+    "latinForm": "г",
+    "type": "CONSONANT",
+    "order": 13,
+    "forms": [
+      {
+        "type": "ISOLATE",
+        "glyph": "ᠭ"
+      },
+      {
+        "type": "INITIAL",
+        "glyph": "ᠭ\u200D"
+      },
+      {
+        "type": "MEDIAL",
+        "glyph": "\u200Dᠭ\u200D"
+      },
+      {
+        "type": "FINAL",
+        "glyph": "\u200Dᠭ"
+      }
+    ]
+  },
+  {
+    "id": "14",
+    "name": "X",
+    "unicode": "U+182C",
+    "latinForm": "x",
+    "type": "CONSONANT",
+    "order": 14,
+    "forms": [
+      {
+        "type": "ISOLATE",
+        "glyph": "ᠬ"
+      },
+      {
+        "type": "INITIAL",
+        "glyph": "ᠬ\u200D"
+      },
+      {
+        "type": "MEDIAL",
+        "glyph": "\u200Dᠬ\u200D"
+      },
+      {
+        "type": "FINAL",
+        "glyph": "\u200Dᠬ"
+      }
+    ]
+  },
+  {
+    "id": "16",
+    "name": "Б",
+    "unicode": "U+182A",
+    "latinForm": "б",
+    "type": "CONSONANT",
+    "order": 16,
+    "forms": [
+      {
+        "type": "ISOLATE",
+        "glyph": "ᠪ"
+      },
+      {
+        "type": "INITIAL",
+        "glyph": "ᠪ\u200D"
+      },
+      {
+        "type": "MEDIAL",
+        "glyph": "\u200Dᠪ\u200D"
+      },
+      {
+        "type": "FINAL",
+        "glyph": "\u200Dᠪ"
+      }
+    ]
+  },
+  {
+    "id": "17",
+    "name": "В",
+    "unicode": "U+182B",
+    "latinForm": "в",
+    "type": "CONSONANT",
+    "order": 17,
+    "forms": [
+      {
+        "type": "ISOLATE",
+        "glyph": "ᠫ"
+      },
+      {
+        "type": "INITIAL",
+        "glyph": "ᠫ\u200D"
+      },
+      {
+        "type": "MEDIAL",
+        "glyph": "\u200Dᠫ\u200D"
+      },
+      {
+        "type": "FINAL",
+        "glyph": "\u200Dᠫ"
+      }
+    ]
+  },
+  {
+    "id": "18",
+    "name": "НГ",
+    "unicode": "U+1829",
+    "latinForm": "нг",
+    "type": "CONSONANT",
+    "order": 18,
+    "forms": [
+      {
+        "type": "ISOLATE",
+        "glyph": "ᠩ"
+      },
+      {
+        "type": "INITIAL",
+        "glyph": "ᠩ\u200D"
+      },
+      {
+        "type": "MEDIAL",
+        "glyph": "\u200Dᠩ\u200D"
+      },
+      {
+        "type": "FINAL",
+        "glyph": "\u200Dᠩ"
+      }
+    ]
+  },
+  {
+    "id": "19",
+    "name": "Д, Т",
+    "unicode": "U+1833, U+1832",
+    "latinForm": "д, т",
+    "type": "CONSONANT",
+    "order": 19,
+    "forms": [
+      {
+        "type": "ISOLATE",
+        "glyph": "ᠲ"
+      },
+      {
+        "type": "INITIAL",
+        "glyph": "ᠲ\u200D"
+      },
+      {
+        "type": "MEDIAL",
+        "glyph": "\u200Dᠲ\u200D"
+      },
+      {
+        "type": "FINAL",
+        "glyph": "\u200Dᠲ"
+      }
+    ]
+  },
+  {
+    "id": "20",
+    "name": "С",
+    "unicode": "U+1830",
+    "latinForm": "с",
+    "type": "CONSONANT",
+    "order": 20,
+    "forms": [
+      {
+        "type": "ISOLATE",
+        "glyph": "ᠰ"
+      },
+      {
+        "type": "INITIAL",
+        "glyph": "ᠰ\u200D"
+      },
+      {
+        "type": "MEDIAL",
+        "glyph": "\u200Dᠰ\u200D"
+      },
+      {
+        "type": "FINAL",
+        "glyph": "\u200Dᠰ"
+      }
+    ]
+  },
+  {
+    "id": "21",
+    "name": "Ш",
+    "unicode": "U+1831",
+    "latinForm": "ш",
+    "type": "CONSONANT",
+    "order": 21,
+    "forms": [
+      {
+        "type": "ISOLATE",
+        "glyph": "ᠱ"
+      },
+      {
+        "type": "INITIAL",
+        "glyph": "ᠱ\u200D"
+      },
+      {
+        "type": "MEDIAL",
+        "glyph": "\u200Dᠱ\u200D"
+      },
+      {
+        "type": "FINAL",
+        "glyph": "\u200Dᠱ"
+      }
+    ]
+  },
+  {
+    "id": "22",
+    "name": "З, Ж",
+    "unicode": "U+1835, U+183C",
+    "latinForm": "з, ж",
+    "type": "CONSONANT",
+    "order": 22,
+    "forms": [
+      {
+        "type": "ISOLATE",
+        "glyph": "ᠵ"
+      },
+      {
+        "type": "INITIAL",
+        "glyph": "ᠵ\u200D"
+      },
+      {
+        "type": "MEDIAL",
+        "glyph": "\u200Dᠵ\u200D"
+      },
+      {
+        "type": "FINAL",
+        "glyph": "\u200Dᠵ"
+      }
+    ]
+  },
+  {
+    "id": "23",
+    "name": "Ц, Ч",
+    "unicode": "U+1834, U+1834",
+    "latinForm": "ц, ч",
+    "type": "CONSONANT",
+    "order": 23,
+    "forms": [
+      {
+        "type": "ISOLATE",
+        "glyph": "ᠴ"
+      },
+      {
+        "type": "INITIAL",
+        "glyph": "ᠴ\u200D"
+      },
+      {
+        "type": "MEDIAL",
+        "glyph": "\u200Dᠴ\u200D"
+      },
+      {
+        "type": "FINAL",
+        "glyph": "\u200Dᠴ"
+      }
     ]
   }
 ]
