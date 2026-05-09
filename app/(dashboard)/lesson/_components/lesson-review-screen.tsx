@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { mnUi } from "@/lib/i18n/mn-ui";
 import { LessonReviewStats } from "./lesson-review-types";
 import { Star, Target } from "lucide-react";
 
@@ -85,7 +86,7 @@ export function LessonReviewScreen({
           className="w-full max-w-sm py-4 rounded-2xl font-black text-base tracking-widest uppercase text-white active:scale-95 transition-all"
           style={{ background: "#E8920A", boxShadow: "0 4px 10px #E8920A" }}
         >
-          Continue
+          {mnUi.continue}
         </button>
       </div>
     </div>

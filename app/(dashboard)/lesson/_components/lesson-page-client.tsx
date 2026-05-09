@@ -11,6 +11,7 @@ import { LessonTopBar } from "./lesson-top-bar";
 import { useLessonGame } from "./use-lesson-game";
 import { LessonReviewScreen } from "./lesson-review-screen";
 import { LessonChoiceGrid } from "./lesson-choice-grid";
+import { mnUi } from "@/lib/i18n/mn-ui";
 
 export function LessonPageClient({
   lessonId,
@@ -53,14 +54,14 @@ export function LessonPageClient({
     return isFirstWeekUser ? (
       <LessonStatusScreen
         message="You ran out of hearts. Have a free refill on us to keep going!"
-        actionLabel="Refill for free"
+        actionLabel={mnUi.refillFree}
         onAction={refillHeartsForFirstWeek}
       />
     ) : (
       <LessonStatusScreen
         message="You're out of hearts."
         description="Try again after your hearts refill in 1 hour."
-        actionLabel="Back to lessons"
+        actionLabel={mnUi.backToLessons}
         onAction={goHome}
       />
     );

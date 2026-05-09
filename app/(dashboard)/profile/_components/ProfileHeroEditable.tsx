@@ -1,9 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import { Pencil } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import { Pencil } from "lucide-react";
+
+import { mnUi } from "@/lib/i18n/mn-ui";
 
 type ProfileHeroEditableProps = {
   name: string;
@@ -160,7 +162,7 @@ export default function ProfileHeroEditable({
                 disabled={busy}
                 className="rounded-xl bg-[#E8920A] px-4 py-2 text-sm font-bold text-white hover:bg-[#cf7d09] disabled:opacity-60"
               >
-                {busy ? "Saving..." : "Save profile"}
+                {busy ? mnUi.saving : mnUi.saveProfile}
               </button>
             </div>
           </form>

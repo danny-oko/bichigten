@@ -2,6 +2,8 @@
 
 import { ReactNode, useEffect, useRef, useState } from "react";
 
+import { mnUi } from "@/lib/i18n/mn-ui";
+
 export const BottomSheet = ({
   isOpen,
   onClose,
@@ -98,7 +100,7 @@ export const BottomSheet = ({
           type="button"
           onClick={onClose}
           className="absolute right-5 top-5 flex h-9 w-9 items-center justify-center rounded-full bg-white font-balsamiq font-bold text-[#3b2f2f] shadow"
-          aria-label="Close bottom sheet"
+          aria-label={mnUi.closeSheet}
         >
           ✕
         </button>

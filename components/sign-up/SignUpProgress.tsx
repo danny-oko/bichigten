@@ -1,20 +1,22 @@
 import { CalendarDays, LockKeyhole, UserRound } from "lucide-react";
 
+import { mnSignUp } from "@/lib/i18n/mn-copy";
+
 type SignUpProgressProps = {
   step: number;
 };
 
 const steps = [
-  { id: 1, icon: UserRound, label: "You" },
-  { id: 2, icon: LockKeyhole, label: "Password" },
-  { id: 3, icon: CalendarDays, label: "Age" },
+  { id: 1, icon: UserRound, label: mnSignUp.stepYou },
+  { id: 2, icon: LockKeyhole, label: mnSignUp.stepPassword },
+  { id: 3, icon: CalendarDays, label: mnSignUp.stepAge },
 ] as const;
 
 export function SignUpProgress({ step }: SignUpProgressProps) {
   return (
     <div
       className="flex items-start justify-center gap-1 sm:gap-2"
-      aria-label="Sign-up progress"
+      aria-label={mnSignUp.progressAria}
     >
       {steps.map((item, index) => {
         const Icon = item.icon;

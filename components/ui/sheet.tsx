@@ -3,8 +3,9 @@
 import * as React from "react"
 import { Dialog as SheetPrimitive } from "radix-ui"
 
-import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
+import { mnUi } from "@/lib/i18n/mn-ui"
+import { cn } from "@/lib/utils"
 import { XIcon } from "lucide-react"
 
 function Sheet({ ...props }: React.ComponentProps<typeof SheetPrimitive.Root>) {
@@ -77,7 +78,7 @@ function SheetContent({
             >
               <XIcon
               />
-              <span className="sr-only">Close</span>
+              <span className="sr-only">{mnUi.close}</span>
             </Button>
           </SheetPrimitive.Close>
         )}

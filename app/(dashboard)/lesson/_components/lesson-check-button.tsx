@@ -1,4 +1,6 @@
 import { Montserrat } from "next/font/google";
+
+import { mnUi } from "@/lib/i18n/mn-ui";
 import IncorrectBear from "./lesson-incorrect-animation";
 
 const montserrat = Montserrat({
@@ -68,7 +70,7 @@ export function LessonCheckButton({
             className="w-full sm:w-[300px] py-3.5 px-7 rounded-2xl font-black text-sm tracking-widest uppercase text-white active:scale-95 transition-all"
             style={{ background: "#FF4B4B", boxShadow: "0 4px 0 #991B1B" }}
           >
-            Continue
+            {mnUi.continue}
           </button>
         </div>
       </div>
@@ -84,7 +86,7 @@ export function LessonCheckButton({
             className="w-full sm:w-[300px] py-3.5 px-20 rounded-2xl font-black text-sm tracking-widest uppercase text-white active:scale-95 transition-all"
             style={{ background: "#E8920A", boxShadow: "0 4px 10px #E8920A" }}
           >
-            Got it
+            {mnUi.gotIt}
           </button>
         </div>
       </div>
@@ -98,7 +100,7 @@ export function LessonCheckButton({
           onClick={onSkip}
           className="w-full sm:w-[300px] py-3.5 px-6 rounded-2xl font-black text-sm tracking-widest uppercase border-2 border-[#374151] text-[#6B7280] hover:border-[#4B5563] hover:text-[#9CA3AF] transition-colors"
         >
-          Skip
+          {mnUi.skip}
         </button>
         <button
           onClick={onClick}
@@ -111,7 +113,7 @@ export function LessonCheckButton({
             color: disabled ? "#6B7280" : "#FFFFFF",
           }}
         >
-          Check
+          {mnUi.check}
         </button>
       </div>
     </div>

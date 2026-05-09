@@ -1,6 +1,7 @@
 import Link from "next/link";
 
 import { SidebarWidget } from "@/components/layout/SidebarWidget";
+import { mnUi } from "@/lib/i18n/mn-ui";
 
 type LessonProgressCardProps = {
   completedLessons: number;
@@ -36,7 +37,7 @@ export default function LessonProgressCard({
           href={nextLessonHref}
           className="inline-flex w-full items-center justify-center rounded-xl bg-[#1C2B4A] px-4 py-2.5 text-sm font-extrabold text-white transition hover:bg-[#193766]"
         >
-          Continue Learning
+          {mnUi.continueLearning}
         </Link>
       </div>
     </SidebarWidget>

@@ -1,5 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { mnLabels, mnSignUp } from "@/lib/i18n/mn-copy";
+import { mnUi } from "@/lib/i18n/mn-ui";
 
 type EmailVerificationBlockProps = {
   verificationCode: string;
@@ -20,21 +22,21 @@ export function EmailVerificationBlock({
         htmlFor="verificationCode"
         className="block text-sm font-semibold tracking-wide text-[#E8920A]"
       >
-        Verification code
+        {mnLabels.verificationCode}
       </label>
       <Input
         id="verificationCode"
         value={verificationCode}
         onChange={(e) => onChangeCode(e.target.value)}
         className="h-11 rounded-2xl border-amber-300/80 bg-[#F8F4E3] text-sm transition-shadow focus-visible:border-amber-500 focus-visible:ring-2 focus-visible:ring-amber-400/35 sm:h-12 sm:text-base"
-        placeholder="Enter 6-digit code"
+        placeholder={mnSignUp.codePlaceholder}
         inputMode="numeric"
         autoComplete="one-time-code"
       />
       <p className="text-xs leading-relaxed text-amber-900/70 sm:text-sm">
-        Not seeing it? Check spam. Clerk test emails can use code{" "}
+        {mnSignUp.emailVerifyHint}
         <code className="rounded bg-amber-100 px-1 py-0.5 text-amber-950">424242</code>
-        .
+        {mnSignUp.emailVerifyHintSuffix}
       </p>
       <Button
         type="button"
@@ -42,7 +44,7 @@ export function EmailVerificationBlock({
         onClick={onResendCode}
         className="w-full rounded-xl border-amber-300 text-sm sm:w-auto"
       >
-        Resend code
+        {mnUi.resendCode}
       </Button>
       {verifyInfo && (
         <p className="rounded-xl bg-emerald-50 px-3 py-2 text-xs text-emerald-800 sm:text-sm">

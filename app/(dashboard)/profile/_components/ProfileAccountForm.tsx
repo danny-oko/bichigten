@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { mnUi } from "@/lib/i18n/mn-ui";
 import {
   Field,
   FieldError,
@@ -130,7 +131,7 @@ export function ProfileAccountForm({
             disabled={busy}
             className="w-full rounded-2xl bg-[#E8920A] hover:bg-[#cf7d09] sm:w-auto"
           >
-            {busy ? "Saving…" : "Save changes"}
+            {busy ? mnUi.saving : mnUi.saveChanges}
           </Button>
         </FieldGroup>
       </form>

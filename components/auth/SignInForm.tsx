@@ -6,6 +6,8 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { mnAuth, mnLabels } from "@/lib/i18n/mn-copy";
+import { mnUi } from "@/lib/i18n/mn-ui";
 
 type SignInFormProps = {
   isLoaded: boolean;
@@ -91,7 +93,7 @@ export function SignInForm({
             className="h-10 w-full max-w-xs rounded-2xl border border-amber-300 bg-white text-sm text-amber-900 hover:border-[#E8920A] hover:bg-[#E8920A] hover:text-white sm:h-11"
           >
             <GoogleLogo />
-            Continue with Google
+            {mnUi.googleSignIn}
           </Button>
         </div>
         <Field>
@@ -99,7 +101,7 @@ export function SignInForm({
             htmlFor="email"
             className="text-sm font-semibold tracking-wide text-[#E8920A]"
           >
-            Email
+            {mnLabels.email}
           </FieldLabel>
           <Input
             id="email"
@@ -108,6 +110,7 @@ export function SignInForm({
             autoComplete="email"
             required
             disabled={busy}
+            placeholder={mnAuth.emailPlaceholder}
             className="h-11 rounded-2xl border-amber-300/80 bg-[#F8F4E3] text-sm sm:h-12 sm:text-base disabled:opacity-60"
           />
         </Field>
@@ -116,7 +119,7 @@ export function SignInForm({
             htmlFor="password"
             className="text-sm font-semibold tracking-wide text-[#E8920A]"
           >
-            Password
+            {mnLabels.password}
           </FieldLabel>
           <Input
             id="password"
@@ -125,6 +128,7 @@ export function SignInForm({
             autoComplete="current-password"
             required
             disabled={busy}
+            placeholder={mnAuth.passwordPlaceholder}
             className="h-11 rounded-2xl border-amber-300/80 bg-[#F8F4E3] text-sm sm:h-12 sm:text-base disabled:opacity-60"
           />
         </Field>
@@ -138,10 +142,10 @@ export function SignInForm({
           {isSigningIn ? (
             <>
               <LoadingSpinner />
-              Logging in...
+              {mnUi.signingIn}
             </>
           ) : (
-            "Continue"
+            mnUi.signIn
           )}
         </Button>
       </FieldGroup>

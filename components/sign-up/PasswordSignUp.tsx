@@ -1,5 +1,6 @@
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { mnLabels, mnSignUp } from "@/lib/i18n/mn-copy";
 
 type PasswordSignUpProps = {
   password: string;
@@ -18,16 +19,16 @@ export function PasswordSignUp({
     <div className="space-y-3 sm:space-y-4">
       <div className="space-y-1.5">
         <h1 className="text-2xl font-bold tracking-tight text-amber-950 sm:text-3xl">
-          Secure your account
+          {mnSignUp.passwordTitle}
         </h1>
         <p className="text-sm text-amber-900/70 sm:text-base">
-          Choose a strong password you don&apos;t use elsewhere.
+          {mnSignUp.passwordSubtitle}
         </p>
       </div>
       <div className="flex flex-col gap-3 sm:gap-4">
         <Field>
           <FieldLabel htmlFor="password" className="text-sm font-semibold tracking-wide text-[#E8920A]">
-            Password
+            {mnLabels.password}
           </FieldLabel>
           <Input
             id="password"
@@ -39,7 +40,7 @@ export function PasswordSignUp({
         </Field>
         <Field>
           <FieldLabel htmlFor="confirmPassword" className="text-sm font-semibold tracking-wide text-[#E8920A]">
-            Confirm Password
+            {mnLabels.confirmPassword}
           </FieldLabel>
           <Input
             id="confirmPassword"

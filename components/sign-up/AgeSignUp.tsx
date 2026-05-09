@@ -4,6 +4,7 @@ import { useRef } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import { Field, FieldLabel } from "@/components/ui/field";
+import { mnLabels, mnSignUp } from "@/lib/i18n/mn-copy";
 
 type AgeSignUpProps = {
   value: string;
@@ -49,27 +50,24 @@ export function AgeSignUp({ value, onChange }: AgeSignUpProps) {
     <div className="animate-in slide-in-from-bottom-3 fade-in-0 space-y-3 duration-300 sm:space-y-4">
       <div className="space-y-1.5">
         <h1 className="text-2xl font-bold tracking-tight text-amber-950 sm:text-3xl">
-          How old are you?
+          {mnSignUp.ageTitle}
         </h1>
-        <p className="text-sm text-amber-900/70 sm:text-base">
-          Swipe the card, tap the numbers, or use the chevrons.
-        </p>
       </div>
       <Field>
         <FieldLabel
           htmlFor="age-display"
           className="text-sm font-semibold tracking-wide text-[#E8920A]"
         >
-          Age
+          {mnLabels.age}
         </FieldLabel>
         <div
           className="mx-auto flex w-full max-w-md items-center gap-0.5 sm:gap-1"
           role="group"
-          aria-label="Age picker"
+          aria-label={mnSignUp.agePickerAria}
         >
           <button
             type="button"
-            aria-label="Decrease age"
+            aria-label={mnSignUp.decreaseAgeAria}
             disabled={selectedAge <= 1}
             onClick={() => bump(-1)}
             className="flex shrink-0 items-center justify-center rounded-full border-0 bg-transparent p-1.5 text-amber-800/80 transition-colors hover:bg-amber-200/35 hover:text-amber-950 active:scale-95 disabled:pointer-events-none disabled:opacity-35"
@@ -119,14 +117,11 @@ export function AgeSignUp({ value, onChange }: AgeSignUpProps) {
                 {nextAge}
               </button>
             </div>
-            <p className="mt-2 text-center text-[10px] font-semibold uppercase tracking-[0.2em] text-amber-900/55 sm:text-xs">
-              Swipe ← →
-            </p>
           </div>
 
           <button
             type="button"
-            aria-label="Increase age"
+            aria-label={mnSignUp.increaseAgeAria}
             disabled={selectedAge >= 100}
             onClick={() => bump(1)}
             className="flex shrink-0 items-center justify-center rounded-full border-0 bg-transparent p-1.5 text-amber-800/80 transition-colors hover:bg-amber-200/35 hover:text-amber-950 active:scale-95 disabled:pointer-events-none disabled:opacity-35"

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
+import { mnUi } from "@/lib/i18n/mn-ui";
 
 const STORAGE_KEY = "mazaalai-profile-dark-preview";
 
@@ -37,7 +38,7 @@ export function AppearanceToggle() {
         your device.
       </p>
       <Button type="button" variant="outline" onClick={toggle} className="rounded-xl">
-        {dark ? "Switch to light" : "Switch to dark"}
+        {dark ? mnUi.switchToLight : mnUi.switchToDark}
       </Button>
     </section>
   );

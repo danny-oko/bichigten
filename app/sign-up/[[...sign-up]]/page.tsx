@@ -16,6 +16,8 @@ import { NameSignUp } from "@/components/sign-up/NameSignUp";
 import { PasswordSignUp } from "@/components/sign-up/PasswordSignUp";
 import { SignUpProgress } from "@/components/sign-up/SignUpProgress";
 import { SignUpStepActions } from "@/components/sign-up/SignUpStepActions";
+import { mnSignUp, mnValidation } from "@/lib/i18n/mn-copy";
+import { mnUi } from "@/lib/i18n/mn-ui";
 import {
   ageSchema,
   signUpNameSchema,
@@ -61,16 +63,23 @@ export default function SignUpPage() {
     setError(null);
     const parsed = signUpNameSchema.safeParse({ fullName, username, email });
     if (!parsed.success) {
-      return setError(parsed.error.issues[0]?.message ?? "Invalid input.");
+      return setError(
+        parsed.error.issues[0]?.message ?? mnValidation.invalidInput,
+      );
     }
     setStep(2);
   };
 
   const goNextFromPassword = () => {
     setError(null);
-    const parsed = signUpPasswordSchema.safeParse({ password, confirmPassword });
+    const parsed = signUpPasswordSchema.safeParse({
+      password,
+      confirmPassword,
+    });
     if (!parsed.success) {
-      return setError(parsed.error.issues[0]?.message ?? "Invalid password.");
+      return setError(
+        parsed.error.issues[0]?.message ?? mnValidation.invalidPassword,
+      );
     }
     setStep(3);
   };
@@ -81,7 +90,9 @@ export default function SignUpPage() {
     if (!isLoaded || !signUp) return;
     const ageParsed = ageSchema.safeParse(age);
     if (!ageParsed.success) {
-      return setError(ageParsed.error.issues[0]?.message ?? "Invalid age.");
+      return setError(
+        ageParsed.error.issues[0]?.message ?? mnValidation.ageInvalid,
+      );
     }
     const ageValue = ageParsed.data;
 
@@ -93,7 +104,7 @@ export default function SignUpPage() {
       let result;
       if (awaitingEmailVerification) {
         if (!verificationCode.trim()) {
-          setError("Enter the verification code from your email.");
+          setError(mnSignUp.verifyCodeMissing);
           return;
         }
         result = await signUp.attemptEmailAddressVerification({
@@ -126,17 +137,15 @@ export default function SignUpPage() {
           strategy: "email_code",
         });
         setAwaitingEmailVerification(true);
-        setVerifyInfo(
-          "We sent a verification code to your email. Enter it to continue.",
-        );
+        setVerifyInfo(mnSignUp.emailVerifySent);
         return;
       }
 
-      setError(
-        "Sign-up started but is not complete yet. Please complete required verification.",
-      );
+      setError(mnSignUp.signUpIncomplete);
     } catch (err: unknown) {
-      setError(getClerkErrorMessage(err, "Unable to create account. Please try again."));
+      setError(
+        getClerkErrorMessage(err, mnSignUp.createAccountFailed),
+      );
     } finally {
       setIsSubmitting(false);
     }
@@ -148,22 +157,22 @@ export default function SignUpPage() {
     setVerifyInfo(null);
     try {
       await signUp.prepareEmailAddressVerification({ strategy: "email_code" });
-      setVerifyInfo(
-        "A new verification code was sent. Check inbox and spam/promotions.",
-      );
+      setVerifyInfo(mnSignUp.verifyResentInfo);
     } catch (err: unknown) {
-      setError(getClerkErrorMessage(err, "Could not resend verification code."));
+      setError(
+        getClerkErrorMessage(err, mnSignUp.resendVerifyFailed),
+      );
     }
   };
 
   return (
     <AuthShell>
       <AuthHeader />
-      <p className="-mt-1 text-center text-sm text-amber-900/75 sm:text-base">
-        Create your account — quick and easy.
-      </p>
       <SignUpProgress step={step} />
-      <div className="h-px w-full bg-gradient-to-r from-transparent via-amber-200 to-transparent" aria-hidden />
+      <div
+        className="h-px w-full bg-linear-to-r from-transparent via-amber-200 to-transparent"
+        aria-hidden
+      />
 
       <FieldGroup className="gap-5 sm:gap-6">
         <div
@@ -223,12 +232,12 @@ export default function SignUpPage() {
       </FieldGroup>
 
       <p className="text-center text-xs text-amber-900/80 sm:text-sm">
-        Already have an account?{" "}
+        {mnUi.haveAccount}{" "}
         <Link
           href="/sign-in"
           className="font-semibold text-amber-800 hover:text-amber-900 hover:underline"
         >
-          Log in
+          {mnUi.logIn}
         </Link>
       </p>
     </AuthShell>

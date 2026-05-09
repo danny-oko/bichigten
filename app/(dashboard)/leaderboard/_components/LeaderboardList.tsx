@@ -2,6 +2,8 @@
 
 import { useMemo, useState } from "react";
 
+import { mnUi } from "@/lib/i18n/mn-ui";
+
 // 1. Ensure the interface matches the data from page.tsx
 interface LeaderboardUser {
   id?: string;
@@ -47,7 +49,7 @@ export default function LeaderboardList({
           onClick={() => setVisibleCount((current) => current + loadStep)}
           className="mt-2 self-center rounded-xl border border-[#D7B680] bg-[#F3E0BD] px-5 py-2 text-sm font-semibold text-[#7A5C2E] transition hover:bg-[#EFD4A2]"
         >
-          Load more
+          {mnUi.loadMore}
         </button>
       )}
     </div>

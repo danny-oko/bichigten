@@ -1,5 +1,6 @@
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { mnLabels, mnSignUp } from "@/lib/i18n/mn-copy";
 
 type NameSignUpProps = {
   fullName: string;
@@ -20,17 +21,12 @@ export function NameSignUp({
 }: NameSignUpProps) {
   return (
     <div className="flex flex-col gap-3 sm:gap-4">
-      <div className="space-y-1.5">
-        <h1 className="text-2xl font-bold tracking-tight text-amber-950 sm:text-3xl">
-          What&apos;s your name?
-        </h1>
-        <p className="text-sm text-amber-900/70 sm:text-base">
-          We&apos;ll use this to personalize your learning path.
-        </p>
-      </div>
+      <h1 className="text-2xl font-bold tracking-tight text-amber-950 sm:text-3xl">
+        {mnSignUp.nameTitle}
+      </h1>
       <Field>
         <FieldLabel htmlFor="name" className="text-sm font-semibold tracking-wide text-[#E8920A]">
-          Full Name
+          {mnLabels.fullName}
         </FieldLabel>
         <Input
           id="name"
@@ -41,7 +37,7 @@ export function NameSignUp({
       </Field>
       <Field>
         <FieldLabel htmlFor="username" className="text-sm font-semibold tracking-wide text-[#E8920A]">
-          User Name
+          {mnLabels.username}
         </FieldLabel>
         <Input
           id="username"
@@ -52,7 +48,7 @@ export function NameSignUp({
       </Field>
       <Field>
         <FieldLabel htmlFor="email" className="text-sm font-semibold tracking-wide text-[#E8920A]">
-          Email
+          {mnLabels.email}
         </FieldLabel>
         <Input
           id="email"
