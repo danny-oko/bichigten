@@ -16,8 +16,13 @@ export function PasswordSignUp({
 }: PasswordSignUpProps) {
   return (
     <div className="space-y-3 sm:space-y-4">
-      <div>
-        <h1 className="text-2xl font-bold tracking-tight text-amber-950 sm:text-3xl">Secure your account</h1>
+      <div className="space-y-1.5">
+        <h1 className="text-2xl font-bold tracking-tight text-amber-950 sm:text-3xl">
+          Secure your account
+        </h1>
+        <p className="text-sm text-amber-900/70 sm:text-base">
+          Choose a strong password you don&apos;t use elsewhere.
+        </p>
       </div>
       <div className="flex flex-col gap-3 sm:gap-4">
         <Field>
@@ -29,7 +34,7 @@ export function PasswordSignUp({
             type="password"
             value={password}
             onChange={(e) => onChangePassword(e.target.value)}
-            className="h-11 rounded-2xl border-amber-300/80 bg-[#F8F4E3] text-sm sm:h-12 sm:text-base"
+            className="h-11 rounded-2xl border-amber-300/80 bg-[#F8F4E3] text-sm transition-shadow focus-visible:border-amber-500 focus-visible:ring-2 focus-visible:ring-amber-400/35 sm:h-12 sm:text-base"
           />
         </Field>
         <Field>
@@ -41,7 +46,7 @@ export function PasswordSignUp({
             type="password"
             value={confirmPassword}
             onChange={(e) => onChangeConfirmPassword(e.target.value)}
-            className="h-11 rounded-2xl border-amber-300/80 bg-[#F8F4E3] text-sm sm:h-12 sm:text-base"
+            className="h-11 rounded-2xl border-amber-300/80 bg-[#F8F4E3] text-sm transition-shadow focus-visible:border-amber-500 focus-visible:ring-2 focus-visible:ring-amber-400/35 sm:h-12 sm:text-base"
           />
         </Field>
       </div>
