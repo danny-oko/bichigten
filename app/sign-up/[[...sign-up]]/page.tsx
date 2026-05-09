@@ -26,7 +26,7 @@ const HOME_ROUTE = "/home";
 
 export default function SignUpPage() {
   const { isSignedIn, isLoaded: sessionLoaded } = useAuth();
-  const { isLoaded, signUp } = useSignUp();
+  const { isLoaded, signUp, setActive } = useSignUp();
   const router = useRouter();
 
   useEffect(() => {
@@ -111,7 +111,8 @@ export default function SignUpPage() {
       }
 
       if (result.createdSessionId) {
-        router.push("/sign-in");
+        await setActive?.({ session: result.createdSessionId });
+        router.replace(HOME_ROUTE);
         return;
       }
 

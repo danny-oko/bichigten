@@ -11,11 +11,11 @@ model User {
   email          String               @unique
   userName       String               @unique
   avatarUrl      String?
+  heartsRemaining Int                 @default(5)
   totalXp        Int                  @default(10)
   createdAt      DateTime             @default(now())
   updatedAt      DateTime             @updatedAt
   name           String?
-  heartsRemaining Int                  @default(5)
   speechAttempts SpeechAttempts[]
   lessonProgress UserLessonProgress[]
 

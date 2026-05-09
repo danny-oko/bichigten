@@ -3,7 +3,7 @@ import prisma from "@/lib/prisma";
 import { calculateDailyStreak } from "@/lib/server/daily-streak";
 import { ensureUser } from "@/lib/server/ensure-user";
 import { MainLayout } from "@/components/layout/MainLayout";
-import { auth, currentUser } from "@clerk/nextjs/server";
+import { auth } from "@clerk/nextjs/server";
 import WebNearbyPlayers from "../leaderboard/_components/SocialPeersList";
 import LessonProgressCard from "./_components/LessonProgressCard";
 import { HomePath } from "./_components/home-page-client";
@@ -29,22 +29,11 @@ export default async function HomeSection() {
   }[] = [];
 
   if (userId) {
-    const clerkUser = await currentUser();
-    await ensureUser({
-      id: userId,
-      email: clerkUser?.emailAddresses[0]?.emailAddress,
-      username: clerkUser?.username,
-      name:
-        [clerkUser?.firstName, clerkUser?.lastName].filter(Boolean).join(" ") ||
-        undefined,
-      avatarUrl: clerkUser?.imageUrl,
-    });
+    // Keep this local and fast: if user row exists this is a cheap upsert path.
+    // Clerk profile syncing is handled elsewhere (webhook/profile flows).
+    const ensuredUser = await ensureUser({ id: userId });
 
-    const [user, completedLessons, totalLessons, inProgressLesson, firstLesson, topPlayers] = await Promise.all([
-      prisma.user.findUnique({
-        where: { id: userId },
-        select: { totalXp: true, heartsRemaining: true },
-      }),
+    const [completedLessons, totalLessons, inProgressLesson, firstLesson, topPlayers] = await Promise.all([
       prisma.userLessonProgress.findMany({
         where: { userId, status: "COMPLETED", completedAt: { not: null } },
         select: { completedAt: true, lessonId: true },
@@ -71,8 +60,8 @@ export default async function HomeSection() {
       }),
     ]);
 
-    xp = user?.totalXp ?? 0;
-    heartsRemaining = user?.heartsRemaining ?? 5;
+    xp = ensuredUser.totalXp ?? 0;
+    heartsRemaining = ensuredUser.heartsRemaining ?? 5;
     completedLessonsCount = new Set(completedLessons.map((item) => item.lessonId)).size;
     totalLessonsCount = totalLessons;
     const nextLesson = inProgressLesson?.lesson ?? firstLesson;
