@@ -159,39 +159,50 @@ export default function SignUpPage() {
   return (
     <AuthShell>
       <AuthHeader />
+      <p className="-mt-1 text-center text-sm text-amber-900/75 sm:text-base">
+        Create your account — quick and easy.
+      </p>
       <SignUpProgress step={step} />
+      <div className="h-px w-full bg-gradient-to-r from-transparent via-amber-200 to-transparent" aria-hidden />
 
-      <FieldGroup>
-        {step === 1 && (
-          <NameSignUp
-            fullName={fullName}
-            username={username}
-            email={email}
-            onChangeFullName={setFullName}
-            onChangeUsername={setUsername}
-            onChangeEmail={setEmail}
-          />
-        )}
+      <FieldGroup className="gap-5 sm:gap-6">
+        <div
+          key={step}
+          className="animate-in fade-in slide-in-from-bottom-2 duration-300"
+        >
+          {step === 1 && (
+            <NameSignUp
+              fullName={fullName}
+              username={username}
+              email={email}
+              onChangeFullName={setFullName}
+              onChangeUsername={setUsername}
+              onChangeEmail={setEmail}
+            />
+          )}
 
-        {step === 2 && (
-          <PasswordSignUp
-            password={password}
-            confirmPassword={confirmPassword}
-            onChangePassword={setPassword}
-            onChangeConfirmPassword={setConfirmPassword}
-          />
-        )}
+          {step === 2 && (
+            <PasswordSignUp
+              password={password}
+              confirmPassword={confirmPassword}
+              onChangePassword={setPassword}
+              onChangeConfirmPassword={setConfirmPassword}
+            />
+          )}
 
-        {step === 3 && <AgeSignUp value={age} onChange={setAge} />}
+          {step === 3 && <AgeSignUp value={age} onChange={setAge} />}
 
-        {step === 3 && awaitingEmailVerification && (
-          <EmailVerificationBlock
-            verificationCode={verificationCode}
-            verifyInfo={verifyInfo}
-            onChangeCode={setVerificationCode}
-            onResendCode={resendVerificationCode}
-          />
-        )}
+          {step === 3 && awaitingEmailVerification && (
+            <div className="mt-4 border-t border-amber-100 pt-4">
+              <EmailVerificationBlock
+                verificationCode={verificationCode}
+                verifyInfo={verifyInfo}
+                onChangeCode={setVerificationCode}
+                onResendCode={resendVerificationCode}
+              />
+            </div>
+          )}
+        </div>
 
         <FieldError>{error}</FieldError>
         <div id="clerk-captcha" />
