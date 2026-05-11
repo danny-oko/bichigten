@@ -7,10 +7,10 @@ const montserrat = Montserrat({
   weight: ["400", "500", "600", "700"],
 });
 
-import { ROW, useLessons, LessonCards } from "./home-lesson-cards";
-import { RoadPath } from "./home-road-path";
-import Mascot from "./home-animation";
 import LoadingScreen from "@/app/_components/loading-screen";
+import Mascot from "./home-animation";
+import { LessonCards, ROW, useLessons } from "./home-lesson-cards";
+import { RoadPath } from "./home-road-path";
 
 export const HomePath = () => {
   const { lessons, completedUpTo, loading } = useLessons();
