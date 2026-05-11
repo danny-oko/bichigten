@@ -56,13 +56,14 @@ export default function SignInPage() {
   }, [sessionLoaded, isSignedIn, router]);
 
   const onGoogleSignIn = async () => {
-    if (!isLoaded || !signIn) return;
+    if (!isLoaded || !signIn || typeof window === "undefined") return;
     setError(null);
+    const origin = window.location.origin;
     try {
       await signIn.authenticateWithRedirect({
         strategy: "oauth_google",
-        redirectUrl: "/sign-in",
-        redirectUrlComplete: HOME_ROUTE,
+        redirectUrl: `${origin}/sso-callback`,
+        redirectUrlComplete: `${origin}${HOME_ROUTE}`,
       });
     } catch (err: unknown) {
       setError(getClerkErrorMessage(err, mnAuth.googleSignInFailed));
@@ -88,6 +89,7 @@ export default function SignInPage() {
     const identifier = parsed.data.email;
     const password = parsed.data.password;
 
+    let keepSigningInSpinner = false;
     try {
       const attempt = await signIn.create({
         identifier,
@@ -97,7 +99,7 @@ export default function SignInPage() {
       if (attempt.status === "complete") {
         await setActive({ session: attempt.createdSessionId });
         router.replace(HOME_ROUTE);
-        // Keep isSigningIn true until this view unmounts so the button stays loading through navigation.
+        keepSigningInSpinner = true;
         return;
       }
 
@@ -113,28 +115,25 @@ export default function SignInPage() {
           });
           setSecondFactorEmailAddressId(factor.emailAddressId);
           setError(null);
-          setIsSigningIn(false);
           return;
         }
 
         setError(mnAuth.secondFactorUnsupported);
-        setIsSigningIn(false);
         return;
       }
 
       setError(mnAuth.signInNeedsStep(attempt.status));
-      setIsSigningIn(false);
     } catch (err: unknown) {
       const msg = (err as { errors?: Array<{ message?: string }> })?.errors?.[0]
         ?.message;
       if (msg?.toLowerCase().includes("session already exists")) {
         await signOut();
         setError(mnAuth.sessionCleared);
-        setIsSigningIn(false);
         return;
       }
       setError(msg ?? mnAuth.signInFailed);
-      setIsSigningIn(false);
+    } finally {
+      if (!keepSigningInSpinner) setIsSigningIn(false);
     }
   };
 
@@ -148,6 +147,7 @@ export default function SignInPage() {
 
     setError(null);
     setIsSecondFactorBusy(true);
+    let keepSecondFactorSpinner = false;
     try {
       const attempt = await signIn.attemptSecondFactor({
         strategy: "email_code",
@@ -157,14 +157,15 @@ export default function SignInPage() {
       if (attempt.status === "complete") {
         await setActive({ session: attempt.createdSessionId });
         router.replace(HOME_ROUTE);
+        keepSecondFactorSpinner = true;
         return;
       }
 
       setError(mnAuth.verificationIncomplete);
-      setIsSecondFactorBusy(false);
     } catch (err: unknown) {
       setError(getClerkErrorMessage(err, mnAuth.invalidOrExpiredCode));
-      setIsSecondFactorBusy(false);
+    } finally {
+      if (!keepSecondFactorSpinner) setIsSecondFactorBusy(false);
     }
   };
 

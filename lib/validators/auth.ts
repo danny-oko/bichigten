@@ -2,6 +2,9 @@ import { z } from "zod";
 
 import { mnValidation } from "@/lib/i18n/mn-copy";
 
+/** Trim + email format (empty and invalid both use the same message). */
+const emailField = z.string().trim().email({ error: mnValidation.emailInvalid });
+
 export const signUpNameSchema = z.object({
   fullName: z
     .string()
@@ -19,11 +22,7 @@ export const signUpNameSchema = z.object({
       /^[a-zA-Z0-9_]{3,20}$/,
       mnValidation.usernameFormat,
     ),
-  email: z
-    .string()
-    .trim()
-    .min(1, mnValidation.emailRequired)
-    .email(mnValidation.emailInvalid),
+  email: emailField,
 });
 
 export const signUpPasswordSchema = z
@@ -31,7 +30,7 @@ export const signUpPasswordSchema = z
     password: z.string().min(8, mnValidation.passwordMin),
     confirmPassword: z.string(),
   })
-  .refine((value) => value.password === value.confirmPassword, {
+  .refine((v) => v.password === v.confirmPassword, {
     path: ["confirmPassword"],
     message: mnValidation.passwordsMismatch,
   });
@@ -43,10 +42,6 @@ export const ageSchema = z.coerce
   });
 
 export const signInSchema = z.object({
-  email: z
-    .string()
-    .trim()
-    .min(1, mnValidation.signInEmailRequired)
-    .email(mnValidation.emailInvalid),
+  email: emailField,
   password: z.string().min(1, mnValidation.signInPasswordRequired),
 });

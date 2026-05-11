@@ -17,14 +17,9 @@ export function PasswordSignUp({
 }: PasswordSignUpProps) {
   return (
     <div className="space-y-3 sm:space-y-4">
-      <div className="space-y-1.5">
-        <h1 className="text-2xl font-bold tracking-tight text-amber-950 sm:text-3xl">
-          {mnSignUp.passwordTitle}
-        </h1>
-        <p className="text-sm text-amber-900/70 sm:text-base">
-          {mnSignUp.passwordSubtitle}
-        </p>
-      </div>
+      <h1 className="text-2xl font-bold tracking-tight text-amber-950 sm:text-3xl">
+        {mnSignUp.passwordTitle}
+      </h1>
       <div className="flex flex-col gap-3 sm:gap-4">
         <Field>
           <FieldLabel htmlFor="password" className="text-sm font-semibold tracking-wide text-[#E8920A]">

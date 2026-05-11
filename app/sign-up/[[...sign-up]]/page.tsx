@@ -168,9 +168,6 @@ export default function SignUpPage() {
   return (
     <AuthShell>
       <AuthHeader />
-      <p className="-mt-1 text-center text-sm text-amber-900/75 sm:text-base">
-        Create your account — quick and easy.
-      </p>
       <SignUpProgress step={step} />
       <div
         className="h-px w-full bg-linear-to-r from-transparent via-amber-200 to-transparent"

@@ -56,7 +56,13 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} ${mongolFont.variable} ${balsamiq.variable} h-full antialiased`}
     >
       <body className="flex h-full min-h-0 flex-row overflow-hidden">
-        <ClerkProvider>
+        <ClerkProvider
+          signInUrl="/sign-in"
+          signUpUrl="/sign-up"
+          signInFallbackRedirectUrl="/home"
+          signUpFallbackRedirectUrl="/home"
+          prefetchUI={false}
+        >
           <ConditionalBars />
           <main
             data-app-scroll-container

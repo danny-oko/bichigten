@@ -7,12 +7,10 @@ export const mnValidation = {
   usernameRequired: "Хэрэглэгчийн нэрээ оруулна уу.",
   usernameFormat:
     "3–20 тэмдэгт, зөвхөн латин үсэг, тоо, доогуур зураас (_) ашиглана уу.",
-  emailRequired: "И-мэйл хаягаа оруулна уу.",
   emailInvalid: "Зөв и-мэйл хаяг оруулна уу.",
   passwordMin: "Нууц үг хамгийн багадаа 8 тэмдэгт байна.",
   passwordsMismatch: "Нууц үг таарахгүй байна.",
   ageInvalid: "Насаа зөв оруулна уу.",
-  signInEmailRequired: "И-мэйл хаягаа оруулна уу.",
   signInPasswordRequired: "Нууц үгээ оруулна уу.",
   invalidInput: "Мэдээлэл буруу байна.",
   invalidPassword: "Нууц үг буруу байна.",
@@ -62,7 +60,6 @@ export const mnSignUp = {
   stepAge: "Нас",
   nameTitle: "Таны нэр хэн бэ?",
   passwordTitle: "Бүртгэлээ хамгаалах",
-  passwordSubtitle: "Өөр газар ашигладаггүй, хүчтэй нууц үг сонгоно уу.",
   ageTitle: "Та хэдэн настай вэ?",
   emailVerifySent:
     "Таны и-мэйлд баталгаажуулах код илгээлээ. Үргэлжлүүлэхийн тулд оруулна уу.",
