@@ -4,9 +4,9 @@ import { NextRequest, NextResponse } from "next/server";
 // GET /api/lessons/:id
 export const GET = async (
   _: NextRequest,
-  { params }: { params: Promise<{ id: string }> }, // Define params as a Promise
+  { params }: { params: Promise<{ id: string }> },
 ) => {
-  const { id } = await params; // Unwrapping the promise
+  const { id } = await params;
 
   const lesson = await prisma.lesson.findUnique({
     where: { id },
@@ -23,10 +23,10 @@ export const GET = async (
 // PATCH /api/lessons/:id
 export const PATCH = async (
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }, // Define params as a Promise
+  { params }: { params: Promise<{ id: string }> },
 ) => {
   try {
-    const { id } = await params; // Unwrapping the promise
+    const { id } = await params;
     const body = await req.json();
 
     const lesson = await prisma.lesson.update({
@@ -45,6 +45,7 @@ export const PATCH = async (
         ...(body.isCompleted !== undefined && {
           isCompleted: body.isCompleted,
         }),
+        ...(body.videoUrl !== undefined && { videoUrl: body.videoUrl }), // ✅ added (allows setting to null too)
       },
     });
 
@@ -60,14 +61,12 @@ export const PATCH = async (
 // DELETE /api/lessons/:id
 export const DELETE = async (
   _: NextRequest,
-  { params }: { params: Promise<{ id: string }> }, // Define params as a Promise
+  { params }: { params: Promise<{ id: string }> },
 ) => {
   try {
-    const { id } = await params; // Unwrapping the promise
+    const { id } = await params;
 
-    await prisma.lesson.delete({
-      where: { id },
-    });
+    await prisma.lesson.delete({ where: { id } });
 
     return NextResponse.json({ message: "Deleted successfully" });
   } catch (error) {
