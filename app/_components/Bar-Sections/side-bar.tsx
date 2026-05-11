@@ -23,7 +23,7 @@ export const SideBar = ({ menuLabels, menuPaths }: HeaderClientProps) => {
 
   return (
     <aside
-      className="bg-[#f8f4e3] hidden h-full flex-col border-r-2 border-[#d6d4d4] py-5 md:flex md:w-20 md:px-2 lg:w-[300px] lg:px-3 shrink-0"
+      className="hidden h-full flex-col border-r-2 py-5 md:flex md:w-20 md:px-2 lg:w-[300px] lg:px-3 shrink-0"
       aria-label="Main navigation"
     >
       <div className="flex h-[60px] items-center justify-center px-2 lg:justify-start lg:px-5">
@@ -51,8 +51,8 @@ export const SideBar = ({ menuLabels, menuPaths }: HeaderClientProps) => {
               transition-all duration-150 font-balsamiq border-2
               ${
                 isActive
-                  ? "bg-[#84d8ff]/50 text-[#1cb0f6] border-[#84d8ff]"
-                  : "text-[#777777] hover:bg-[#F2EEDD] border-transparent"
+                  ? "bg-[#84d8ff]/15 text-[#1cb0f6] border-[#84d8ff]"
+                  : "text-[#777777] border-transparent"
               }`}
             >
               <NavMenuIcon

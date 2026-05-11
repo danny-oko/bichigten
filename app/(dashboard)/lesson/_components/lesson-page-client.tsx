@@ -12,6 +12,12 @@ import { useLessonGame } from "./use-lesson-game";
 import { LessonReviewScreen } from "./lesson-review-screen";
 import { LessonChoiceGrid } from "./lesson-choice-grid";
 import { mnUi } from "@/lib/i18n/mn-ui";
+import { Montserrat } from "next/font/google";
+
+const montserrat = Montserrat({
+  subsets: ["latin", "cyrillic"],
+  weight: ["400", "500", "600", "700"],
+});
 
 export function LessonPageClient({
   lessonId,
@@ -88,7 +94,9 @@ export function LessonPageClient({
   }
 
   return (
-    <div className="min-h-screen flex flex-col font-['Plus_Jakarta_Sans']">
+    <div
+      className={`min-h-screen flex flex-col font-['Plus_Jakarta_Sans'] ${montserrat.className}`}
+    >
       <div className="w-full flex flex-1 flex-col">
         <LessonTopBar
           progress={progress}

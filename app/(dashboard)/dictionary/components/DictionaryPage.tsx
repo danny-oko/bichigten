@@ -73,13 +73,13 @@ export const DictionaryPage = ({ characters }: { characters: Character[] }) => {
     FILTER_TABS.find((t) => t.value === filter)?.label ?? "Бүгд";
 
   return (
-    <div className="min-h-full w-full overflow-x-hidden bg-[#FFF8E7] px-4 py-6 font-balsamiq text-[#3b2f2f] md:px-6 lg:px-8">
+    <div className="min-h-full w-full overflow-x-hidden px-4 py-6 font-balsamiq text-[#3b2f2f] dark:text-[#fff] md:px-6 lg:px-8">
       <div className="mx-auto w-full max-w-6xl">
         <header className="mb-6">
-          <h1 className="text-4xl font-bold tracking-normal text-[#3b2f2f] md:text-5xl">
+          <h1 className="text-4xl font-bold tracking-normal text-[#8A4D07] md:text-5xl dark:text-[#7a5930]">
             Цагаан толгой
           </h1>
-          <p className="mt-2 max-w-2xl text-base font-bold text-[#7a5930]">
+          <p className="mt-2 max-w-2xl text-base font-bold text-[#7a5930] dark:text-[#fff]">
             Уламжлалт монгол бичгийн зурлага, үсгийн хувилбар дүрсийг судлан,
             бичих зүй тогтол, дарааллыг эзэмших.
           </p>

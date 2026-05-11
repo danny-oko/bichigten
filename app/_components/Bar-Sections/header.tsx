@@ -37,7 +37,7 @@ export const Header = ({
       ].join(" ")}
     >
       <div className="w-full">
-        <div className="flex items-center px-4 py-3 font-['Plus_Jakarta_Sans'] text-[#0F5238]">
+        <div className="flex items-center px-4 py-3 font-['Plus_Jakarta_Sans']">
           <div className="flex shrink-0 items-center gap-10">
             <div
               className={`flex items-center gap-3 ${
@@ -59,7 +59,9 @@ export const Header = ({
                   width={30}
                 />
               )}
-              <span className="text-md font-black sm:text-lg">
+              <span
+                className={`text-md font-black sm:text-lg ${isOutOfHearts ? "text-slate-500" : "text-red-500"}`}
+              >
                 {safeHeartsRemaining}
               </span>
             </div>
@@ -74,7 +76,7 @@ export const Header = ({
                 height={30}
                 width={30}
               />
-              <span className="text-md font-black sm:text-lg">
+              <span className={`text-md font-black sm:text-lg`}>
                 {totalXp.toLocaleString()} XP
               </span>
             </div>

@@ -104,7 +104,7 @@ export default async function HomeSection() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F0EDE3] pb-28 font-['Plus_Jakarta_Sans']">
+    <div className="min-h-screen pb-28 font-['Plus_Jakarta_Sans']">
       <MainLayout
         aside={
           <div className="space-y-4">

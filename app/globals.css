@@ -131,13 +131,15 @@
 
 @layer base {
   .dark body {
-    background: linear-gradient(to bottom, #0c192e 0%, #0c192e 100%);
+    background: linear-gradient(to bottom, #131f24 0%, #131f24 100%);
     min-height: 100vh;
+    border-color: #0c192e;
   }
 
   html:not(.dark) body {
     background-color: #fefae8;
     min-height: 100vh;
+    border-color: #d6d4d4;
   }
 }
 

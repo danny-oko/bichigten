@@ -111,9 +111,7 @@ function resolveCompletedUpTo(lessons: Lesson[], progress: ProgressItem[]) {
 
 export const useLessons = () => {
   const [lessons, setLessons] = useState<Lesson[]>([]);
-
   const [completedUpTo, setCompletedUpTo] = useState(0);
-
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -224,7 +222,9 @@ export const LessonCards = ({
           ) : (
             <>
               <DialogTitle className="sr-only">Lesson</DialogTitle>
-              <DialogDescription className="sr-only">Lesson details</DialogDescription>
+              <DialogDescription className="sr-only">
+                Lesson details
+              </DialogDescription>
             </>
           )}
         </DialogContent>

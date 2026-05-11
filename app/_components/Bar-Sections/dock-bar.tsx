@@ -19,10 +19,10 @@ export const DockBar = ({ menuLabels, menuPaths }: DockBarProps) => {
 
   return (
     <nav
-      className="fixed bottom-0 z-50 w-full md:hidden border-t-2 border-[#d6d4d4]"
+      className="fixed bottom-0 z-50 w-full md:hidden border-t-2"
       aria-label="Mobile navigation"
     >
-      <div className="flex items-center justify-around gap-1 bg-[#FEFAE8] p-3 shadow-xl backdrop-blur-md">
+      <div className="flex items-center justify-around gap-1 p-3 shadow-xl backdrop-blur-md">
         {menuLabels.map((label) => {
           const isActive = active === label;
 

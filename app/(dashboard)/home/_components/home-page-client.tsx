@@ -17,7 +17,7 @@ export const HomePath = () => {
 
   if (loading) {
     return (
-      <div className="flex flex-col items-center justify-center gap-1 bg-[#F0EDE3] font-['Plus_Jakarta_Sans']">
+      <div className="flex flex-col items-center justify-center gap-1 font-['Plus_Jakarta_Sans']">
         <div className="w-[120px] sm:w-[180px] md:w-[200px] lg:w-[220px] xl:w-[300px] aspect-square transition-all duration-300">
           <LoadingScreen />
         </div>
@@ -32,7 +32,7 @@ export const HomePath = () => {
 
   return (
     <div
-      className={`flex w-full justify-center bg-[#F0EDE3] px-3 py-8 sm:px-4 sm:py-10 md:px-6 ${montserrat.className}`}
+      className={`flex w-full justify-center px-3 py-8 sm:px-4 sm:py-10 md:px-6 ${montserrat.className}`}
     >
       <div className="relative w-full max-w-[340px]" style={{ height: totalH }}>
         <RoadPath lessonCount={lessons.length} completedUpTo={completedUpTo} />

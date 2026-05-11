@@ -1,5 +1,6 @@
 import LoadingScreen from "@/app/_components/loading-screen";
 import "@fontsource/plus-jakarta-sans";
+import { Montserrat } from "next/font/google";
 
 interface Props {
   message: string;
@@ -8,6 +9,11 @@ interface Props {
   actionLabel?: string;
   onAction?: () => void;
 }
+
+const montserrat = Montserrat({
+  subsets: ["latin", "cyrillic"],
+  weight: ["400", "500", "600", "700"],
+});
 
 export function LessonStatusScreen({
   message,
@@ -18,7 +24,7 @@ export function LessonStatusScreen({
 }: Props) {
   return (
     <div
-      className={`flex items-center justify-center min-h-screen font-['Plus_Jakarta_Sans']`}
+      className={`flex items-center justify-center min-h-screen font-['Plus_Jakarta_Sans'] ${montserrat.className}`}
     >
       <div className="flex-col w-full max-w-sm text-center flex justify-center items-center">
         <div
