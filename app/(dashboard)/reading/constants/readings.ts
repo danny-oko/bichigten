@@ -1,0 +1,1 @@
+export const DEFAULT_READING_DURATION_SEC = 60;

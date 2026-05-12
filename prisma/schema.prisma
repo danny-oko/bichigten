@@ -7,17 +7,17 @@ datasource db {
 }
 
 model User {
-  id             String               @id
-  email          String               @unique
-  userName       String               @unique
-  avatarUrl      String?
-  heartsRemaining Int                 @default(5)
-  totalXp        Int                  @default(10)
-  createdAt      DateTime             @default(now())
-  updatedAt      DateTime             @updatedAt
-  name           String?
-  speechAttempts SpeechAttempts[]
-  lessonProgress UserLessonProgress[]
+  id              String               @id
+  email           String               @unique
+  userName        String               @unique
+  avatarUrl       String?
+  totalXp         Int                  @default(10)
+  createdAt       DateTime             @default(now())
+  updatedAt       DateTime             @updatedAt
+  name            String?
+  heartsRemaining Int                  @default(5)
+  speechAttempts  SpeechAttempt[]
+  lessonProgress  UserLessonProgress[]
 
   @@index([totalXp(sort: Desc)])
   @@map("users_table")
@@ -39,6 +39,7 @@ model Lesson {
   order        Int
   levelId      String
   isCompleted  Boolean              @default(false)
+  videoUrl     String?
   content      LessonContent[]
   level        Section              @relation(fields: [levelId], references: [id])
   tasks        Task[]
@@ -50,13 +51,14 @@ model Lesson {
 }
 
 model LessonContent {
-  id       String  @id @default(cuid())
-  lessonId String
-  name     String
-  text     String
-  imageUrl String?
-  order    Int
-  lesson   Lesson  @relation(fields: [lessonId], references: [id])
+  id           String  @id @default(cuid())
+  lessonId     String
+  name         String
+  text         String
+  imageUrl     String?
+  animationCss String?
+  order        Int
+  lesson       Lesson  @relation(fields: [lessonId], references: [id])
 
   @@map("lesson_contents_table")
 }
@@ -77,37 +79,57 @@ model Task {
 }
 
 model UserLessonProgress {
-  id           String       @id @default(cuid())
-  userId       String
-  lessonId     String
-  status       LessonStatus @default(LOCKED)
-  xpEarned     Int          @default(0)
-  completedAt  DateTime?
-  lesson       Lesson       @relation(fields: [lessonId], references: [id])
-  user         User         @relation(fields: [userId], references: [id])
+  id          String       @id @default(cuid())
+  userId      String
+  lessonId    String
+  status      LessonStatus @default(LOCKED)
+  xpEarned    Int          @default(0)
+  completedAt DateTime?
+  lesson      Lesson       @relation(fields: [lessonId], references: [id])
+  user        User         @relation(fields: [userId], references: [id])
 
   @@unique([userId, lessonId])
   @@map("user_lesson_progress")
 }
 
-model SpeechTargets {
-  id           String           @id @default(uuid())
-  createdAt    DateTime         @default(now())
-  expectedText String
-  title        String
-  wordsCount   Int
-  attempts     SpeechAttempts[]
+
+model SpeechTarget {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  title            String
+  description      String?
+  difficulty       ReadingDifficulty @default(EASY)
+  requiredAccuracy Int?
+  cyrillicText    String
+  traditionalText String
+  wordsCount       Int
+  attempts         SpeechAttempt[]
+
+  @@map("speech_targets")
 }
 
-model SpeechAttempts {
-  id              String        @id @default(uuid())
-  createdAt       DateTime      @default(now())
-  targetId        String
+model SpeechAttempt {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+
+  targetId String
+  target   SpeechTarget @relation(fields: [targetId], references: [id], onDelete: Cascade)
+  userId   String
+  user     User         @relation(fields: [userId], references: [id])
+
   transcribedText String
-  userId          String
-  wordsRead       Int
-  target          SpeechTargets @relation(fields: [targetId], references: [id])
-  user            User          @relation(fields: [userId], references: [id])
+  durationSec     Int
+
+  // Computed results — store these so you never need to recalculate
+  mistakes       Int
+  accuracy       Float
+  wordsRead      Int
+  charactersRead Int
+  wpm            Int
+
+  @@map("speech_attempts")
 }
 
 enum LessonStatus {
@@ -123,6 +145,12 @@ enum TaskType {
 }
 
 enum TaskDifficulty {
+  EASY
+  MEDIUM
+  HARD
+}
+
+enum ReadingDifficulty {
   EASY
   MEDIUM
   HARD

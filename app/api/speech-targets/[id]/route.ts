@@ -8,7 +8,7 @@ export const GET = async (req: NextRequest) => {
   const userId = await getClerkUserIdFromRequest(req);
   if (!userId) return unauthorizedApiResponse(req);
 
-  const attempts = await prisma.speechAttempts.findMany({
+  const attempts = await prisma.speechAttempt.findMany({
     where: { userId },
     include: { target: true },
     orderBy: { createdAt: "desc" },
@@ -27,8 +27,18 @@ export const POST = async (req: NextRequest) => {
       { status: 400 },
     );
   }
-  const attempt = await prisma.speechAttempts.create({
-    data: { userId, targetId, transcribedText, wordsRead: parseInt(wordsRead) },
+  const attempt = await prisma.speechAttempt.create({
+    data: {
+      userId,
+      targetId,
+      transcribedText,
+      durationSec: 60,
+      mistakes: 0,
+      accuracy: 100,
+      wordsRead: Number(wordsRead),
+      charactersRead: String(transcribedText).length,
+      wpm: Number(wordsRead),
+    },
   });
   return NextResponse.json(attempt, { status: 201 });
 };
