@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma";
+import { Prisma } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
 
 // GET /api/lessons/:id
@@ -10,7 +11,7 @@ export const GET = async (
 
   const lesson = await prisma.lesson.findUnique({
     where: { id },
-    include: { content: true, tasks: true, userProgress: true },
+    include: { content: true, tasks: true, userProgress: true, level: true },
   });
 
   if (!lesson) {
@@ -45,16 +46,32 @@ export const PATCH = async (
         ...(body.isCompleted !== undefined && {
           isCompleted: body.isCompleted,
         }),
-        ...(body.videoUrl !== undefined && { videoUrl: body.videoUrl }), // ✅ added (allows setting to null too)
+        ...(body.videoUrl !== undefined && { videoUrl: body.videoUrl }),
+        ...(body.levelId && { levelId: body.levelId }),
       },
     });
 
     return NextResponse.json(lesson);
   } catch (error) {
-    return NextResponse.json(
-      { message: "Update failed. Record may not exist.", error },
-      { status: 400 },
-    );
+    if (error instanceof Prisma.PrismaClientKnownRequestError) {
+      if (error.code === "P2002") {
+        return NextResponse.json(
+          {
+            message: "A lesson with this order already exists in the section.",
+          },
+          { status: 409 },
+        );
+      }
+      if (error.code === "P2025") {
+        return NextResponse.json(
+          { message: "Lesson not found." },
+          { status: 404 },
+        );
+      }
+    }
+
+    const message = error instanceof Error ? error.message : String(error);
+    return NextResponse.json({ message }, { status: 400 });
   }
 };
 
@@ -65,14 +82,20 @@ export const DELETE = async (
 ) => {
   try {
     const { id } = await params;
-
     await prisma.lesson.delete({ where: { id } });
-
     return NextResponse.json({ message: "Deleted successfully" });
   } catch (error) {
-    return NextResponse.json(
-      { message: "Delete failed. Record may not exist." },
-      { status: 404 },
-    );
+    if (
+      error instanceof Prisma.PrismaClientKnownRequestError &&
+      error.code === "P2025"
+    ) {
+      return NextResponse.json(
+        { message: "Lesson not found." },
+        { status: 404 },
+      );
+    }
+
+    const message = error instanceof Error ? error.message : String(error);
+    return NextResponse.json({ message }, { status: 500 });
   }
 };
