@@ -5,84 +5,40 @@ import { NextRequest, NextResponse } from "next/server";
 
 // GET /api/speech-targets/:id — attempts for the authenticated (or impersonated) user
 export const GET = async (req: NextRequest) => {
-  try {
-    const userId = req.nextUrl.searchParams.get("userId");
+  const userId = await getClerkUserIdFromRequest(req);
+  if (!userId) return unauthorizedApiResponse(req);
 
-    const attempts = await prisma.speechAttempt.findMany({
-      where: userId ? { userId } : undefined,
-      include: {
-        target: true,
-      },
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
-
-    return NextResponse.json(attempts);
-  } catch (error) {
-    console.error("Failed to fetch speech attempts:", error);
-
-    return NextResponse.json(
-      { message: "Failed to fetch speech attempts" },
-      { status: 500 },
-    );
-  }
+  const attempts = await prisma.speechAttempt.findMany({
+    where: { userId },
+    include: { target: true },
+    orderBy: { createdAt: "desc" },
+  });
+  return NextResponse.json(attempts);
 };
 
 export const POST = async (req: NextRequest) => {
-  try {
-    const {
+  const userId = await getClerkUserIdFromRequest(req);
+  if (!userId) return unauthorizedApiResponse(req);
+
+  const { targetId, transcribedText, wordsRead } = await req.json();
+  if (!targetId || !transcribedText || wordsRead === undefined) {
+    return NextResponse.json(
+      { message: "Missing required fields" },
+      { status: 400 },
+    );
+  }
+  const attempt = await prisma.speechAttempt.create({
+    data: {
       userId,
       targetId,
       transcribedText,
-      durationSec,
-      mistakes,
-      accuracy,
-      wordsRead,
-      charactersRead,
-      wpm,
-    } = await req.json();
-
-    if (
-      !userId ||
-      !targetId ||
-      !transcribedText ||
-      durationSec === undefined ||
-      mistakes === undefined ||
-      accuracy === undefined ||
-      wordsRead === undefined ||
-      charactersRead === undefined ||
-      wpm === undefined
-    ) {
-      return NextResponse.json(
-        { message: "Missing required fields" },
-        { status: 400 },
-      );
-    }
-
-    const attempt = await prisma.speechAttempt.create({
-      data: {
-        userId,
-        targetId,
-        transcribedText,
-
-        durationSec: Number(durationSec),
-        mistakes: Number(mistakes),
-        accuracy: Number(accuracy),
-
-        wordsRead: Number(wordsRead),
-        charactersRead: Number(charactersRead),
-        wpm: Number(wpm),
-      },
-    });
-
-    return NextResponse.json(attempt, { status: 201 });
-  } catch (error) {
-    console.error("Failed to create speech attempt:", error);
-
-    return NextResponse.json(
-      { message: "Failed to create speech attempt" },
-      { status: 500 },
-    );
-  }
+      durationSec: 60,
+      mistakes: 0,
+      accuracy: 100,
+      wordsRead: Number(wordsRead),
+      charactersRead: String(transcribedText).length,
+      wpm: Number(wordsRead),
+    },
+  });
+  return NextResponse.json(attempt, { status: 201 });
 };
