@@ -68,7 +68,7 @@ export default async function RankPage() {
           {podiumUsers.length >= 3 ? (
             <WebPodiumSection users={podiumUsers} />
           ) : (
-            <div className="rounded-2xl border-3 border-dashed border-[#ead9bb] bg-transparent px-4 py-8 text-center text-sm text-[#3b2f2f] sm:p-10 sm:text-base dark:border-[#37464f] dark:bg-[#252f35]/40 dark:text-[#bdb5a6]">
+            <div className="rounded-2xl border-3 border-dashed border-[#ead9bb] bg-transparent px-4 py-8 text-center text-sm text-[#3b2f2f] sm:p-10 sm:text-base dark:border-[#37464f] dark:text-[#bdb5a6]">
               Лиг эхлэхэд илүү олон тоглогч хэрэгтэй...
             </div>
           )}

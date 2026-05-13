@@ -8,35 +8,35 @@ type LeaguePanelProps = {
 
 export default function LeaguePanel({ league }: LeaguePanelProps) {
   return (
-    <section className="overflow-hidden rounded-3xl border border-[#c9d4ee] bg-white shadow-sm">
-      <div className="relative bg-gradient-to-br from-[#1d2b55] via-[#243a6e] to-[#1a2748] px-4 py-3">
-        <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#e8ecfb]">
+    <section className="overflow-hidden rounded-2xl border-3 border-[#E8920A] bg-transparent shadow-[0_8px_24px_rgba(232,146,10,0.08)] dark:border-[#84d8ff]/40 dark:shadow-[0_8px_24px_rgba(132,216,255,0.12)]">
+      <div className="relative bg-transparent px-3 py-3 sm:px-4">
+        <p className="text-xs font-bold uppercase tracking-[0.2em] text-[#1d2b55] dark:text-[#e8ecfb]">
           {league.name}
         </p>
-        <p className="mt-1 text-xs text-[#b8c4e8]">{league.resetInText}</p>
+        <p className="mt-1 text-xs text-[#243a6e] dark:text-[#b8c4e8]">{league.resetInText}</p>
       </div>
-      <div className="divide-y divide-[#efe8db]">
+      <div className="divide-y divide-[#efe8db] dark:divide-[#37464f]">
         {league.entries.map((entry) => (
           <div
             key={`${entry.rank}-${entry.name}`}
-            className={`flex items-center justify-between px-4 py-3 text-sm transition-colors ${
-              entry.isCurrentUser
-                ? "bg-[#fff7e5]"
-                : "bg-white hover:bg-[#fffefb]"
-            }`}
+            className="flex items-center justify-between gap-2 bg-transparent px-3 py-3 text-sm sm:px-4"
           >
-            <div className="flex items-center gap-2">
-              <span className="w-4 text-[#8a806f]">{entry.rank}</span>
-              <p className="font-semibold text-[#27221d]">
-                {entry.name}
+            <div className="flex min-w-0 flex-1 items-center gap-2">
+              <span className="w-4 shrink-0 text-[#8a806f] dark:text-[#94a3b8]">
+                {entry.rank}
+              </span>
+              <div className="flex min-w-0 flex-1 items-center gap-1">
+                <span className="truncate font-semibold text-[#27221d] dark:text-[#e8e4dc]">
+                  {entry.name}
+                </span>
                 {entry.isCurrentUser ? (
-                  <span className="ml-1 rounded-full bg-[#e9a732] px-1.5 py-0.5 text-[10px] font-bold text-white">
+                  <span className="shrink-0 rounded-full bg-[#e9a732] px-1.5 py-0.5 text-[10px] font-bold text-white">
                     {mnProfile.leagueYou}
                   </span>
                 ) : null}
-              </p>
+              </div>
             </div>
-            <span className="font-bold text-[#4d4337]">
+            <span className="shrink-0 pl-2 text-right font-bold tabular-nums text-[#4d4337] dark:text-[#c4bdb0]">
               {entry.xp.toLocaleString()}
               {mnProfile.leagueXpSuffix}
             </span>

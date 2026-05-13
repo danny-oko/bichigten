@@ -46,7 +46,7 @@ export const ReadingPage = () => {
   }, [searchParams]);
 
   return (
-    <main className="min-h-screen w-full overflow-x-hidden bg-[#fbf3df] px-6 py-6 text-stone-900 lg:px-10">
+    <main className="min-h-screen w-full overflow-x-hidden bg-transparent px-6 py-6 text-stone-900 lg:px-10">
       <div className="flex w-full flex-col gap-6">
         <ReadingHeader
           title="Минутын уншлага"
@@ -61,13 +61,13 @@ export const ReadingPage = () => {
         </div>
 
         {error && (
-          <section className="rounded-2xl border border-red-200 bg-red-50 p-4 text-sm font-medium text-red-700">
+          <section className="rounded-2xl border-3 border-red-300 bg-transparent p-4 text-sm font-medium text-red-700 dark:border-red-500/50 dark:text-red-300">
             {error}
           </section>
         )}
 
         {isLoading ? (
-          <section className="rounded-2xl border border-amber-100 bg-white/90 p-6 text-sm font-semibold text-stone-600 shadow-sm">
+          <section className="rounded-2xl border-3 border-[#E8920A] bg-transparent p-6 text-sm font-semibold text-stone-600 shadow-[0_8px_24px_rgba(232,146,10,0.08)] dark:border-[#84d8ff]/40">
             Уншлагуудыг ачаалж байна...
           </section>
         ) : (

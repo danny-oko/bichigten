@@ -82,10 +82,10 @@ function WebPodiumPerson({ user }: { user: PodiumUser }) {
         {user.name}
       </p>
       <div
-        className={`mt-1 text-center ${isFirst ? "rounded-2xl bg-[#E8920A] px-3 py-2 sm:px-8 sm:py-3 dark:border-2 dark:border-[#84d8ff] dark:bg-[#84d8ff]/10" : "rounded-xl border border-[#ead9bb] bg-[#E8920A]/10 px-3 py-1.5 sm:px-6 sm:py-2 dark:border-[#84d8ff]/35 dark:bg-[#84d8ff]/10"}`}
+        className={`mt-1 text-center ${isFirst ? "rounded-2xl border-3 border-[#E8920A] bg-transparent px-3 py-2 sm:px-8 sm:py-3 dark:border-[#84d8ff]" : "rounded-xl border-3 border-[#ead9bb] bg-transparent px-3 py-1.5 sm:px-6 sm:py-2 dark:border-[#84d8ff]/35"}`}
       >
         <div
-          className={`font-bold tabular-nums ${isFirst ? "text-lg text-white sm:text-2xl dark:text-[#84d8ff]" : "text-sm text-[#E8920A] sm:text-base dark:text-[#84d8ff]"}`}
+          className={`font-bold tabular-nums ${isFirst ? "text-lg text-[#E8920A] sm:text-2xl dark:text-[#84d8ff]" : "text-sm text-[#E8920A] sm:text-base dark:text-[#84d8ff]"}`}
         >
           {user.xp.toLocaleString()} XP
         </div>

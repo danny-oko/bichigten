@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import { mnProfile } from "@/lib/i18n/mn-profile";
 
 import type { ProfileTab } from "../common/types";
@@ -22,24 +23,23 @@ export default function ProfileTabs({
 }: ProfileTabsProps) {
   return (
     <nav
-      className="flex w-full max-w-full flex-nowrap gap-1 overflow-x-auto rounded-2xl border border-[#ead9bb]/90 bg-gradient-to-r from-[#faf3e6] to-[#f5ecda] p-1.5 [-ms-overflow-style:none] [scrollbar-width:none] md:inline-flex md:w-auto [&::-webkit-scrollbar]:hidden"
+      className="flex w-full max-w-full flex-nowrap gap-2 overflow-x-auto [-ms-overflow-style:none] [scrollbar-width:none] md:flex-wrap [&::-webkit-scrollbar]:hidden"
       aria-label="Profile sections"
     >
       {tabs.map((tab) => {
         const isActive = tab.id === activeTab;
         return (
-          <button
-            type="button"
+          <Button
             key={tab.id}
+            type="button"
+            variant="sortbutton"
+            size="sort"
+            aria-pressed={isActive}
             onClick={() => onTabChange(tab.id)}
-            className={`relative shrink-0 rounded-xl px-4 py-2.5 text-sm font-bold transition-colors ${
-              isActive
-                ? "bg-white text-[#2a241e] shadow-sm ring-1 ring-[#e8d4b0]"
-                : "text-[#7d7364] hover:bg-white/60 hover:text-[#433c31]"
-            }`}
+            className="shrink-0 text-xs sm:text-sm"
           >
             {tab.label}
-          </button>
+          </Button>
         );
       })}
     </nav>

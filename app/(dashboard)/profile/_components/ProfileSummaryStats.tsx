@@ -82,19 +82,19 @@ export default function ProfileSummaryStats({
       {stats.map((stat) => (
         <div
           key={stat.id}
-          className="group relative overflow-hidden rounded-2xl border border-white/70 bg-white/95 px-2 py-2 text-center shadow-sm md:rounded-3xl md:px-2.5 md:py-2.5"
+          className="group relative min-w-0 overflow-hidden rounded-2xl border-3 border-[#ead9bb] bg-transparent px-1.5 py-2 text-center shadow-[0_8px_24px_rgba(232,146,10,0.06)] dark:border-[#37464f] md:rounded-2xl md:px-2.5 md:py-2.5"
         >
           <div
             className={`pointer-events-none absolute inset-x-0 top-0 h-0.5 rounded-b-full bg-linear-to-r ${statAccent[stat.id] ?? "from-[#E8920A] to-[#f5c96a]"}`}
             aria-hidden
           />
-          <p className="mb-0.5 flex min-h-4 items-center justify-center text-[#b08a52]">
+          <p className="flex min-h-4 items-center justify-center text-[#b08a52] dark:text-[#c4a574]">
             {iconFor(stat.id)}
           </p>
-          <p className="flex items-center justify-center text-xl font-extrabold tabular-nums leading-none text-[#1f1c18] md:text-2xl">
+          <p className="flex min-w-0 items-center justify-center text-lg font-extrabold tabular-nums leading-none text-[#1f1c18] dark:text-[#f0ebe3] md:text-2xl">
             {stat.value}
           </p>
-          <p className="mt-0.5 text-[9px] font-bold uppercase leading-tight tracking-[0.12em] text-[#8a806f] md:text-[10px] md:tracking-[0.14em]">
+          <p className="mt-0.5 wrap-break-word text-[9px] font-bold uppercase leading-tight tracking-[0.12em] text-[#8a806f] dark:text-[#9ba3a7] md:text-[10px] md:tracking-[0.14em]">
             {stat.label}
           </p>
         </div>

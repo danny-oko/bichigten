@@ -138,7 +138,7 @@ export default function ActivityHeatmap({ days }: ActivityHeatmapProps) {
   }, [lessonsByDate, startDateUTC]);
 
   return (
-    <div className="overflow-hidden rounded-3xl border border-[#ead9bb] bg-gradient-to-br from-white via-[#fffdfb] to-[#fff4e6] p-3 shadow-sm">
+    <div className="overflow-hidden rounded-2xl border-3 border-[#E8920A] bg-transparent p-3 shadow-[0_8px_24px_rgba(232,146,10,0.08)] dark:border-[#84d8ff]/40 dark:shadow-[0_8px_24px_rgba(132,216,255,0.12)]">
       <div className="hm-root">
         <div className="hm-grid-wrap">
           <div className="hm-grid-inner">
@@ -231,17 +231,16 @@ export default function ActivityHeatmap({ days }: ActivityHeatmapProps) {
 
         .hm-grid-inner {
           width: 100%;
-          min-width: 0;
-          background: rgba(255, 253, 248, 0.95);
-          border: 1px solid rgba(234, 217, 187, 0.55);
+          min-width: 400px;
+          background: transparent;
           border-radius: 12px;
           padding: 12px;
         }
 
         @media (prefers-color-scheme: dark) {
           .hm-grid-inner {
-            background: rgba(255, 255, 255, 0.04);
-            border-color: rgba(255, 255, 255, 0.08);
+            background: transparent;
+            border-color: rgba(132, 216, 255, 0.35);
           }
         }
 
