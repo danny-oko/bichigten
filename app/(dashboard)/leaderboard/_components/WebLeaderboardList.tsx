@@ -29,25 +29,24 @@ function WebListItem({
   user: WebLeaderboardUser;
   maxXp: number;
 }) {
+
   const progressPercent = Math.min((user.xp / maxXp) * 100, 100);
 
   return (
     <div
       className={`flex items-center gap-4 px-4 py-3 rounded-2xl ${
         user.isMe
-          ? "bg-[#EEF7EE] border-3 border-[#A8D5A8] dark:bg-[#1a2e21] dark:border-[#3d634d]"
-          : "bg-white border border-[#E8D9C0] dark:bg-[#1c262b] dark:border-[#37464f]"
+          ? "bg-[#EEF7EE] border border-[#A8D5A8]"
+          : "bg-white border border-[#E8D9C0]"
       }`}
     >
-      <span className="text-sm font-semibold text-[#888] dark:text-[#9fa8ad] w-5 shrink-0">
+      <span className="text-sm font-semibold text-[#888] w-5 shrink-0">
         {user.rank}
       </span>
 
       <div
         className={`w-9 h-9 rounded-full shrink-0 flex items-center justify-center text-sm font-bold ${
-          user.isMe
-            ? "bg-[#E8940A] text-white dark:bg-[#ffa629] dark:text-[#131f24]"
-            : "bg-[#D3C4A8] text-[#7a6a50] dark:bg-[#37464f] dark:text-[#a39494]"
+          user.isMe ? "bg-[#E8940A] text-white" : "bg-[#D3C4A8] text-[#7a6a50]"
         }`}
       >
         {user.avatarUrl ? (
@@ -63,7 +62,7 @@ function WebListItem({
 
       <div className="w-36 shrink-0">
         <div className="flex items-center gap-1.5">
-          <p className="text-sm font-semibold text-[#222] dark:text-[#f0f4f5] truncate">
+          <p className="text-sm font-semibold text-[#222] truncate">
             {user.name}
           </p>
           {user.isNew && (
@@ -72,15 +71,15 @@ function WebListItem({
             </span>
           )}
         </div>
-        <p className="text-[10px] text-[#999] dark:text-[#aab3b8] uppercase tracking-wide">
+        <p className="text-[10px] text-[#999] uppercase tracking-wide">
           {user.title}
         </p>
       </div>
 
       <div className="flex-1">
-        <div className="w-full bg-[#F4EFE8] dark:bg-[#252f35] rounded-full h-2">
+        <div className="w-full bg-[#F4EFE8] rounded-full h-2">
           <div
-            className="bg-[#E8940A] dark:bg-[#ffa629] h-2 rounded-full"
+            className="bg-[#E8940A] h-2 rounded-full"
             style={{ width: `${progressPercent}%` }}
           />
         </div>
@@ -124,10 +123,8 @@ export default function WebLeaderboardList({
       {hasMore && (
         <button
           type="button"
-          onClick={() =>
-            setVisibleCount((current: number) => current + loadStep)
-          }
-          className="mt-2 self-center rounded-xl border-3 border-[#D7B680] bg-[#F3E0BD] px-5 py-2 text-sm font-semibold text-[#7A5C2E] transition hover:bg-[#EFD4A2] dark:border-[#b58a55] dark:bg-[#2d271b] dark:text-[#ffa629] dark:hover:bg-[#3d3525]"
+          onClick={() => setVisibleCount((current: number) => current + loadStep)}
+          className="mt-2 self-center rounded-xl border border-[#D7B680] bg-[#F3E0BD] px-5 py-2 text-sm font-semibold text-[#7A5C2E] transition hover:bg-[#EFD4A2]"
         >
           {mnUi.loadMore}
         </button>

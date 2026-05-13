@@ -20,8 +20,8 @@ export default function WebLeaguePath({ userXp = 0 }: { userXp: number }) {
   };
 
   return (
-    <div className="rounded-2xl border-3 border-[#E5E5E5] bg-white p-5 shadow-sm dark:bg-transparent dark:border-[#37464f]">
-      <h3 className="mb-5 border-b border-[#ECE7DE] px-1 pb-3 text-sm font-bold text-[#1C2B4A] dark:border-[#37464f] dark:text-[#f0f4f5]">
+    <div className="rounded-2xl border-2 border-[#E5E5E5] bg-white p-5 shadow-sm">
+      <h3 className="mb-5 border-b border-[#ECE7DE] px-1 pb-3 text-sm font-bold text-[#1C2B4A]">
         Цолны нэршил
       </h3>
 
@@ -37,16 +37,16 @@ export default function WebLeaguePath({ userXp = 0 }: { userXp: number }) {
               className="relative flex items-center gap-3 p-2 group"
             >
               {index !== RANK_TIERS.length - 1 && (
-                <div className="absolute left-[23px] top-10 h-6 w-px bg-[#ECE7DE] dark:border-[#2d3a42]" />
+                <div className="absolute left-[23px] top-10 h-6 w-px bg-[#ECE7DE]" />
               )}
 
               <div
                 className={`w-9 h-9 rounded-full flex items-center justify-center border-2 transition-all z-10 ${
                   isCurrent
-                    ? "scale-110 border-[#E8920A] bg-[#FFF8EE] dark:border-[#ffad33] dark:bg-[#2d271b] dark:shadow-[0_0_15px_rgba(255,173,51,0.3)]"
+                    ? "scale-110 border-[#E8920A] bg-[#FFF8EE]"
                     : isLocked
-                      ? "bg-gray-50 border-gray-100 grayscale dark:bg-[#1a2124] dark:border-[#252f35] dark:opacity-50"
-                      : "border-[#BFE3D8] bg-[#ECF8F4] dark:border-[#2E8B6F] dark:bg-[#132a24]"
+                      ? "bg-gray-50 border-gray-100 grayscale"
+                      : "border-[#BFE3D8] bg-[#ECF8F4]"
                 }`}
               >
                 <span className="text-sm">{isLocked ? "🔒" : rank.icon}</span>
@@ -54,12 +54,12 @@ export default function WebLeaguePath({ userXp = 0 }: { userXp: number }) {
 
               <div className="flex-1">
                 <p
-                  className={`text-xs font-bold ${isLocked ? "text-gray-400 dark:text-[#52606b]" : "text-[#1C2B4A] dark:text-[#f0f4f5]"}`}
+                  className={`text-xs font-bold ${isLocked ? "text-gray-400" : "text-[#1C2B4A]"}`}
                 >
                   {rank.label}
                 </p>
                 {isCurrent && (
-                  <p className="text-[10px] font-medium text-[#E8920A] dark:text-[#ffad33]">
+                  <p className="text-[10px] font-medium text-[#E8920A]">
                     Дараагийн цол хүртэл {RANK_TIERS[index + 1]?.minXp - userXp}{" "}
                     XP
                   </p>
@@ -67,9 +67,7 @@ export default function WebLeaguePath({ userXp = 0 }: { userXp: number }) {
               </div>
 
               {status === "done" && (
-                <span className="text-[10px] font-bold text-[#2E8B6F] dark:text-[#4ade80]">
-                  ✓
-                </span>
+                <span className="text-[10px] font-bold text-[#2E8B6F]">✓</span>
               )}
             </div>
           );

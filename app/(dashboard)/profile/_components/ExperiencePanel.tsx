@@ -1,21 +1,12 @@
 import { mnProfile } from "@/lib/i18n/mn-profile";
 
 import { ExperienceInfo } from "../common/types";
-import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
 
 type ExperiencePanelProps = {
   experience: ExperienceInfo;
 };
 
 export default function ExperiencePanel({ experience }: ExperiencePanelProps) {
-  const { resolvedTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => setMounted(true), []);
-
-  const isDarkMode = mounted && resolvedTheme === "dark";
-
   const percent = Math.max(
     0,
     Math.min(100, (experience.currentXp / experience.nextLevelXp) * 100),

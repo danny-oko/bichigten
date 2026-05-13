@@ -4,8 +4,6 @@ import * as React from "react";
 
 import { mnProfile } from "@/lib/i18n/mn-profile";
 import type { ActivityHeatmapDay } from "../common/types";
-import { useEffect, useState } from "react";
-import { useTheme } from "next-themes";
 
 type ActivityHeatmapProps = {
   days: ActivityHeatmapDay[];
@@ -24,16 +22,6 @@ const COLORS: string[] = [
   "#E8920A",
   "#BA7517",
   "#854F0B",
-];
-
-const DARK_COLORS: string[] = [
-  "#1a2124",
-  "#252f35",
-  "#ccac81",
-  "#f59e0b",
-  "#ffad33",
-  "#d97706",
-  "#92400e",
 ];
 
 function addDaysUTC(date: Date, days: number) {
@@ -149,13 +137,6 @@ export default function ActivityHeatmap({ days }: ActivityHeatmapProps) {
     return rows;
   }, [lessonsByDate, startDateUTC]);
 
-  const { resolvedTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => setMounted(true), []);
-
-  const isDarkMode = mounted && resolvedTheme === "dark";
-
   return (
     <div className="overflow-hidden rounded-3xl border border-[#ead9bb] bg-gradient-to-br from-white via-[#fffdfb] to-[#fff4e6] p-3 shadow-sm">
       <div className="hm-root">
@@ -196,15 +177,9 @@ export default function ActivityHeatmap({ days }: ActivityHeatmapProps) {
                         key={cell.dateKey}
                         className="hm-cell"
                         style={{
-                          background: isDarkMode
-                            ? DARK_COLORS[cell.level]
-                            : COLORS[cell.level],
+                          background: COLORS[cell.level],
                           border:
-                            cell.level === 0
-                              ? isDarkMode
-                                ? "1px solid #252f35"
-                                : "0.5px solid #E8E5DC"
-                              : "none",
+                            cell.level === 0 ? "0.5px solid #E8E5DC" : "none",
                         }}
                         onMouseEnter={(e) => {
                           showCellTooltip(e, dateStr, valStr);
@@ -245,7 +220,7 @@ export default function ActivityHeatmap({ days }: ActivityHeatmapProps) {
 
         @media (prefers-color-scheme: dark) {
           .hm-root {
-            --text-muted: #8d96a3ff;
+            --text-muted: #8a8880;
           }
         }
 
@@ -318,10 +293,14 @@ export default function ActivityHeatmap({ days }: ActivityHeatmapProps) {
           cursor: default;
 =======
           cursor: pointer;
+<<<<<<< HEAD
           transition:
             transform 0.1s,
             outline 0.1s;
 >>>>>>> 589fb68 (Theme & Loading Screen)
+=======
+          transition: transform 0.1s, outline 0.1s;
+>>>>>>> cd84c80 (Revert "Theme & Loading Screen")
           position: relative;
         }
 

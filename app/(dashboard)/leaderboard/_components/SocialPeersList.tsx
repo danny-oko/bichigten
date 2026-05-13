@@ -14,15 +14,15 @@ interface WebNearbyPlayersProps {
 
 export default function WebNearbyPlayers({ players }: WebNearbyPlayersProps) {
   return (
-    <div className="rounded-2xl border-3 border-[#E5E5E5] bg-white p-5 dark:bg-transparent dark:border-[#37464f]">
-      <div className="mb-4 flex items-center justify-between border-b border-[#ECE7DE] dark:border-[#37464f] pb-3">
-        <p className="text-xs uppercase tracking-wide text-[#6F6658] dark:text-[#9ba3a7]">
+    <div className="rounded-2xl border-2 border-[#E5E5E5] bg-white p-5">
+      <div className="mb-4 flex items-center justify-between border-b border-[#ECE7DE] pb-3">
+        <p className="text-xs uppercase tracking-wide text-[#6F6658]">
           Ойролцоох тоглогчид
         </p>
-        <p className="text-xs text-[#6F6658] dark:text-[#647179]">Ranks 1-3</p>
+        <p className="text-xs text-[#6F6658]">Ranks 1-3</p>
       </div>
 
-      <p className="mb-3 text-sm font-semibold text-[#1C2B4A] dark:text-[#f0f4f5]">
+      <p className="mb-3 text-sm font-semibold text-[#1C2B4A]">
         Таны эргэн тойронд
       </p>
 
@@ -31,18 +31,18 @@ export default function WebNearbyPlayers({ players }: WebNearbyPlayersProps) {
           <div
             key={player.rank}
             className={`flex items-center gap-3 px-3 py-2 rounded-xl ${
-              player.isMe ? "bg-[#FFF8EE] dark:bg-[#37464f]" : ""
+              player.isMe ? "bg-[#FFF8EE]" : ""
             }`}
           >
-            <span className="text-sm font-semibold text-[#888] dark:text-[#9ba3a7] w-4 shrink-0">
+            <span className="text-sm font-semibold text-[#888] w-4 shrink-0">
               {player.rank}
             </span>
 
             <div
               className={`w-8 h-8 rounded-full shrink-0 flex items-center justify-center text-sm font-bold ${
                 player.isMe
-                  ? "bg-[#E8920A] text-white dark:bg-[#ffad33] dark:text-[#131f24]"
-                  : "bg-[#D3C4A8] text-[#7a6a50] dark:bg-[#37464f] dark:text-[#9ba3a7]"
+                  ? "bg-[#E8920A] text-white"
+                  : "bg-[#D3C4A8] text-[#7a6a50]"
               }`}
             >
               {player.avatarUrl ? (
@@ -58,11 +58,11 @@ export default function WebNearbyPlayers({ players }: WebNearbyPlayersProps) {
 
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-1.5">
-                <p className="text-sm font-semibold text-[#222] truncate dark:text-[#f0f4f5]">
+                <p className="text-sm font-semibold text-[#222] truncate">
                   {player.name}
                 </p>
                 {player.isMe && (
-                  <span className="rounded-full bg-[#1C2B4A] dark:bg-[#2e4575] px-1.5 py-0.5 text-[9px] font-bold text-white">
+                  <span className="rounded-full bg-[#1C2B4A] px-1.5 py-0.5 text-[9px] font-bold text-white">
                     Та
                   </span>
                 )}
@@ -70,12 +70,12 @@ export default function WebNearbyPlayers({ players }: WebNearbyPlayersProps) {
             </div>
 
             <div className="text-right shrink-0">
-              <p className="text-sm font-bold text-[#222] dark:text-[#f0f4f5]">
+              <p className="text-sm font-bold text-[#222]">
                 {player.xp.toLocaleString()}
               </p>
               {player.xpChange !== undefined && (
                 <p
-                  className={`text-[10px] font-medium ${player.xpChange >= 0 ? "text-[#2E8B6F] dark:text-[#4ade80]" : "text-[#D63F3F] dark:text-[#f87171]"}`}
+                  className={`text-[10px] font-medium ${player.xpChange >= 0 ? "text-[#2E8B6F]" : "text-[#D63F3F]"}`}
                 >
                   {player.xpChange >= 0 ? "+" : ""}
                   {player.xpChange} XP

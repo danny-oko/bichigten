@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+
 import { Button } from "@/components/ui/button";
 import { mnProfile } from "@/lib/i18n/mn-profile";
 import { mnUi } from "@/lib/i18n/mn-ui";

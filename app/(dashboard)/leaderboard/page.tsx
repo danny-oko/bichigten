@@ -45,7 +45,7 @@ export default async function RankPage() {
   const listUsers = allUsers.slice(3);
 
   return (
-    <div className="min-h-screen bg-transparent pb-24 text-[#3b2f2f] md:pb-10">
+    <div className="min-h-screen bg-[#FFF8E7] pb-24 text-[#3b2f2f] md:pb-10">
       <MainLayout
         aside={
           <>
@@ -57,14 +57,14 @@ export default async function RankPage() {
         }
       >
         <div className="space-y-4 md:space-y-5">
-          {podiumUsers.length >= 3 ? (
-            <WebPodiumSection users={podiumUsers} />
-          ) : (
-            <div className="p-10 text-center bg-white rounded-2xl border border-dashed border-[#E8D9C0]">
-              Лиг эхлэхэд илүү олон тоглогч хэрэгтэй...
-            </div>
-          )}
-          <WebLeaderboardList users={listUsers} />
+            {podiumUsers.length >= 3 ? (
+              <WebPodiumSection users={podiumUsers} />
+            ) : (
+              <div className="p-10 text-center bg-white rounded-2xl border border-dashed border-[#E8D9C0]">
+                Лиг эхлэхэд илүү олон тоглогч хэрэгтэй...
+              </div>
+            )}
+            <WebLeaderboardList users={listUsers} />
         </div>
       </MainLayout>
     </div>

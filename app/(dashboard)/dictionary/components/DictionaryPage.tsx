@@ -86,11 +86,9 @@ export const DictionaryPage = ({ characters }: { characters: Character[] }) => {
         </header>
 
         <div className="grid min-w-0 gap-6 xl:grid-cols-[minmax(0,1fr)_360px]">
-          <section className="min-w-0 rounded-2xl border-2 border-[#ead9bb] dark:border-[#37464f] bg-[#fffdf7] p-4 shadow-[0_18px_45px_rgba(122,89,48,0.12)] md:p-5 dark:bg-transparent">
+          <section className="min-w-0 rounded-2xl border border-[#ead9bb] bg-[#fffdf7] p-4 shadow-[0_18px_45px_rgba(122,89,48,0.12)] md:p-5">
             <div className="mb-4 hidden items-center justify-between gap-3 xl:flex">
-              <h2 className="text-xl font-bold text-[#3b2f2f] dark:text-[#fff]">
-                Үсэгнүүд
-              </h2>
+              <h2 className="text-xl font-bold text-[#3b2f2f]">Үсэгнүүд</h2>
               <div className="flex gap-2">
                 {FILTER_TABS.map((tab) => {
                   const isActive = filter === tab.value;
@@ -100,11 +98,11 @@ export const DictionaryPage = ({ characters }: { characters: Character[] }) => {
                       type="button"
                       onClick={() => handleFilterSelect(tab.value)}
                       className={[
-                        "rounded-full border px-5 py-2 font-balsamiq text-sm font-bold transition dark:text-white",
+                        "rounded-full border px-5 py-2 font-balsamiq text-sm font-bold transition",
                         "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e8920a] focus-visible:ring-offset-2",
                         isActive
-                          ? "border-[#e8920a] bg-[#e8920a] text-white shadow-[0_10px_24px_rgba(232,146,10,0.25)] hover:bg-[#c97806] dark:bg-[#3B72C8] dark:border-[#3B72C8]"
-                          : "border-[#ead9bb] bg-white text-[#3b2f2f] hover:border-[#e8920a] hover:text-[#c97806] dark:bg-[#1C2B4A] dark:border-[#37464f]",
+                          ? "border-[#e8920a] bg-[#e8920a] text-white shadow-[0_10px_24px_rgba(232,146,10,0.25)] hover:bg-[#c97806]"
+                          : "border-[#ead9bb] bg-white text-[#3b2f2f] hover:border-[#e8920a] hover:text-[#c97806]",
                       ].join(" ")}
                     >
                       {tab.label}
@@ -112,7 +110,7 @@ export const DictionaryPage = ({ characters }: { characters: Character[] }) => {
                   );
                 })}
               </div>
-              <span className="shrink-0 rounded-full bg-[#f8e7c7] px-3 py-1 text-sm font-bold text-[#7a5930] dark:bg-[#3B72C8] dark:text-white">
+              <span className="shrink-0 rounded-full bg-[#f8e7c7] px-3 py-1 text-sm font-bold text-[#7a5930]">
                 {filteredCharacters.length} Үсэг
               </span>
             </div>

@@ -40,10 +40,10 @@ export function NotificationsPreference() {
       >
         <span>{mnProfile.notificationsDaily}</span>
         <span
-          className={`rounded-full px-3 py-1 text-xs font-bold transition-colors ${
+          className={`rounded-full px-3 py-1 text-xs font-bold ${
             enabled
-              ? "bg-emerald-100 text-emerald-800 dark:bg-emerald-500/20 dark:text-emerald-400"
-              : "bg-neutral-200 text-neutral-600 dark:bg-neutral-800 dark:text-neutral-500"
+              ? "bg-emerald-100 text-emerald-800"
+              : "bg-neutral-200 text-neutral-600"
           }`}
         >
           {enabled ? mnProfile.notificationsOn : mnProfile.notificationsOff}

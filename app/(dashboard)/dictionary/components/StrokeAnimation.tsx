@@ -65,7 +65,7 @@ export default function StrokeAnimation({
             pathRefs.current[i] = el;
           }}
           d={d}
-          className="stroke-[#3b2f2f] dark:stroke-[#a39494]"
+          stroke="#3b2f2f"
           strokeWidth="2"
           strokeLinecap="round"
         />

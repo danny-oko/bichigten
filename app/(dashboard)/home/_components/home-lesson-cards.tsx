@@ -70,14 +70,19 @@ function toYoutubeEmbedUrl(url: string | null | undefined): string | null {
 }
 
 export const X = [47, 78, 47, 18, 47, 78, 47];
+
 export const ROW = 160;
+
 export const SW = 340;
 
 function assignStatuses(lessons: Lesson[], completedUpTo: number): Lesson[] {
   return lessons
+
     .sort((a, b) => a.order - b.order)
+
     .map((l, i) => ({
       ...l,
+
       status:
         i < completedUpTo ? "done" : i === completedUpTo ? "active" : "locked",
     }));
@@ -95,6 +100,7 @@ function resolveCompletedUpTo(lessons: Lesson[], progress: ProgressItem[]) {
       .filter((item) => item.status === "COMPLETED")
       .map((item) => item.lessonId),
   );
+
   let contiguousCompleted = 0;
   for (const lesson of sorted) {
     if (!completedSet.has(lesson.id)) break;
@@ -106,6 +112,7 @@ function resolveCompletedUpTo(lessons: Lesson[], progress: ProgressItem[]) {
 export const useLessons = () => {
   const [lessons, setLessons] = useState<Lesson[]>([]);
   const [completedUpTo, setCompletedUpTo] = useState(0);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     Promise.all([
@@ -123,13 +130,15 @@ export const useLessons = () => {
         );
         setCompletedUpTo(nextCompletedUpTo);
         setLessons(assignStatuses(lessonsData, nextCompletedUpTo));
+        setLoading(false);
       })
       .catch((err) => {
         console.error("Fetch error:", err);
+        setLoading(false);
       });
   }, []);
 
-  return { lessons, completedUpTo };
+  return { lessons, completedUpTo, loading };
 };
 
 export const LessonCards = ({
@@ -223,10 +232,13 @@ export const LessonCards = ({
 
       {lessons.map((l, i) => {
         const isLocked = l.status === "locked";
+
         const isDone = l.status === "done";
+
         const isActive = l.status === "active";
 
         const Icon = isLocked ? Lock : isDone ? Check : Star;
+
         const xPos = X[i % X.length];
 
         return (
@@ -235,8 +247,11 @@ export const LessonCards = ({
             className="absolute flex flex-col items-center transition-all duration-500"
             style={{
               left: `${xPos}%`,
+
               top: `${i * ROW + 20}px`,
+
               transform: "translateX(-50%)",
+
               zIndex: 10,
             }}
           >
@@ -245,42 +260,46 @@ export const LessonCards = ({
               onClick={() => {
                 if (!isLocked) setSelectedLesson(l);
               }}
-              className={`
-                relative flex items-center justify-center rounded-full transition-all duration-300
-                ${isActive && !isLocked ? "hover:-translate-y-1 active:translate-y-0 active:brightness-90 scale-105" : "scale-100"}
-                ${
-                  isLocked
-                    ? "cursor-not-allowed border-2 border-dashed border-[#BFC9C1] bg-[#E8E5DC] dark:border-[#252f35] dark:bg-[#1a2124]"
-                    : isDone
-                      ? "cursor-pointer border-none bg-[#2C6601] shadow-[0_5px_0_#000000] dark:bg-[#132a24] dark:shadow-[0_5px_0_#09120f]"
-                      : "cursor-pointer border-none bg-[#58cc02] shadow-[0_5px_0_rgba(0,118,255,0.39)] dark:bg-[#ffad33] dark:shadow-[0_5px_0_rgba(255,173,51,0.4)]"
-                }
-              `}
+              className={`relative flex items-center justify-center rounded-full transition-all duration-300 ${isActive && !isLocked ? "hover:-translate-y-1 active:translate-y-0 active:brightness-90" : ""}`}
               style={{
                 width: isActive ? 80 : 72,
                 height: isActive ? 60 : 52,
+                background: isLocked
+                  ? "#E8E5DC"
+                  : isDone
+                    ? "#2C6601"
+                    : "#58cc02",
+                border: isLocked ? "2px dashed #BFC9C1" : "none",
+                boxShadow: isDone
+                  ? "0 5px 0 #000000"
+                  : isActive
+                    ? "0 5px 0px rgba(0, 118, 255, 0.39)"
+                    : "none",
+                cursor: isLocked ? "not-allowed" : "pointer",
+                transform: isActive ? "scale(1.05)" : "scale(1)",
               }}
             >
               <Icon
                 size={isLocked ? 24 : isDone ? 28 : 40}
+                color={isLocked ? "#BFC9C1" : "#fff"}
                 strokeWidth={2}
-                className={`
-                  ${isLocked ? "text-[#BFC9C1] dark:text-[#52606b]" : "text-white dark:text-[#131f24]"}
-                  ${isDone ? "fill-transparent" : "fill-current"}
-                `}
+                fill={isLocked ? "#BFC9C1" : isDone ? "" : "#fff"}
               />
             </button>
+
             {isActive && (
-              <div className="mt-3 mx-auto max-w-[min(85vw,11rem)] rounded-2xl bg-[#58cc02] dark:bg-[#ffad33] px-4 py-1.5 text-center text-[13px] font-bold uppercase leading-snug tracking-widest text-white dark:text-[#131f24] wrap-break-word sm:max-w-none sm:whitespace-nowrap sm:rounded-full sm:px-5">
+              <div
+                className="mt-3 mx-auto max-w-[min(85vw,11rem)] rounded-2xl px-4 py-1.5 text-center text-[13px] font-bold uppercase leading-snug tracking-widest text-white wrap-break-word sm:max-w-none sm:whitespace-nowrap sm:rounded-full sm:px-5"
+                style={{ background: "#58cc02" }}
+              >
                 {l.title}
               </div>
             )}
+
             {!isActive && (
               <p
-                className={`
-                  mt-2 mx-auto max-w-[min(85vw,11rem)] rounded-2xl bg-[#ECE8D8] dark:bg-[#252f35] px-3 py-1.5 text-center text-[13px] font-bold leading-snug wrap-break-word sm:max-w-none sm:whitespace-nowrap
-                  ${isLocked ? "text-[#BFC9C1] dark:text-[#52606b]" : "text-[#0F5238] dark:text-[#4ade80]"}
-                `}
+                className="mt-2 mx-auto max-w-[min(85vw,11rem)] rounded-2xl bg-[#ECE8D8] px-3 py-1.5 text-center text-[13px] font-bold leading-snug wrap-break-word sm:max-w-none sm:whitespace-nowrap"
+                style={{ color: isLocked ? "#BFC9C1" : "#0F5238" }}
               >
                 {l.title}
               </p>

@@ -1,4 +1,3 @@
-"use client";
 import { ProfileBadge } from "../common/types";
 import { mnProfile } from "@/lib/i18n/mn-profile";
 import { useTheme } from "next-themes";
@@ -9,12 +8,6 @@ type AchievementsPanelProps = {
 };
 
 export default function AchievementsPanel({ badges }: AchievementsPanelProps) {
-  const { resolvedTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => setMounted(true), []);
-
-  const isDarkMode = mounted && resolvedTheme === "dark";
   const unlockedCount = badges.filter((badge) => badge.unlocked).length;
 
   return (
@@ -34,15 +27,13 @@ export default function AchievementsPanel({ badges }: AchievementsPanelProps) {
             className="flex flex-col items-center gap-1.5 text-center"
           >
             <div
-              className={`flex h-14 w-14 items-center justify-center rounded-2xl border text-xl transition-all duration-300 ${
+              className={`flex h-14 w-14 items-center justify-center rounded-2xl border text-xl ${
                 badge.unlocked
                   ? "border-[#f0d090] bg-gradient-to-br from-[#fff9eb] to-[#fdecc8] shadow-sm"
                   : "border-[#ebe5d8] bg-[#f7f3eb] opacity-50 grayscale"
               }`}
             >
-              <span className={badge.unlocked ? "" : "grayscale opacity-80"}>
-                {badge.icon}
-              </span>
+              {badge.icon}
             </div>
             <p className="line-clamp-1 text-[11px] font-semibold text-[#7d7364]">
               {badge.label}

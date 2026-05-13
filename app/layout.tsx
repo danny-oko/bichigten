@@ -2,10 +2,9 @@ import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Balsamiq_Sans, Dosis, Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+
 import localFont from "next/font/local";
 import { ConditionalBars } from "./_components/Bar-Sections/conditional-bars";
-import { NavLoadingProvider } from "./_components/nav-loading-context";
-import { NavigationLoader } from "./_components/navigation-loader";
 
 const mongolFont = localFont({
   src: "./font/cmdashitseden.ttf",

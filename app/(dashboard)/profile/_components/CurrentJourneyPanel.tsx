@@ -1,8 +1,6 @@
 import { mnProfile } from "@/lib/i18n/mn-profile";
 
 import { JourneyProgress } from "../common/types";
-import { useTheme } from "next-themes";
-import { useEffect, useState } from "react";
 
 type CurrentJourneyPanelProps = {
   journey: JourneyProgress;
@@ -11,13 +9,6 @@ type CurrentJourneyPanelProps = {
 export default function CurrentJourneyPanel({
   journey,
 }: CurrentJourneyPanelProps) {
-  const { resolvedTheme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => setMounted(true), []);
-
-  const isDarkMode = mounted && resolvedTheme === "dark";
-
   return (
     <section className="rounded-3xl border border-[#ead9bb] bg-gradient-to-br from-white via-[#fffefb] to-[#fff2dc] p-4 shadow-sm md:p-5">
       <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
@@ -38,8 +29,7 @@ export default function CurrentJourneyPanel({
           style={{ width: `${journey.completionPercent}%` }}
         />
       </div>
-
-      <div className="mt-1 flex justify-between text-sm font-semibold text-[#6e6556] dark:text-[#94a3b8]">
+      <div className="mt-1 flex justify-between text-sm font-semibold text-[#6e6556]">
         <span>{journey.lessonsLeftText}</span>
         <span>{journey.completionPercent}%</span>
       </div>
@@ -49,7 +39,7 @@ export default function CurrentJourneyPanel({
           <p className="text-xs font-bold uppercase tracking-wider text-[#8a806f]">
             {mnProfile.journeyLearnCharacters}
           </p>
-          <p className="mt-1 text-lg font-bold text-[#27221d] dark:text-[#f8fafc]">
+          <p className="mt-1 text-lg font-bold text-[#27221d]">
             {journey.characterProgressText}
           </p>
         </div>
@@ -57,7 +47,7 @@ export default function CurrentJourneyPanel({
           <p className="text-xs font-bold uppercase tracking-wider text-[#8a806f]">
             {mnProfile.journeyPracticeTime}
           </p>
-          <p className="mt-1 text-lg font-bold text-[#27221d] dark:text-[#f8fafc]">
+          <p className="mt-1 text-lg font-bold text-[#27221d]">
             {journey.practiceProgressText}
           </p>
         </div>

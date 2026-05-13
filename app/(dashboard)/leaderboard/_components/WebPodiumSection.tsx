@@ -59,7 +59,7 @@ export default function WebPodiumSection({ users }: WebPodiumSectionProps) {
   if (!first) return null; // Prevent crash if data is missing
 
   return (
-    <div className="bg-white rounded-2xl border-3 border-[#E8D9C0] dark:border-[#37464f] px-6 py-6 shadow-sm dark:bg-transparent">
+    <div className="bg-white rounded-2xl border border-[#E8D9C0] px-6 py-6 shadow-sm">
       <div className="flex items-end justify-center gap-8">
         {second && <WebPodiumPerson user={second} />}
         <WebPodiumPerson user={first} />
@@ -75,15 +75,15 @@ function WebPodiumPerson({ user }: { user: PodiumUser }) {
     <div className="flex flex-col items-center gap-1">
       <WebAvatar rank={user.rank} avatarUrl={user.avatarUrl} name={user.name} />
       <p
-        className={`mt-3 font-semibold text-[#222] dark:text-[#fff] ${isFirst ? "text-base" : "text-sm"}`}
+        className={`mt-3 font-semibold text-[#222] ${isFirst ? "text-base" : "text-sm"}`}
       >
         {user.name}
       </p>
       <div
-        className={`${isFirst ? "bg-[#E8940A] rounded-2xl px-8 py-3 dark:bg-[#ffa629]" : "bg-[#F4EFE8] rounded-xl px-6 py-2 dark:bg-[#252f35]"} text-center mt-1`}
+        className={`${isFirst ? "bg-[#E8940A] rounded-2xl px-8 py-3" : "bg-[#F4EFE8] rounded-xl px-6 py-2"} text-center mt-1`}
       >
         <div
-          className={`font-bold ${isFirst ? "text-white text-2xl" : "text-[#E8940A] text-base dark:text-[#ffad33]"}`}
+          className={`font-bold ${isFirst ? "text-white text-2xl" : "text-[#E8940A] text-base"}`}
         >
           {user.xp.toLocaleString()} XP
         </div>

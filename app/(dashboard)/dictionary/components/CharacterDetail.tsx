@@ -40,26 +40,26 @@ export const CharacterDetail = ({
   return (
     <div
       className={[
-        "rounded-2xl border-3 border-[#ead9bb] bg-white text-[#3b2f2f] shadow-[0_18px_45px_rgba(122,89,48,0.12)] dark:border-[#37464f] dark:bg-transparent",
+        "rounded-2xl border border-[#ead9bb] bg-white text-[#3b2f2f] shadow-[0_18px_45px_rgba(122,89,48,0.12)]",
         compact ? "h-full p-5" : "p-6 md:p-8",
       ].join(" ")}
     >
       <div className={compact ? "mb-5" : "mb-9"}>
         <h2
           className={[
-            "font-balsamiq font-bold text-[#3b2f2f] dark:text-[#deb476]",
+            "font-balsamiq font-bold text-[#3b2f2f]",
             compact ? "text-3xl" : "text-4xl",
           ].join(" ")}
         >
           {character.name}
         </h2>
-        <p className="mt-1 font-balsamiq text-sm font-bold text-[#7a5930] dark:text-[#b58a55]">
+        <p className="mt-1 font-balsamiq text-sm font-bold text-[#7a5930]">
           /{character.latinForm}/ phoneme
         </p>
       </div>
 
       <section className={compact ? "mb-5" : "mb-8"}>
-        <h3 className="mb-4 font-balsamiq text-xs font-bold uppercase text-[#7a5930] dark:text-[#b58a55]">
+        <h3 className="mb-4 font-balsamiq text-xs font-bold uppercase text-[#7a5930]">
           Дүрслэл
         </h3>
         <div className="grid grid-cols-3 gap-4">
@@ -77,24 +77,18 @@ export const CharacterDetail = ({
                     "flex items-center justify-center rounded-full border-2",
                     compact ? "h-16 w-16" : "h-20 w-20",
                     active
-                      ? "border-[#e8920a] bg-[#fff2d6] dark:bg-[#2d2418] dark:border-[#ffad33]"
-                      : "border-[#ead9bb] bg-[#fffdf7] dark:bg-[#1a2124] dark:border-[#4a4236]",
+                      ? "border-[#e8920a] bg-[#fff2d6]"
+                      : "border-[#ead9bb] bg-[#fffdf7]",
                   ].join(" ")}
                 >
                   <span
-                    className="mongol-script text-2xl dark:text-white"
+                    className="mongol-script text-2xl text-[#3b2f2f]"
                     style={{ unicodeBidi: "isolate", display: "inline-block" }}
                   >
                     {form.glyph}
                   </span>
                 </div>
-                <span
-                  className={
-                    active
-                      ? "text-[#c97806] dark:text-[#ffa629]"
-                      : "text-[#7a5930] dark:text-[#b58a55]"
-                  }
-                >
+                <span className={active ? "text-[#c97806]" : "text-[#7a5930]"}>
                   {FORM_LABELS[form.type]}
                 </span>
               </button>
@@ -105,18 +99,18 @@ export const CharacterDetail = ({
 
       <section
         className={[
-          "rounded-2xl border-3 border-b-5 border-[#ead9bb] bg-[#fffdf7] dark:bg-transparent dark:border-[#37464f]",
+          "rounded-2xl border border-[#ead9bb] bg-[#fffdf7]",
           compact ? "mb-5 p-5" : "mb-8 p-6 md:p-8",
         ].join(" ")}
       >
         <div className="mb-4">
-          <h3 className="font-balsamiq text-sm font-bold text-[#3b2f2f] dark:text-white">
+          <h3 className="font-balsamiq text-sm font-bold text-[#3b2f2f]">
             Бичиглэл
           </h3>
         </div>
         <div
           className={[
-            "flex items-center justify-center rounded-[20px] bg-white dark:bg-transparent",
+            "flex items-center justify-center rounded-[20px] bg-white",
             compact
               ? "h-52 p-4 sm:p-5"
               : "h-72 p-5 sm:p-6 md:h-80 md:p-8 md:pb-10",
