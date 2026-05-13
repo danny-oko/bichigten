@@ -4,6 +4,12 @@ import { useEffect, useState } from "react";
 import { mnUi } from "@/lib/i18n/mn-ui";
 import { LessonReviewStats } from "./lesson-review-types";
 import { Star, Target } from "lucide-react";
+import { Montserrat } from "next/font/google";
+
+const montserrat = Montserrat({
+  subsets: ["latin", "cyrillic"],
+  weight: ["400", "500", "600", "700"],
+});
 
 function AnimatedNumber({
   target,
@@ -42,7 +48,9 @@ export function LessonReviewScreen({
     accuracy === 100 ? "AMAZING" : accuracy >= 80 ? "GREAT" : "NICE";
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center px-4 py-10 font-['Plus_Jakarta_Sans']">
+    <div
+      className={`min-h-screen flex flex-col items-center justify-center px-4 py-10 ${montserrat.className}`}
+    >
       <div className="w-full max-w-2xl flex flex-col items-center gap-10">
         <div className="flex flex-col items-center gap-3 text-center">
           <div className="rounded-full bg-white p-5 shadow-[0_8px_24px_rgba(0,0,0,0.06)]">

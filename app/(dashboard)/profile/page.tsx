@@ -1,8 +1,5 @@
-import { Suspense } from "react";
-
 import type { ProfileTab } from "./common/types";
 import ProfilePageBody from "./_components/ProfilePageBody";
-import { ProfilePageSkeleton } from "./_components/ProfilePageSkeleton";
 
 const VALID_TABS: ProfileTab[] = [
   "overview",
@@ -26,9 +23,5 @@ export default async function ProfilePage({
   const q = searchParams ? await searchParams : {};
   const activeTab = parseTab(q.tab);
 
-  return (
-    <Suspense fallback={<ProfilePageSkeleton />}>
-      <ProfilePageBody activeTab={activeTab} />
-    </Suspense>
-  );
+  return <ProfilePageBody activeTab={activeTab} />;
 }

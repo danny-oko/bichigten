@@ -34,7 +34,6 @@ export function LessonPageClient({
     router.refresh();
   };
   const {
-    loading,
     phase,
     currentContent,
     currentTask,
@@ -55,7 +54,6 @@ export function LessonPageClient({
   } = useLessonGame(lessonId, userId);
   const [skipped, setSkipped] = useState(false);
 
-  if (loading) return <LessonStatusScreen message="LOADING..." animated />;
   if (isFailed)
     return isFirstWeekUser ? (
       <LessonStatusScreen

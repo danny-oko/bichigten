@@ -60,11 +60,7 @@ export default function SettingsPanel({ settings }: SettingsPanelProps) {
         <button
           type="button"
           onClick={onLogout}
-<<<<<<< HEAD
           className="mt-2 w-full rounded-2xl border border-[#f0c4c4] bg-gradient-to-r from-[#fff8f8] to-[#ffecec] px-3 py-2.5 text-sm font-bold text-[#cc5d5d] transition-colors hover:bg-[#fff0f0]"
-=======
-          className="mt-2 w-full rounded-xl border border-[#f0d3d3] bg-[#fff7f7] px-3 py-2 text-sm font-semibold text-[#cc5d5d] hover:bg-[#ffecec]"
->>>>>>> cd84c80 (Revert "Theme & Loading Screen")
         >
           {mnProfile.logOut}
         </button>

@@ -118,7 +118,7 @@ function StreakTriggerFace({
     >
       {isStreakLost ? (
         <img
-          src="https://d35aaqx5ub95lt.cloudfront.net/images/icons/65b8a029d7a148218f1ac98a198f8b42.svg"
+          src="https://d35aaqx5ub95lt.cloudfront.net/images/icons/ba95e6081679d9d7e8c132da5cfce1ec.svg"
           alt=""
           width={20}
           height={20}

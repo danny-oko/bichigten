@@ -20,7 +20,6 @@ interface State {
   phase: Phase;
   hearts: number;
   selected: string | null;
-  loading: boolean;
   reviewStats: LessonReviewStats | null;
   isFailed: boolean;
   matchFeedback: "correct" | "incorrect" | null;
@@ -218,7 +217,6 @@ export function useLessonGame(lessonId: string, userId: string) {
     phase: "teaching",
     hearts: 5,
     selected: null,
-    loading: true,
     reviewStats: null,
     isFailed: false,
     matchFeedback: null,
@@ -271,7 +269,6 @@ export function useLessonGame(lessonId: string, userId: string) {
     taskIndex,
     hearts,
     selected,
-    loading,
     reviewStats,
     isFailed,
     matchFeedback,
@@ -481,7 +478,6 @@ export function useLessonGame(lessonId: string, userId: string) {
   }
 
   return {
-    loading,
     phase,
     currentContent,
     currentTask,

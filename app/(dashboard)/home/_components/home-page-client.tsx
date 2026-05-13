@@ -13,20 +13,7 @@ import { LessonCards, ROW, useLessons } from "./home-lesson-cards";
 import { RoadPath } from "./home-road-path";
 
 export const HomePath = () => {
-  const { lessons, completedUpTo, loading } = useLessons();
-
-  if (loading) {
-    return (
-      <div className="flex flex-col items-center justify-center gap-1 font-['Plus_Jakarta_Sans']">
-        <div className="w-[120px] sm:w-[180px] md:w-[200px] lg:w-[220px] xl:w-[300px] aspect-square transition-all duration-300">
-          <LoadingScreen />
-        </div>
-        <p className={`text-lg font-black text-black animate-pulse}`}>
-          LOADING...
-        </p>
-      </div>
-    );
-  }
+  const { lessons, completedUpTo } = useLessons();
 
   const totalH = lessons.length * ROW + 80;
 
@@ -37,7 +24,7 @@ export const HomePath = () => {
       <div className="relative w-full max-w-[340px]" style={{ height: totalH }}>
         <RoadPath lessonCount={lessons.length} completedUpTo={completedUpTo} />
         <LessonCards lessons={lessons} />
-        <div className="fixed right-0 bottom-21.5 md:bottom-0 z-50 pointer-events-none">
+        <div className="fixed left-0 bottom-21.5 md:bottom-0 z-50 pointer-events-none">
           <div className="w-[120px] sm:w-[180px] md:w-[200px] lg:w-[220px] xl:w-[300px] aspect-square transition-all duration-300">
             <Mascot />
           </div>

@@ -29,8 +29,8 @@ export function LessonContentCard({ item }: LessonContentCardProps) {
         <img
           src={item.imageUrl}
           alt=""
-          width={300}
-          height={300}
+          width={100}
+          height={100}
           className="mt-2 rounded-xl max-w-full h-auto antialiased"
         />
       )}

@@ -3,7 +3,7 @@
 import { Check, Lock, Star } from "lucide-react";
 import { Montserrat } from "next/font/google";
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useNavLoading } from "@/app/_components/nav-loading-context";
 
 import { Button } from "@/components/ui/button";
 import {
@@ -31,7 +31,6 @@ export type Lesson = {
   status?: "done" | "active" | "locked";
 };
 
-/** Returns a youtube.com/embed/… URL for iframe embedding, or null if not embeddable. */
 function toYoutubeEmbedUrl(url: string | null | undefined): string | null {
   if (!url?.trim()) return null;
   const raw = url.trim();
@@ -70,19 +69,14 @@ function toYoutubeEmbedUrl(url: string | null | undefined): string | null {
 }
 
 export const X = [47, 78, 47, 18, 47, 78, 47];
-
 export const ROW = 160;
-
 export const SW = 340;
 
 function assignStatuses(lessons: Lesson[], completedUpTo: number): Lesson[] {
   return lessons
-
     .sort((a, b) => a.order - b.order)
-
     .map((l, i) => ({
       ...l,
-
       status:
         i < completedUpTo ? "done" : i === completedUpTo ? "active" : "locked",
     }));
@@ -100,7 +94,6 @@ function resolveCompletedUpTo(lessons: Lesson[], progress: ProgressItem[]) {
       .filter((item) => item.status === "COMPLETED")
       .map((item) => item.lessonId),
   );
-
   let contiguousCompleted = 0;
   for (const lesson of sorted) {
     if (!completedSet.has(lesson.id)) break;
@@ -146,7 +139,7 @@ export const LessonCards = ({
 }: {
   lessons: ReturnType<typeof useLessons>["lessons"];
 }) => {
-  const router = useRouter();
+  const { navigateTo } = useNavLoading();
   const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
 
   const embedUrl = selectedLesson
@@ -211,7 +204,7 @@ export const LessonCards = ({
                   type="button"
                   className="h-11 w-full border-0 bg-[#58cc02] font-bold uppercase tracking-widest text-white hover:bg-[#58cc02]/90"
                   onClick={() => {
-                    router.push(`/lesson/${selectedLesson.id}`);
+                    navigateTo(`/lesson/${selectedLesson.id}`);
                     setSelectedLesson(null);
                   }}
                 >
@@ -232,13 +225,9 @@ export const LessonCards = ({
 
       {lessons.map((l, i) => {
         const isLocked = l.status === "locked";
-
         const isDone = l.status === "done";
-
         const isActive = l.status === "active";
-
         const Icon = isLocked ? Lock : isDone ? Check : Star;
-
         const xPos = X[i % X.length];
 
         return (
@@ -247,11 +236,8 @@ export const LessonCards = ({
             className="absolute flex flex-col items-center transition-all duration-500"
             style={{
               left: `${xPos}%`,
-
               top: `${i * ROW + 20}px`,
-
               transform: "translateX(-50%)",
-
               zIndex: 10,
             }}
           >

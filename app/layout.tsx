@@ -5,6 +5,8 @@ import "./globals.css";
 
 import localFont from "next/font/local";
 import { ConditionalBars } from "./_components/Bar-Sections/conditional-bars";
+import { NavLoadingProvider } from "./_components/nav-loading-context";
+import { NavigationLoader } from "./_components/navigation-loader";
 
 const mongolFont = localFont({
   src: "./font/cmdashitseden.ttf",
@@ -63,13 +65,16 @@ export default function RootLayout({
           signUpFallbackRedirectUrl="/home"
           prefetchUI={false}
         >
-          <ConditionalBars />
-          <main
-            data-app-scroll-container
-            className="min-h-0 min-w-0 flex-1 overflow-y-auto"
-          >
-            {children}
-          </main>
+          <NavLoadingProvider>
+            <NavigationLoader />
+            <ConditionalBars />
+            <main
+              data-app-scroll-container
+              className="min-h-0 min-w-0 flex-1 overflow-y-auto"
+            >
+              {children}
+            </main>
+          </NavLoadingProvider>
         </ClerkProvider>
       </body>
     </html>
