@@ -7,6 +7,7 @@ import CurrentJourneyPanel from "./CurrentJourneyPanel";
 import ExperiencePanel from "./ExperiencePanel";
 import LeaguePanel from "./LeaguePanel";
 import { NotificationsPreference } from "./NotificationsPreference";
+import { ProfileAccountForm } from "./ProfileAccountForm";
 import { ProfileHelpSection } from "./ProfileHelpSection";
 import SettingsPanel from "./SettingsPanel";
 import StreakPanel from "./StreakPanel";
@@ -71,6 +72,11 @@ export default function ProfileTabContent({
       <section className="rounded-3xl border border-dashed border-[#e5cfa8] bg-gradient-to-br from-[#fffdf8] to-[#fff4dc] p-4 text-sm text-[#706552] md:p-5">
         {mnProfile.settingsHint}
       </section>
+      <ProfileAccountForm
+        initialName={currentUser.name}
+        initialUserName={currentUser.username}
+        initialAvatarUrl={currentUser.avatarUrl ?? ""}
+      />
       <AppearanceToggle />
       <NotificationsPreference />
       <ProfileHelpSection />

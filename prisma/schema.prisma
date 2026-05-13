@@ -44,7 +44,6 @@ model Lesson {
   level        Section              @relation(fields: [levelId], references: [id])
   tasks        Task[]
   userProgress UserLessonProgress[]
-  videoUrl     String?
 
   @@unique([levelId, order])
   @@map("lessons_table")
@@ -89,6 +88,7 @@ model UserLessonProgress {
   user        User         @relation(fields: [userId], references: [id])
 
   @@unique([userId, lessonId])
+  @@index([userId, status, completedAt])
   @@map("user_lesson_progress")
 }
 

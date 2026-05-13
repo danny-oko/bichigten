@@ -40,7 +40,7 @@ export const mnProfile = {
     `${xp} XP энэ долоо хоногт · Идэвхтэй ${days} өдөр`,
 
   settingsHint:
-    "Профайлын мэдээллийг дээд талын картнаас засварлана уу.",
+    "Нэр, хэрэглэгчийн нэр, зурагны холбоосыг доорх «Бүртгэлийн мэдээлэл»-ээс өөрчилнө үү.",
   settingsSectionTitle: "Тохиргоо",
   logOut: "Гарах",
 
@@ -75,6 +75,8 @@ export const mnProfile = {
   networkErrorRetry: "Сүлжээний алдаа. Дахин оролдоно уу.",
 
   streakTitle: "Дараалал",
+  streakHoverSubtitle:
+    "Өдөр бүр хичээлээ дуусгаж дараалаа уртасгана уу.",
   streakCurrent: "Одоогийн дараалал",
   streakDaysBest: (current: number, best: number) =>
     `${current} өдөр · Шилдэг: ${best}`,

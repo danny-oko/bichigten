@@ -1,6 +1,7 @@
 import { Header } from "@/app/_components/Bar-Sections/header";
 import prisma from "@/lib/prisma";
-import { calculateDailyStreak } from "@/lib/server/daily-streak";
+import { buildLast7StreakDots } from "@/lib/server/build-profile-user";
+import { calculateDailyStreak, toUtcDateOnly } from "@/lib/server/daily-streak";
 import { ensureUser } from "@/lib/server/ensure-user";
 import { MainLayout } from "@/components/layout/MainLayout";
 import { auth } from "@clerk/nextjs/server";
@@ -18,6 +19,7 @@ export default async function HomeSection() {
   let totalLessonsCount = 0;
   let nextLessonHref = "/dictionary";
   let nextLessonTitle = "Explore Dictionary";
+  let streakWeekDays = buildLast7StreakDots(new Set());
   let nearbyPlayers: {
     id: string;
     rank: number;
@@ -85,6 +87,14 @@ export default async function HomeSection() {
         .map((item) => item.completedAt)
         .filter((date): date is Date => Boolean(date)),
     );
+
+    const completionMidnightSet = new Set(
+      completedLessons
+        .map((item) => item.completedAt)
+        .filter((d): d is Date => Boolean(d))
+        .map((d) => toUtcDateOnly(d).getTime()),
+    );
+    streakWeekDays = buildLast7StreakDots(completionMidnightSet);
   }
 
   return (
@@ -94,6 +104,7 @@ export default async function HomeSection() {
           <div className="space-y-4">
             <Header
               streak={streak}
+              streakWeekDays={streakWeekDays}
               totalXp={xp}
               heartsRemaining={heartsRemaining}
               fixedOnDesktop={false}
@@ -112,6 +123,7 @@ export default async function HomeSection() {
           <div className="w-full md:hidden">
             <Header
               streak={streak}
+              streakWeekDays={streakWeekDays}
               totalXp={xp}
               heartsRemaining={heartsRemaining}
               fixedOnDesktop={false}
