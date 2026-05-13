@@ -1,7 +1,6 @@
 /** Mongolian copy for profile / dashboard profile UI */
 
 export const mnProfile = {
-  /** UTC Sunday=0 … Saturday=6 — streak dots */
   dowUtc: ["Ня", "Да", "Мя", "Лх", "Пү", "Ба", "Бя"] as const,
 
   tabOverview: "Тойм",
@@ -19,17 +18,17 @@ export const mnProfile = {
   summaryTotalXp: "Нийт XP",
   summaryLeague: "Лиг",
   summaryHearts: "Зүрх",
-  summaryStreak: "Дараалал",
-  summaryBadges: "Одон медаль",
+  summaryStreak: "Ирц",
+  summaryBadges: "Шагналууд",
 
-  achievementsTitle: "Амжилтууд",
+  achievementsTitle: "Шагналууд",
   achievementsEarned: (unlocked: number, total: number) =>
     `${unlocked}/${total} олсон`,
 
   leagueYou: "Та",
   leagueXpSuffix: " XP",
 
-  experienceTitle: "Туршлага",
+  experienceTitle: "Оноо",
   experienceLevel: (n: number) => `Түвшин ${n}`,
 
   journeyLearnCharacters: "Үсэг сурах",
@@ -75,8 +74,7 @@ export const mnProfile = {
   networkErrorRetry: "Сүлжээний алдаа. Дахин оролдоно уу.",
 
   streakTitle: "Дараалал",
-  streakHoverSubtitle:
-    "Өдөр бүр хичээлээ дуусгаж дараалаа уртасгана уу.",
+  streakHoverSubtitle: "Өдөр бүр хичээлээ дуусгаж дараалаа уртасгана уу.",
   streakCurrent: "Одоогийн дараалал",
   streakDaysBest: (current: number, best: number) =>
     `${current} өдөр · Шилдэг: ${best}`,
@@ -94,22 +92,20 @@ export const mnProfile = {
 
   levelTitle: (level: number) => `Түвшин ${level} сурагч`,
   streakLabel: (days: number) => `${days} өдрийн дараалал`,
-  levelProgressLine: (cur: string, need: string) =>
-    `${cur} / ${need} XP`,
+  levelProgressLine: (cur: string, need: string) => `${cur} / ${need} XP`,
   toNextLevelLine: (xp: string, nextLevel: number) =>
     `${xp} XP — түвшин ${nextLevel} хүртэл`,
 
-  journeyModuleLabel: "Одоогийн модуль",
+  journeyModuleLabel: "Одоо үзэж буй бүлэг сэдэв",
   journeyEmptyTitle: "Түвшин байхгүй",
   journeyEmptyDescription:
     "Өгөгдлийн санд хэсэг, хичээл нэмснээр явц энд харагдана.",
   journeyDescription: (sectionTitle: string) =>
     `${sectionTitle} хэсгийн таны явц.`,
-  lessonsProgress: (done: number, total: number) =>
-    `${done} / ${total} хичээл`,
+  lessonsProgress: (done: number, total: number) => `${done} / ${total} хичээл`,
   lessonsLeftOne: "1 хичээл үлдлээ",
   lessonsLeftMany: (n: number) => `${n} хичээл үлдлээ`,
-  moduleComplete: "Модуль дууссан",
+  moduleComplete: "Бүлэг сэдэв дууссан",
   inProgressCount: (n: number) => `${n} үргэлжилж байна`,
   completedCount: (n: number) => `${n} дууссан`,
   notStarted: "Эхлээгүй",
@@ -118,7 +114,7 @@ export const mnProfile = {
     b1: "Эхний хичээл",
     b2: "5 хичээл",
     b3: "10 хичээл",
-    b4: "7 өдрийн дараалал",
+    b4: "7 өдрийн ирц",
     b5: "100 XP",
     b6: "500 XP",
     b7: "1000 XP",

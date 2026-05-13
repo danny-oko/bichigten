@@ -141,7 +141,10 @@ type StreakNavHoverProps = {
   streakWeekDays: StreakDayDot[];
 };
 
-export function StreakNavHover({ streak, streakWeekDays }: StreakNavHoverProps) {
+export function StreakNavHover({
+  streak,
+  streakWeekDays,
+}: StreakNavHoverProps) {
   const isStreakLost = streak === 0;
   const prefersCoarsePointer = useSyncExternalStore(
     subscribePointerCoarse,
