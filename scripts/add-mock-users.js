@@ -1,8 +1,6 @@
+// Run with: bun scripts/add-mock-users.js (Bun loads .env automatically.)
 const { PrismaClient } = require("@prisma/client");
 const { PrismaPg } = require("@prisma/adapter-pg");
-const dotenv = require("dotenv");
-
-dotenv.config();
 
 const adapter = new PrismaPg({
   connectionString: process.env.DATABASE_URL,

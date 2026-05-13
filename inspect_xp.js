@@ -1,4 +1,4 @@
-require('dotenv').config();
+// Run with: bun inspect_xp.js (Bun loads .env from the project root automatically.)
 const { PrismaClient } = require('@prisma/client');
 const { PrismaPg } = require('@prisma/adapter-pg');
 (async () => {
