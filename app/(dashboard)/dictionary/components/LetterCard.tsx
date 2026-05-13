@@ -39,11 +39,11 @@ export const LetterCard = ({
       onClick={() => onSelect(character)}
       className={[
         "group flex aspect-square min-h-[136px] w-full items-center justify-center",
-        "rounded-2xl border bg-white text-center shadow-sm transition duration-200",
-        "hover:scale-105 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e8920a] focus-visible:ring-offset-2",
+        "rounded-2xl border-3 text-center shadow-none transition duration-200",
+        "hover:scale-105 hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e8920a] focus-visible:ring-offset-2 dark:focus-visible:border-[#84d8ff] dark:focus-visible:ring-[#84d8ff]",
         isSelected
-          ? "border-[#e8920a] shadow-[0_14px_30px_rgba(232,146,10,0.2)] ring-2 ring-[#e8920a]/25"
-          : "border-[#ead9bb] hover:border-[#e8920a]/70",
+          ? "border-[#e8920a] bg-[#e8920a] shadow-[0_10px_24px_rgba(232,146,10,0.25)] ring-2 ring-[#e8920a]/25 dark:border-[#84d8ff] dark:bg-[#84d8ff]/15 dark:shadow-none dark:ring-[#84d8ff]/25"
+          : "border-[#ead9bb] bg-transparent hover:border-[#e8920a] dark:border-[#37464f] dark:not-aria-pressed:bg-transparent dark:hover:border-[#84d8ff] dark:hover:bg-[#84d8ff]/15",
       ].join(" ")}
       aria-pressed={isSelected}
     >
@@ -51,15 +51,24 @@ export const LetterCard = ({
         <span className="flex h-16 w-full shrink-0 items-center justify-center md:h-[72px]">
           <span
             className={[
-              "mongol-script block text-center text-[46px] font-normal leading-none text-[#3b2f2f] transition-colors md:text-[54px]",
-              isSelected ? "text-[#e8920a]" : "group-hover:text-[#c97806]",
+              "mongol-script block text-center text-[46px] font-normal leading-none transition-colors md:text-[54px]",
+              isSelected
+                ? "text-white dark:text-white"
+                : "text-[#3b2f2f] group-hover:text-[#c97806] dark:text-[#94a3b8] dark:group-hover:text-white",
             ].join(" ")}
           >
             {glyph}
           </span>
         </span>
 
-        <span className="flex h-5 shrink-0 items-center justify-center font-balsamiq text-sm font-bold leading-none text-[#7a5930]">
+        <span
+          className={[
+            "flex h-5 shrink-0 items-center justify-center font-balsamiq text-sm font-bold leading-none transition-colors",
+            isSelected
+              ? "text-white/90 dark:text-white"
+              : "text-[#7a5930] group-hover:text-[#c97806] dark:text-[#94a3b8] dark:group-hover:text-white",
+          ].join(" ")}
+        >
           {character.latinForm?.toUpperCase() ?? character.name}
         </span>
       </div>
