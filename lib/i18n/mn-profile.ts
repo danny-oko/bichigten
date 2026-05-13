@@ -8,7 +8,7 @@ export const mnProfile = {
   tabStats: "Статистик",
   tabSettings: "Тохиргоо",
 
-  exploreDictionary: "Толио судлах",
+  exploreDictionary: "Цагаан толгой",
 
   lessonCardTitle: "Хичээлийн явц",
   lessonCardSubtitle: (done: number, total: number) =>
@@ -16,7 +16,7 @@ export const mnProfile = {
   nextLesson: "Дараагийн хичээл",
 
   summaryTotalXp: "Нийт XP",
-  summaryLeague: "Лиг",
+  summaryLeague: "Онооны самбар",
   summaryHearts: "Зүрх",
   summaryStreak: "Ирц",
   summaryBadges: "Шагналууд",
@@ -60,25 +60,25 @@ export const mnProfile = {
   helpEmailCta: "И-мэйл илгээх",
 
   accountSectionTitle: "Бүртгэлийн мэдээлэл",
-  displayName: "Харагдах нэр",
+  displayName: "Хэрэглэгчийн нэр",
   avatarUrl: "Зурагны холбоос",
   urlPlaceholder: "https://…",
   saved: "Хадгалагдлаа.",
-  saveFailed: "Хадгалж чадсангүй.",
-  networkError: "Сүлжээний алдаа. Дахин оролдоно уу.",
+  saveFailed: "Хадгалхад алдаа гарлаа.",
+  networkError: "Сүлжээний алдаа. Дахин оролдоно уу!",
 
   heroJoined: "Элссэн",
   heroAt: (username: string, memberSince: string) =>
     `@${username} · Элссэн ${memberSince}`,
-  saveChangesFailed: "Өөрчлөлтийг хадгалж чадсангүй.",
+  saveChangesFailed: "Өөрчлөлтийг хадгалхад алдаа гарлаа.",
   networkErrorRetry: "Сүлжээний алдаа. Дахин оролдоно уу.",
 
   streakTitle: "Ирц",
-  streakHoverSubtitle: "Өдөр бүр хичээлээ дуусгаж ирцээ уртасгана уу.",
+  streakHoverSubtitle: "Өдөр бүр хичээлээ дуусгаж ирцээ ахиулна уу.",
   streakCurrent: "Одоогийн ирц",
   streakDaysBest: (current: number, best: number) =>
     `${current} өдөр · Шилдэг: ${best}`,
-  streakFreezeUnavailable: "Ирц хөлдөөх одоогоор боломжгүй",
+  streakFreezeUnavailable: "Одоогоор ирц хөлдөөх боломжгүй",
   streakFreezeCta: (left: number) => `Ирц хөлдөөх (${left} үлдсэн)`,
 
   heatmapRowLabels: ["Да", "Лх", "Ба"] as const,
@@ -87,7 +87,7 @@ export const mnProfile = {
 
   languageDisplay: "Монгол",
 
-  leagueName: (rankTitle: string) => `${rankTitle} лиг`,
+  leagueName: (rankTitle: string) => `${rankTitle} цол`,
   leagueResetDays: (d: number) => `${d} өдрийн дараа шинэчлэгдэнэ`,
 
   levelTitle: (level: number) => `Түвшин ${level} сурагч`,
@@ -111,7 +111,7 @@ export const mnProfile = {
   notStarted: "Эхлээгүй",
 
   badges: {
-    b1: "Эхний хичээл",
+    b1: "Анхны хичээл",
     b2: "5 хичээл",
     b3: "10 хичээл",
     b4: "7 өдрийн ирц",
@@ -128,15 +128,15 @@ export const mnProfile = {
     c2Subtitle: "UTC өдөрт дуусгах",
     c3Title: "Энэ долоо хоногийн XP",
     c3Subtitle: "Дууссан хичээлээс",
-    xpUnit: "XP",
+    xpUnit: "оноо",
   } as const,
 
   settingAccountLabel: "Бүртгэл",
-  settingAccountDesc: "Нэр, хэрэглэгчийн нэр, хувийн мэдээлэл",
+  settingAccountDesc: "Хэрэглэгчийн нэр, хувийн мэдээлэл",
   settingAppearanceLabel: "Харагдах байдал",
   settingAppearanceDesc: "Загвар, үсгийн хэмжээ, харанхуй горим",
   settingNotificationsLabel: "Мэдэгдэл",
-  settingNotificationsDesc: "Push, сануулах цаг",
+  settingNotificationsDesc: "Cануулах цаг",
   settingHelpLabel: "Тусламж",
   settingHelpDesc: "Түгээмэл асуулт, холбоо барих",
 } as const;
