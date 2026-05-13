@@ -32,7 +32,7 @@ export default function LessonProgressCard({
             style={{ width: `${Math.max(0, Math.min(100, progress))}%` }}
           />
         </div>
-        <p className="text-sm text-[#6F6658] dark:text-[#bdb5a6]">
+        <p className="text-sm text-[#3e382d] dark:text-[#bdb5a6]">
           {mnProfile.nextLesson}:{" "}
           <span className="font-bold text-[#1C2B4A] dark:text-[#cbd5e1]">
             {nextLessonTitle}

@@ -25,14 +25,9 @@ export const SideBar = ({ menuLabels, menuPaths }: HeaderClientProps) => {
     >
       <div className="flex h-[60px] items-center justify-center px-2 lg:justify-start lg:px-5">
         <img
-          src="https://d35aaqx5ub95lt.cloudfront.net/vendor/0cecd302cf0bcd0f73d51768feff75fe.svg"
+          src="/logo.png"
           alt="Mazaalai Learn"
-          className="block h-8 w-auto object-contain md:h-9 lg:hidden"
-        />
-        <img
-          src="https://d35aaqx5ub95lt.cloudfront.net/vendor/70a4be81077a8037698067f583816ff9.svg"
-          alt="Mazaalai Learn"
-          className="hidden h-9 w-auto object-contain lg:block"
+          className="block h-8 w-auto object-contain md:h-9"
         />
       </div>
 
@@ -48,7 +43,7 @@ export const SideBar = ({ menuLabels, menuPaths }: HeaderClientProps) => {
               transition-all duration-150 font-balsamiq border-2
               ${
                 isActive
-                  ? "bg-[#84d8ff]/15 text-[#1cb0f6] border-[#84d8ff]"
+                  ? "dark:bg-[#84d8ff]/15 dark:border-[#84d8ff] bg-[#ffad33]/10 border-[#ffad33] text-black"
                   : "text-[#777777] border-transparent dark:text-[#94a3b8]"
               }`}
             >

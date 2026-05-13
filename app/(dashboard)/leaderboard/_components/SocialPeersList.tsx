@@ -14,15 +14,15 @@ interface WebNearbyPlayersProps {
 
 export default function WebNearbyPlayers({ players }: WebNearbyPlayersProps) {
   return (
-    <div className="rounded-2xl border-3 border-[#E5E5E5] bg-white p-5 dark:bg-transparent dark:border-[#37464f]">
+    <div className="rounded-2xl border-3 border-[#E8920A] p-5 bg-transparent dark:border-[#37464f]">
       <div className="mb-4 flex items-center justify-between border-b border-[#ECE7DE] dark:border-[#37464f] pb-3">
-        <p className="text-xs uppercase tracking-wide text-[#6F6658] dark:text-[#bfc6ca]">
+        <p className="text-xs uppercase tracking-wide text-[#3b352c] dark:text-[#bfc6ca]">
           Ойролцоох тоглогчид
         </p>
-        <p className="text-xs text-[#6F6658] dark:text-[#8997a0]">Ranks 1-3</p>
+        <p className="text-xs text-[#39342c] dark:text-[#8997a0]">Ranks 1-3</p>
       </div>
 
-      <p className="mb-3 text-sm font-semibold text-[#1C2B4A] dark:text-[#f0f4f5]">
+      <p className="mb-3 text-sm font-semibold text-[#0f182c] dark:text-[#f0f4f5]">
         Таны эргэн тойронд
       </p>
 
@@ -31,7 +31,7 @@ export default function WebNearbyPlayers({ players }: WebNearbyPlayersProps) {
           <div
             key={player.rank}
             className={`flex items-center gap-3 px-3 py-2 rounded-xl ${
-              player.isMe ? "bg-[#FFF8EE] dark:bg-[#37464f]" : ""
+              player.isMe ? "bg-[#ecd6b8] dark:bg-[#37464f]" : ""
             }`}
           >
             <span className="text-sm font-semibold text-[#888] w-4 shrink-0 dark:text-[#9ba3a7]">
