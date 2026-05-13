@@ -19,7 +19,7 @@ export default function WebNearbyPlayers({ players }: WebNearbyPlayersProps) {
         <p className="text-xs uppercase tracking-wide text-[#7a5930] dark:text-[#94a3b8]">
           Ойролцоох тоглогчид
         </p>
-        <p className="text-xs text-[#7a5930] dark:text-[#94a3b8]">Ranks 1-3</p>
+        <p className="text-xs text-[#7a5930] dark:text-[#94a3b8]">Ranks 1-5</p>
       </div>
 
       <p className="mb-3 text-sm font-semibold text-[#3b2f2f] dark:text-[#d8d2c4]">
