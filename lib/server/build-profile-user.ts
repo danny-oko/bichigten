@@ -21,6 +21,9 @@ const XP_PER_LEVEL = 300;
 const DAY_MS = 24 * 60 * 60 * 1000;
 const HEATMAP_DAYS = 70;
 
+/** Max age of completion rows loaded for profile (streak, heatmap, badges). Caps DB + payload size. */
+const PROFILE_COMPLETION_LOOKBACK_DAYS = 800;
+
 function formatMemberSince(date: Date): string {
   return new Intl.DateTimeFormat("mn-MN", { month: "short", year: "numeric" }).format(date);
 }
@@ -31,7 +34,8 @@ function daysUntilNextMondayUtc(): number {
   return dow === 0 ? 1 : 8 - dow;
 }
 
-function buildLast7StreakDots(completionUtcMidnights: Set<number>) {
+/** Last 7 UTC days (oldest → newest) with weekday labels — used by profile + header streak UI. */
+export function buildLast7StreakDots(completionUtcMidnights: Set<number>) {
   const today = toUtcDateOnly(new Date()).getTime();
   const out: { label: string; completed: boolean }[] = [];
   for (let i = 6; i >= 0; i -= 1) {
@@ -186,6 +190,10 @@ export async function fetchProfileDashboardData(
 ): Promise<ProfileDashboardData> {
   const weekAgo = new Date();
   weekAgo.setTime(weekAgo.getTime() - 7 * DAY_MS);
+  const completionCutoff = new Date();
+  completionCutoff.setTime(
+    completionCutoff.getTime() - PROFILE_COMPLETION_LOOKBACK_DAYS * DAY_MS,
+  );
 
   const [
     completedRowsRaw,
@@ -199,7 +207,11 @@ export async function fetchProfileDashboardData(
     firstLesson,
   ] = await Promise.all([
     prisma.userLessonProgress.findMany({
-      where: { userId, status: "COMPLETED", completedAt: { not: null } },
+      where: {
+        userId,
+        status: "COMPLETED",
+        completedAt: { not: null, gte: completionCutoff },
+      },
       select: { completedAt: true, lessonId: true },
     }),
     prisma.userLessonProgress.findMany({

@@ -1,8 +1,15 @@
 import "@fontsource/plus-jakarta-sans";
 
+import type { StreakDayDot } from "@/app/(dashboard)/profile/common/types";
+import { buildLast7StreakDots } from "@/lib/server/build-profile-user";
+
+import { StreakNavHover } from "./StreakNavHover";
+
 type HeaderProps = {
   heartsRemaining?: number;
   streak: number;
+  /** Last 7 UTC days for streak popover; defaults to empty week if omitted. */
+  streakWeekDays?: StreakDayDot[];
   totalXp: number;
   fixedOnDesktop?: boolean;
 };
@@ -12,6 +19,7 @@ const MAX_HEARTS = 5;
 export const Header = ({
   heartsRemaining = MAX_HEARTS,
   streak,
+  streakWeekDays,
   totalXp,
   fixedOnDesktop = true,
 }: HeaderProps) => {
@@ -20,7 +28,6 @@ export const Header = ({
     Math.min(heartsRemaining, MAX_HEARTS),
   );
   const isOutOfHearts = safeHeartsRemaining === 0;
-  const isStreakLost = streak === 0;
 
   return (
     <div
@@ -56,24 +63,10 @@ export const Header = ({
                 {safeHeartsRemaining}
               </span>
             </div>
-            <div className="flex items-center gap-3">
-              {isStreakLost ? (
-                <img
-                  src="https://d35aaqx5ub95lt.cloudfront.net/images/icons/65b8a029d7a148218f1ac98a198f8b42.svg"
-                  alt="Flame Icon"
-                  width={20}
-                  height={20}
-                />
-              ) : (
-                <img
-                  src="https://d35aaqx5ub95lt.cloudfront.net/images/icons/398e4298a3b39ce566050e5c041949ef.svg"
-                  alt="Flame Icon"
-                  width={20}
-                  height={20}
-                />
-              )}
-              <span className="text-md font-black sm:text-lg">{streak}</span>
-            </div>
+            <StreakNavHover
+              streak={streak}
+              streakWeekDays={streakWeekDays ?? buildLast7StreakDots(new Set())}
+            />
             <div className="flex items-center gap-1">
               <img
                 src="https://d35aaqx5ub95lt.cloudfront.net/images/goals/2b5a211d830a24fab92e291d50f65d1d.svg"

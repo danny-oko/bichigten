@@ -60,64 +60,22 @@ export default function ActivityHeatmap({ days }: ActivityHeatmapProps) {
     valStr: string;
   }>({ visible: false, x: 0, y: 0, dateStr: "", valStr: "" });
 
-  const tooltipRaf = React.useRef<number | null>(null);
-  const tooltipPending = React.useRef<{
-    x: number;
-    y: number;
-    dateStr: string;
-    valStr: string;
-  } | null>(null);
-
-  const flushTooltip = React.useCallback(() => {
-    tooltipRaf.current = null;
-    const p = tooltipPending.current;
-    if (!p) return;
-    setTooltip((prev) => {
-      if (
-        prev.visible &&
-        prev.x === p.x &&
-        prev.y === p.y &&
-        prev.dateStr === p.dateStr &&
-        prev.valStr === p.valStr
-      ) {
-        return prev;
-      }
-      return { visible: true, ...p };
-    });
-  }, []);
-
-  const queueCellTooltip = React.useCallback(
+  const showCellTooltip = React.useCallback(
     (e: React.MouseEvent, dateStr: string, valStr: string) => {
-      tooltipPending.current = {
+      setTooltip({
+        visible: true,
         x: e.clientX + 14,
         y: e.clientY - 40,
         dateStr,
         valStr,
-      };
-      if (tooltipRaf.current == null) {
-        tooltipRaf.current = requestAnimationFrame(flushTooltip);
-      }
-    },
-    [flushTooltip],
-  );
-
-  const hideTooltip = React.useCallback(() => {
-    tooltipPending.current = null;
-    if (tooltipRaf.current != null) {
-      cancelAnimationFrame(tooltipRaf.current);
-      tooltipRaf.current = null;
-    }
-    setTooltip((t) => ({ ...t, visible: false }));
-  }, []);
-
-  React.useEffect(
-    () => () => {
-      if (tooltipRaf.current != null) {
-        cancelAnimationFrame(tooltipRaf.current);
-      }
+      });
     },
     [],
   );
+
+  const hideTooltip = React.useCallback(() => {
+    setTooltip((t) => ({ ...t, visible: false }));
+  }, []);
 
   const { startDateUTC, lessonsByDate } = React.useMemo(() => {
     const endDateUTC = new Date();
@@ -219,8 +177,8 @@ export default function ActivityHeatmap({ days }: ActivityHeatmapProps) {
                           background: COLORS[cell.level],
                           border: cell.level === 0 ? "0.5px solid #E8E5DC" : "none",
                         }}
-                        onMouseMove={(e) => {
-                          queueCellTooltip(e, dateStr, valStr);
+                        onMouseEnter={(e) => {
+                          showCellTooltip(e, dateStr, valStr);
                         }}
                         onMouseLeave={hideTooltip}
                         role="img"

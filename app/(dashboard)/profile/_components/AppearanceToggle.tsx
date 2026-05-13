@@ -29,7 +29,7 @@ export function AppearanceToggle() {
   return (
     <section
       id="appearance"
-      className="scroll-mt-24 rounded-3xl border border-[#ead9bb] bg-gradient-to-br from-white via-[#fffefb] to-[#fff6e8] p-4 shadow-sm md:p-5"
+      className="scroll-mt-24 rounded-3xl border border-[#ead9bb] bg-linear-to-br from-white via-[#fffefb] to-[#fff6e8] p-4 shadow-sm md:p-5"
     >
       <h2 className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-[#8a806f]">
         {mnProfile.appearanceTitle}

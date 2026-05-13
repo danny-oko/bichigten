@@ -66,7 +66,7 @@ export function ProfileAccountForm({
   return (
     <section
       id="account"
-      className="scroll-mt-24 rounded-3xl border border-[#ead9bb] bg-gradient-to-br from-white to-[#fffdf6] p-4 shadow-sm md:p-5"
+      className="scroll-mt-24 rounded-3xl border border-[#ead9bb] bg-linear-to-br from-white to-[#fffdf6] p-4 shadow-sm md:p-5"
     >
       <h2 className="mb-4 text-xs font-bold uppercase tracking-[0.2em] text-[#8a806f]">
         {mnProfile.accountSectionTitle}
