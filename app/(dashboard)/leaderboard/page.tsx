@@ -45,7 +45,7 @@ export default async function RankPage() {
   const listUsers = allUsers.slice(3);
 
   return (
-    <div className="min-h-screen bg-[#FFF8E7] pb-24 text-[#3b2f2f] md:pb-10">
+    <div className="min-h-screen bg-transparent pb-24 font-balsamiq text-[#3b2f2f] dark:text-[#9ba3a7] md:pb-10">
       <MainLayout
         aside={
           <>
@@ -57,14 +57,22 @@ export default async function RankPage() {
         }
       >
         <div className="space-y-4 md:space-y-5">
-            {podiumUsers.length >= 3 ? (
-              <WebPodiumSection users={podiumUsers} />
-            ) : (
-              <div className="p-10 text-center bg-white rounded-2xl border border-dashed border-[#E8D9C0]">
-                Лиг эхлэхэд илүү олон тоглогч хэрэгтэй...
-              </div>
-            )}
-            <WebLeaderboardList users={listUsers} />
+          <header>
+            <h1 className="text-2xl font-bold tracking-tight text-[#E8920A] dark:text-[#84d8ff] sm:text-3xl md:text-4xl">
+              Онооны Самбар
+            </h1>
+            <p className="mt-1 text-xs font-bold text-[#7a5930] dark:text-[#bfb8a9] sm:text-sm">
+              Топ 100 тоглогчийн XP зэрэглэл
+            </p>
+          </header>
+          {podiumUsers.length >= 3 ? (
+            <WebPodiumSection users={podiumUsers} />
+          ) : (
+            <div className="rounded-2xl border-3 border-dashed border-[#ead9bb] bg-transparent px-4 py-8 text-center text-sm text-[#3b2f2f] sm:p-10 sm:text-base dark:border-[#37464f] dark:bg-[#252f35]/40 dark:text-[#bdb5a6]">
+              Лиг эхлэхэд илүү олон тоглогч хэрэгтэй...
+            </div>
+          )}
+          <WebLeaderboardList users={listUsers} />
         </div>
       </MainLayout>
     </div>
