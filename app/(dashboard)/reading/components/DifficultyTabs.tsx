@@ -23,10 +23,10 @@ export const DifficultyTabs = ({
           key={difficulty.value}
           type="button"
           onClick={() => onChange(difficulty.value)}
-          className={`rounded-full border px-4 py-2 text-sm font-semibold transition ${
+          className={`rounded-full border-3 px-4 py-2 text-sm font-semibold transition ${
             value === difficulty.value
-              ? "border-amber-500 bg-amber-100 text-amber-900"
-              : "border-amber-100 bg-white/80 text-stone-700 hover:border-amber-300"
+              ? "border-[#E8920A] bg-transparent text-amber-900 dark:border-[#84d8ff] dark:text-[#e8e4dc]"
+              : "border-amber-200/80 bg-transparent text-stone-700 hover:border-[#E8920A] dark:border-[#37464f] dark:text-[#94a3b8] dark:hover:border-[#84d8ff]/50"
           }`}
         >
           {difficulty.label}

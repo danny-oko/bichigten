@@ -25,7 +25,7 @@ export function NotificationsPreference() {
   return (
     <section
       id="notifications"
-      className="scroll-mt-24 rounded-3xl border border-[#ead9bb] bg-linear-to-br from-white via-[#fffefb] to-[#f8fafc] p-4 shadow-sm md:p-5"
+      className="scroll-mt-24 rounded-2xl border-3 border-[#E8920A] bg-transparent p-4 shadow-[0_8px_24px_rgba(232,146,10,0.08)] md:p-5 dark:border-[#84d8ff]/40 dark:shadow-[0_8px_24px_rgba(132,216,255,0.12)]"
     >
       <h2 className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-[#8a806f]">
         {mnProfile.notificationsTitle}
@@ -36,14 +36,14 @@ export function NotificationsPreference() {
       <button
         type="button"
         onClick={toggle}
-        className="flex w-full max-w-md items-center justify-between rounded-2xl border border-[#e8dcc4] bg-linear-to-r from-[#fffefb] to-[#faf3e8] px-4 py-3 text-left text-sm font-bold text-[#2a241e] shadow-sm transition hover:border-[#E8920A]/30"
+        className="flex w-full max-w-md items-center justify-between rounded-2xl border-3 border-[#e8dcc4] bg-transparent px-4 py-3 text-left text-sm font-bold text-[#2a241e] transition hover:border-[#E8920A] dark:border-[#37464f] dark:text-[#e8e4dc] dark:hover:border-[#84d8ff]/50"
       >
         <span>{mnProfile.notificationsDaily}</span>
         <span
-          className={`rounded-full px-3 py-1 text-xs font-bold ${
+          className={`rounded-full border-3 px-3 py-1 text-xs font-bold ${
             enabled
-              ? "bg-emerald-100 text-emerald-800"
-              : "bg-neutral-200 text-neutral-600"
+              ? "border-emerald-500 bg-transparent text-emerald-800 dark:border-emerald-400 dark:text-emerald-300"
+              : "border-neutral-400 bg-transparent text-neutral-600 dark:border-neutral-600 dark:text-neutral-400"
           }`}
         >
           {enabled ? mnProfile.notificationsOn : mnProfile.notificationsOff}

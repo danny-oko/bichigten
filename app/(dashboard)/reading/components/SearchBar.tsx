@@ -10,7 +10,7 @@ export const SearchBar = ({ onChange, value }: SearchBarProps) => {
       value={value}
       onChange={(event) => onChange(event.target.value)}
       placeholder="Search readings"
-      className="w-full rounded-full border border-amber-100 bg-white/85 px-4 py-3 text-sm text-stone-900 shadow-sm outline-none transition placeholder:text-stone-400 focus:border-amber-400"
+      className="w-full rounded-full border-3 border-[#E8920A]/50 bg-transparent px-4 py-3 text-sm text-stone-900 outline-none transition placeholder:text-stone-400 focus:border-[#E8920A] dark:border-[#84d8ff]/40 dark:text-[#e8e4dc] dark:placeholder:text-[#64748b] dark:focus:border-[#84d8ff]"
     />
   );
 };

@@ -66,7 +66,7 @@ export function ProfileAccountForm({
   return (
     <section
       id="account"
-      className="scroll-mt-24 rounded-3xl border border-[#ead9bb] bg-linear-to-br from-white to-[#fffdf6] p-4 shadow-sm md:p-5"
+      className="scroll-mt-24 rounded-2xl border-3 border-[#E8920A] bg-transparent p-4 shadow-[0_8px_24px_rgba(232,146,10,0.08)] md:p-5 dark:border-[#84d8ff]/40 dark:shadow-[0_8px_24px_rgba(132,216,255,0.12)]"
     >
       <h2 className="mb-4 text-xs font-bold uppercase tracking-[0.2em] text-[#8a806f]">
         {mnProfile.accountSectionTitle}
@@ -86,7 +86,7 @@ export function ProfileAccountForm({
               onChange={(e) => setName(e.target.value)}
               autoComplete="name"
               disabled={busy}
-              className="rounded-2xl border-amber-300/80 bg-[#F8F4E3]"
+              className="rounded-2xl border-3 border-[#ead9bb] bg-transparent dark:border-[#37464f]"
             />
           </Field>
           <Field>
@@ -102,7 +102,7 @@ export function ProfileAccountForm({
               onChange={(e) => setUserName(e.target.value)}
               autoComplete="username"
               disabled={busy}
-              className="rounded-2xl border-amber-300/80 bg-[#F8F4E3]"
+              className="rounded-2xl border-3 border-[#ead9bb] bg-transparent dark:border-[#37464f]"
             />
           </Field>
           <Field>
@@ -119,7 +119,7 @@ export function ProfileAccountForm({
               onChange={(e) => setAvatarUrl(e.target.value)}
               placeholder={mnProfile.urlPlaceholder}
               disabled={busy}
-              className="rounded-2xl border-amber-300/80 bg-[#F8F4E3]"
+              className="rounded-2xl border-3 border-[#ead9bb] bg-transparent dark:border-[#37464f]"
             />
           </Field>
           <FieldError>{error}</FieldError>

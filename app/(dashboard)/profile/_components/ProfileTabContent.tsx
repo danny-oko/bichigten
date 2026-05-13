@@ -1,18 +1,16 @@
 "use client";
 
+import type { ProfileTab, ProfileUser } from "../common/types";
 import AchievementsPanel from "./AchievementsPanel";
 import ActivityHeatmap from "./ActivityHeatmap";
 import { AppearanceToggle } from "./AppearanceToggle";
 import CurrentJourneyPanel from "./CurrentJourneyPanel";
 import ExperiencePanel from "./ExperiencePanel";
-import LeaguePanel from "./LeaguePanel";
 import { NotificationsPreference } from "./NotificationsPreference";
 import { ProfileAccountForm } from "./ProfileAccountForm";
 import { ProfileHelpSection } from "./ProfileHelpSection";
 import SettingsPanel from "./SettingsPanel";
 import StreakPanel from "./StreakPanel";
-import { mnProfile } from "@/lib/i18n/mn-profile";
-import type { ProfileTab, ProfileUser } from "../common/types";
 
 type ProfileTabContentProps = {
   activeTab: ProfileTab;
@@ -57,9 +55,6 @@ export default function ProfileTabContent({
 
   return (
     <div className="flex min-h-[200px] w-full flex-col gap-6">
-      <section className="rounded-3xl border border-dashed border-[#e5cfa8] bg-gradient-to-br from-[#fffdf8] to-[#fff4dc] p-4 text-sm text-[#706552] md:p-5">
-        {mnProfile.settingsHint}
-      </section>
       <ProfileAccountForm
         initialName={currentUser.name}
         initialUserName={currentUser.username}

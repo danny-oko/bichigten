@@ -14,7 +14,7 @@ type ReadingCardProps = {
 
 export const ReadingCard = ({ reading }: ReadingCardProps) => {
   return (
-    <article className="flex min-h-64 flex-col rounded-2xl border border-amber-100 bg-white/90 p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md">
+    <article className="flex min-h-64 flex-col rounded-2xl border-3 border-[#E8920A] bg-transparent p-5 shadow-[0_8px_24px_rgba(232,146,10,0.08)] transition hover:-translate-y-0.5 dark:border-[#84d8ff]/40">
       <div className="flex items-start justify-between gap-3">
         <ReadingBadge>{DIFFICULTY_LABELS[reading.difficulty]}</ReadingBadge>
         <span className="text-xs font-semibold text-stone-400">

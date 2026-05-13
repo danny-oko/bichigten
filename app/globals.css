@@ -178,17 +178,7 @@
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  background-image:
-    radial-gradient(
-      ellipse 90% 55% at 15% 0%,
-      rgb(232 146 10 / 0.08),
-      transparent 45%
-    ),
-    radial-gradient(
-      ellipse 70% 45% at 100% 100%,
-      rgb(253 224 170 / 0.14),
-      transparent 48%
-    );
+  background: transparent;
 }
 
 .profile-page-shell > * {

@@ -35,7 +35,7 @@ function WebListItem({
     <div
       className={`flex flex-col gap-2.5 rounded-2xl px-3 py-3 sm:flex-row sm:items-center sm:gap-4 sm:px-4 ${
         user.isMe
-          ? "border-3 border-[#E8920A]/60 bg-[#E8920A]/10 dark:border-[#84d8ff] dark:bg-[#84d8ff]/15"
+          ? "border-3 border-[#E8920A]/60 bg-transparent dark:border-[#84d8ff] dark:bg-transparent"
           : "border-3 border-[#ead9bb] bg-transparent dark:border-[#37464f] dark:bg-transparent"
       }`}
     >
@@ -68,7 +68,7 @@ function WebListItem({
               {user.name}
             </p>
             {user.isNew && (
-              <span className="shrink-0 rounded-full bg-[#E8920A]/15 px-1.5 py-0.5 text-[9px] font-bold text-[#E8920A] dark:bg-[#84d8ff]/15 dark:text-[#84d8ff]">
+              <span className="shrink-0 rounded-full border-3 border-[#E8920A] bg-transparent px-1.5 py-0.5 text-[9px] font-bold text-[#E8920A] dark:border-[#84d8ff] dark:text-[#84d8ff]">
                 ШИНЭ
               </span>
             )}
@@ -142,7 +142,7 @@ export default function WebLeaderboardList({
           onClick={() =>
             setVisibleCount((current: number) => current + loadStep)
           }
-          className="mt-2 w-full max-w-sm self-center rounded-xl border-3 border-[#E8920A]/50 bg-[#E8920A]/15 px-4 py-2 text-sm font-semibold text-[#7A5C2E] transition hover:bg-[#E8920A]/25 sm:w-auto sm:px-5 dark:border-[#84d8ff] dark:bg-[#84d8ff]/15 dark:text-[#d8d2c4] dark:hover:bg-[#84d8ff]/25"
+          className="mt-2 w-full max-w-sm self-center rounded-xl border-3 border-[#E8920A]/50 bg-transparent px-4 py-2 text-sm font-semibold text-[#7A5C2E] transition hover:border-[#E8920A] sm:w-auto sm:px-5 dark:border-[#84d8ff] dark:text-[#d8d2c4] dark:hover:border-[#84d8ff]"
         >
           {mnUi.loadMore}
         </button>
