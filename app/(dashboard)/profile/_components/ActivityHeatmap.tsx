@@ -260,23 +260,23 @@ export default function ActivityHeatmap({ days }: ActivityHeatmapProps) {
 
         .day-labels {
           display: grid;
-          grid-template-columns: 28px repeat(26, minmax(0, 1fr));
-          gap: 3px;
+          grid-template-columns: 28px repeat(26, minmax(10px, 1fr));
+          gap: 4px;
           margin-bottom: 2px;
         }
 
         .hm-rows {
           display: flex;
           flex-direction: column;
-          gap: 3px;
+          gap: 4px;
           contain: content;
         }
 
         .hm-row {
           display: grid;
-          grid-template-columns: 28px repeat(26, minmax(0, 1fr));
-          gap: 3px;
-          align-items: center;
+          grid-template-columns: 28px repeat(26, minmax(10px, 1fr));
+          gap: 4px;
+          align-items: stretch;
         }
 
         .row-label {
@@ -288,19 +288,10 @@ export default function ActivityHeatmap({ days }: ActivityHeatmapProps) {
 
         .hm-cell {
           aspect-ratio: 1;
-          border-radius: 3px;
-<<<<<<< HEAD
-          cursor: default;
-=======
-          cursor: pointer;
-<<<<<<< HEAD
-          transition:
-            transform 0.1s,
-            outline 0.1s;
->>>>>>> 589fb68 (Theme & Loading Screen)
-=======
-          transition: transform 0.1s, outline 0.1s;
->>>>>>> cd84c80 (Revert "Theme & Loading Screen")
+          width: 100%;
+          min-height: 10px;
+          border-radius: 6px;
+          box-sizing: border-box;
           position: relative;
         }
 

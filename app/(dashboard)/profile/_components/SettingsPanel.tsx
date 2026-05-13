@@ -26,7 +26,7 @@ export default function SettingsPanel({ settings }: SettingsPanelProps) {
   };
 
   return (
-    <section className="rounded-3xl border border-[#ead9bb] bg-gradient-to-b from-white to-[#fffdf6] p-4 shadow-sm">
+    <section className="rounded-3xl border border-[#ead9bb] bg-linear-to-b from-white to-[#fffdf6] p-4 shadow-sm">
       <h2 className="mb-3 text-xs font-bold uppercase tracking-[0.2em] text-[#8a806f]">
         {mnProfile.settingsSectionTitle}
       </h2>
@@ -38,9 +38,9 @@ export default function SettingsPanel({ settings }: SettingsPanelProps) {
               key={item.id}
               href={href}
               scroll={true}
-              className="group flex w-full items-center gap-3 rounded-2xl border border-[#efe0cc] bg-gradient-to-r from-[#fffefb] to-[#faf3e8] px-3 py-3 text-left shadow-sm transition-colors hover:border-[#E8920A]/35 hover:bg-[#faf6ee]"
+              className="group flex w-full items-center gap-3 rounded-2xl border border-[#efe0cc] bg-linear-to-r from-[#fffefb] to-[#faf3e8] px-3 py-3 text-left shadow-sm transition-colors hover:border-[#E8920A]/35 hover:bg-[#faf6ee]"
             >
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-br from-[#fde9b8] to-[#f0c978] text-sm ring-1 ring-white/60">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-linear-to-br from-[#fde9b8] to-[#f0c978] text-sm ring-1 ring-white/60">
                 {item.icon}
               </span>
               <span className="min-w-0 flex-1">
@@ -60,7 +60,7 @@ export default function SettingsPanel({ settings }: SettingsPanelProps) {
         <button
           type="button"
           onClick={onLogout}
-          className="mt-2 w-full rounded-2xl border border-[#f0c4c4] bg-gradient-to-r from-[#fff8f8] to-[#ffecec] px-3 py-2.5 text-sm font-bold text-[#cc5d5d] transition-colors hover:bg-[#fff0f0]"
+          className="mt-2 w-full rounded-2xl border border-[#f0c4c4] bg-linear-to-r from-[#fff8f8] to-[#ffecec] px-3 py-2.5 text-sm font-bold text-[#cc5d5d] transition-colors hover:bg-[#fff0f0]"
         >
           {mnProfile.logOut}
         </button>

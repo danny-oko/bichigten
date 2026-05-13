@@ -26,8 +26,6 @@ export function AppearanceToggle() {
     localStorage.setItem(STORAGE_KEY, next ? "1" : "0");
   };
 
-  // {experience.currentXp.toLocaleString()}
-  // mnProfile.experienceLevel(experience.currentLevel)}
   return (
     <section
       id="appearance"

@@ -4,9 +4,9 @@ A Next.js language learning app with Prisma + PostgreSQL.
 
 ## Setup
 
-**1. Install dependencies**
+**1. Install dependencies** (this repo uses [Bun](https://bun.sh))
 ```bash
-npm install
+bun install
 ```
 
 **2. Set up environment variables**
@@ -19,20 +19,20 @@ NODE_ENV="development"
 
 > Also add `DATABASE_URL` to `.env.local` for Next.js to pick it up.
 
-**3. Install Prisma adapter**
+**3. Install Prisma adapter** (if not already in `package.json`)
 ```bash
-npm install @prisma/adapter-pg pg
-npm install -D @types/pg
+bun add @prisma/adapter-pg pg
+bun add -d @types/pg
 ```
 
 **4. Generate Prisma client and run migrations**
 ```bash
-npx prisma generate && npx prisma migrate dev --name init
+bun run db:generate && bun run db:migrate
 ```
 
 **5. Run the dev server**
 ```bash
-npm run dev
+bun dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000)

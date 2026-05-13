@@ -18,9 +18,13 @@ export default function StreakPanel({ streak }: StreakPanelProps) {
         <p className="mt-2 text-sm font-semibold text-[#7e7463]">
           {mnProfile.streakCurrent}
         </p>
-        <p className="flex items-center gap-2 text-5xl font-extrabold leading-none text-[#c77a0a]">
-          <Flame className="size-10 shrink-0" strokeWidth={2} aria-hidden />
-          {streak.current}
+        <p className="flex items-center gap-2 text-5xl font-extrabold leading-none">
+          <Flame
+            className="size-10 shrink-0 text-[#E5A13D]"
+            strokeWidth={2}
+            aria-hidden
+          />
+          <span className="text-[#c77a0a]">{streak.current}</span>
         </p>
         <p className="mt-1 text-sm text-[#7d7364]">
           {mnProfile.streakDaysBest(streak.current, streak.best)}

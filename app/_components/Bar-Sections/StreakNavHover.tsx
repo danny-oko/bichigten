@@ -42,25 +42,23 @@ function StreakCardBody({
       <div className="flex gap-4">
         <div className="relative flex h-[5.5rem] w-[5.5rem] shrink-0 items-center justify-center">
           <Flame
-            className={
-              isStreakLost
-                ? "absolute size-[4.5rem] text-[#c9c2b6]"
-                : "absolute size-[4.5rem] text-[#FAC775]"
-            }
+            className="absolute size-[4.5rem] text-[#E5A13D]"
             aria-hidden
             fill="currentColor"
-            stroke="#E8920A"
+            stroke="#C8872E"
             strokeWidth={0.6}
           />
-          <span
-            className={
-              isStreakLost
-                ? "relative z-[1] text-2xl font-black tracking-tight text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)]"
-                : "relative z-[1] text-2xl font-black tracking-tight text-white drop-shadow-[0_1px_3px_rgba(89,52,0,0.45)]"
-            }
-          >
-            {streak}
-          </span>
+          {streak > 0 ? (
+            <span
+              className={
+                isStreakLost
+                  ? "relative z-[1] text-2xl font-black tracking-tight text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)]"
+                  : "relative z-[1] text-2xl font-black tracking-tight text-white drop-shadow-[0_1px_3px_rgba(89,52,0,0.45)]"
+              }
+            >
+              {streak}
+            </span>
+          ) : null}
         </div>
         <div className="min-w-0 flex-1 pt-0.5">
           <p className="text-lg font-bold leading-tight text-[#3b2f2f]">
@@ -131,7 +129,9 @@ function StreakTriggerFace({
           height={20}
         />
       )}
-      <span className="text-md font-black sm:text-lg">{streak}</span>
+      {streak > 0 ? (
+        <span className="text-md font-black sm:text-lg">{streak}</span>
+      ) : null}
     </span>
   );
 }

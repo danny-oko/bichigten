@@ -73,13 +73,13 @@ export const mnProfile = {
   saveChangesFailed: "Өөрчлөлтийг хадгалж чадсангүй.",
   networkErrorRetry: "Сүлжээний алдаа. Дахин оролдоно уу.",
 
-  streakTitle: "Дараалал",
-  streakHoverSubtitle: "Өдөр бүр хичээлээ дуусгаж дараалаа уртасгана уу.",
-  streakCurrent: "Одоогийн дараалал",
+  streakTitle: "Ирц",
+  streakHoverSubtitle: "Өдөр бүр хичээлээ дуусгаж ирцээ уртасгана уу.",
+  streakCurrent: "Одоогийн ирц",
   streakDaysBest: (current: number, best: number) =>
     `${current} өдөр · Шилдэг: ${best}`,
-  streakFreezeUnavailable: "Дараалал хөлдөөх одоогоор боломжгүй",
-  streakFreezeCta: (left: number) => `Дараалал хөлдөөх (${left} үлдсэн)`,
+  streakFreezeUnavailable: "Ирц хөлдөөх одоогоор боломжгүй",
+  streakFreezeCta: (left: number) => `Ирц хөлдөөх (${left} үлдсэн)`,
 
   heatmapRowLabels: ["Да", "Лх", "Ба"] as const,
   heatmapNoActivity: "Идэвхигүй",
@@ -91,7 +91,7 @@ export const mnProfile = {
   leagueResetDays: (d: number) => `${d} өдрийн дараа шинэчлэгдэнэ`,
 
   levelTitle: (level: number) => `Түвшин ${level} сурагч`,
-  streakLabel: (days: number) => `${days} өдрийн дараалал`,
+  streakLabel: (days: number) => `${days} өдрийн ирц`,
   levelProgressLine: (cur: string, need: string) => `${cur} / ${need} XP`,
   toNextLevelLine: (xp: string, nextLevel: number) =>
     `${xp} XP — түвшин ${nextLevel} хүртэл`,
