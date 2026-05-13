@@ -51,18 +51,6 @@ export default function ProfileTabContent({
           <StreakPanel streak={currentUser.streak} />
           <ExperiencePanel experience={currentUser.experience} />
         </div>
-        <LeaguePanel league={currentUser.league} />
-        <section className="rounded-3xl border border-[#ead9bb] bg-gradient-to-br from-white to-[#fff9ef] p-4 shadow-sm md:p-5">
-          <h2 className="mb-2 text-xs font-bold uppercase tracking-[0.2em] text-[#8a806f]">
-            {mnProfile.weeklyActivityTitle}
-          </h2>
-          <p className="text-sm text-[#706552]">
-            {mnProfile.weeklyActivityLine(
-              currentUser.weeklyStats.xpThisWeek.toLocaleString(),
-              currentUser.weeklyStats.daysThisWeek,
-            )}
-          </p>
-        </section>
       </div>
     );
   }
