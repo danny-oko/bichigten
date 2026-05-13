@@ -1,9 +1,9 @@
 "use client";
 
 import { usePathname } from "next/navigation";
+import { useNavLoading } from "../nav-loading-context";
 import type { MenuLabel } from "./main-bars";
 import { NavMenuIcon } from "./nav-menu-icon";
-import { useNavLoading } from "../nav-loading-context";
 
 type HeaderClientProps = {
   menuLabels: readonly MenuLabel[];
@@ -39,11 +39,11 @@ export const SideBar = ({ menuLabels, menuPaths }: HeaderClientProps) => {
               key={label}
               type="button"
               onClick={() => navigateTo(menuPaths[label])}
-              className={`flex w-full items-center justify-center rounded-xl py-2 text-[16px] md:px-0 lg:justify-start lg:gap-5 lg:px-4
+              className={`flex w-full items-center justify-start rounded-xl py-2 text-[16px] md:px-0 lg:justify-start lg:gap-5 lg:px-4
               transition-all duration-150 font-balsamiq border-2
               ${
                 isActive
-                  ? "dark:bg-[#84d8ff]/15 dark:border-[#84d8ff] bg-[#ffad33]/10 border-[#ffad33] text-black"
+                  ? "dark:bg-[#84d8ff]/15 dark:border-[#84d8ff] bg-[#ffad33]/10 border-[#ffad33] text-black dark:text-white"
                   : "text-[#777777] border-transparent dark:text-[#94a3b8]"
               }`}
             >

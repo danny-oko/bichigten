@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Fragment, useEffect, useMemo, useRef, useState } from "react";
 import { BottomSheet } from "./BottomSheet";
+import { Character } from "./CharacterCard";
 import { CharacterDetail } from "./CharacterDetail";
 import { LetterGrid } from "./LetterGrid";
-import { Character } from "./CharacterCard";
 
 type Filter = "ALL" | "VOWEL" | "CONSONANT";
 
@@ -73,63 +74,62 @@ export const DictionaryPage = ({ characters }: { characters: Character[] }) => {
     FILTER_TABS.find((t) => t.value === filter)?.label ?? "Бүгд";
 
   return (
-    <div className="min-h-full w-full overflow-x-hidden px-4 py-6 font-balsamiq text-[#3b2f2f] dark:text-[#fff] md:px-6 lg:px-8">
+    <div className="min-h-full w-full overflow-x-hidden px-4 py-6 font-balsamiq text-[#3b2f2f] dark:text-[#9ba3a7] md:px-6 lg:px-8">
       <div className="mx-auto w-full max-w-6xl">
         <header className="mb-6">
-          <h1 className="text-4xl font-bold tracking-normal text-[#8A4D07] md:text-5xl dark:text-[#7a5930]">
+          <h1 className="text-4xl font-bold tracking-normal text-[#E8920A] md:text-5xl dark:text-[#84d8ff]">
             Цагаан толгой
           </h1>
-          <p className="mt-2 max-w-2xl text-base font-bold text-[#7a5930] dark:text-[#fff]">
+          <p className="mt-2 max-w-2xl text-base font-bold text-[#7a5930] dark:text-[#94a3b8]">
             Уламжлалт монгол бичгийн зурлага, үсгийн хувилбар дүрсийг судлан,
             бичих зүй тогтол, дарааллыг эзэмших.
           </p>
         </header>
 
         <div className="grid min-w-0 gap-6 xl:grid-cols-[minmax(0,1fr)_360px]">
-          <section className="min-w-0 rounded-2xl border border-[#ead9bb] bg-[#fffdf7] p-4 shadow-[0_18px_45px_rgba(122,89,48,0.12)] md:p-5">
+          <section className="min-w-0 rounded-2xl border-3 border-[#E8920A] p-5 bg-transparent dark:border-[#37464f] shadow-[0_18px_45px_rgba(122,89,48,0.12)] md:p-5">
             <div className="mb-4 hidden items-center justify-between gap-3 xl:flex">
-              <h2 className="text-xl font-bold text-[#3b2f2f]">Үсэгнүүд</h2>
+              <h2 className="text-xl font-bold text-[#3b2f2f] dark:text-[#d8d2c4]">
+                Үсэгнүүд
+              </h2>
               <div className="flex gap-2">
                 {FILTER_TABS.map((tab) => {
                   const isActive = filter === tab.value;
                   return (
-                    <button
+                    <Button
                       key={tab.value}
                       type="button"
+                      variant="sortbutton"
+                      size="sort"
+                      aria-pressed={isActive}
                       onClick={() => handleFilterSelect(tab.value)}
-                      className={[
-                        "rounded-full border px-5 py-2 font-balsamiq text-sm font-bold transition",
-                        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e8920a] focus-visible:ring-offset-2",
-                        isActive
-                          ? "border-[#e8920a] bg-[#e8920a] text-white shadow-[0_10px_24px_rgba(232,146,10,0.25)] hover:bg-[#c97806]"
-                          : "border-[#ead9bb] bg-white text-[#3b2f2f] hover:border-[#e8920a] hover:text-[#c97806]",
-                      ].join(" ")}
                     >
                       {tab.label}
-                    </button>
+                    </Button>
                   );
                 })}
               </div>
-              <span className="shrink-0 rounded-full bg-[#f8e7c7] px-3 py-1 text-sm font-bold text-[#7a5930]">
+              <span className="shrink-0 rounded-full border border-[#E8920A]/35 bg-[#E8920A]/10 px-3 py-1 text-sm font-bold text-[#7a5930] dark:border-[#84d8ff] dark:bg-[#84d8ff]/15 dark:text-[#fff]">
                 {filteredCharacters.length} Үсэг
               </span>
             </div>
 
             <div className="xl:hidden">
               <div className="mb-2 flex items-center justify-between gap-3">
-                <h2 className="text-xl font-bold text-[#3b2f2f]">Үсэгнүүд</h2>
+                <h2 className="text-xl font-bold text-[#3b2f2f] dark:text-[#d8d2c4]">
+                  Үсэгнүүд
+                </h2>
 
                 <div className="relative" ref={dropdownRef}>
-                  <button
+                  <Button
                     type="button"
+                    variant="sortbutton"
+                    size="sort"
+                    aria-expanded={isDropdownOpen}
+                    aria-haspopup="listbox"
+                    aria-pressed={filter !== "ALL"}
+                    className="flex items-center gap-1.5"
                     onClick={() => setIsDropdownOpen((prev) => !prev)}
-                    className={[
-                      "flex items-center gap-1.5 rounded-full border px-5 py-2 font-balsamiq text-sm font-bold transition",
-                      "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e8920a] focus-visible:ring-offset-2",
-                      filter !== "ALL"
-                        ? "border-[#e8920a] bg-[#e8920a] text-white shadow-[0_10px_24px_rgba(232,146,10,0.25)]"
-                        : "border-[#ead9bb] bg-white text-[#3b2f2f] hover:border-[#e8920a] hover:text-[#c97806]",
-                    ].join(" ")}
                   >
                     {activeLabel}
                     <svg
@@ -137,6 +137,7 @@ export const DictionaryPage = ({ characters }: { characters: Character[] }) => {
                       height="12"
                       viewBox="0 0 12 12"
                       fill="none"
+                      aria-hidden
                       className={[
                         "transition-transform duration-200",
                         isDropdownOpen ? "rotate-180" : "",
@@ -150,27 +151,28 @@ export const DictionaryPage = ({ characters }: { characters: Character[] }) => {
                         strokeLinejoin="round"
                       />
                     </svg>
-                  </button>
+                  </Button>
 
                   {isDropdownOpen && (
-                    <div className="absolute left-0 top-full z-20 mt-2 min-w-[148px] overflow-hidden rounded-2xl border border-[#ead9bb] bg-white shadow-[0_8px_24px_rgba(122,89,48,0.15)]">
+                    <div
+                      className="absolute left-0 top-full z-20 mt-2 min-w-[148px] overflow-hidden rounded-2xl border border-border bg-popover text-popover-foreground shadow-[0_8px_24px_rgba(0,0,0,0.12)] dark:shadow-[0_8px_24px_rgba(0,0,0,0.4)]"
+                      role="listbox"
+                    >
                       {FILTER_TABS.map((tab, i) => (
-                        <>
+                        <Fragment key={tab.value}>
                           {i === 1 && (
-                            <div
-                              key="divider"
-                              className="mx-3 h-px bg-[#ead9bb]"
-                            />
+                            <div className="mx-3 h-px bg-border" />
                           )}
                           <button
-                            key={tab.value}
                             type="button"
+                            role="option"
+                            aria-selected={filter === tab.value}
                             onClick={() => handleFilterSelect(tab.value)}
                             className={[
-                              "flex w-full items-center gap-2 px-4 py-3 text-left font-balsamiq text-sm font-bold transition hover:bg-[#fff2d6]",
+                              "flex w-full items-center gap-2 px-4 py-3 text-left font-balsamiq text-sm font-bold transition hover:bg-muted",
                               filter === tab.value
-                                ? "text-[#e8920a]"
-                                : "text-[#3b2f2f]",
+                                ? "text-primary"
+                                : "text-foreground",
                             ].join(" ")}
                           >
                             <span className="w-4 text-center">
@@ -178,7 +180,7 @@ export const DictionaryPage = ({ characters }: { characters: Character[] }) => {
                             </span>
                             {tab.label}
                           </button>
-                        </>
+                        </Fragment>
                       ))}
                     </div>
                   )}
@@ -186,7 +188,7 @@ export const DictionaryPage = ({ characters }: { characters: Character[] }) => {
               </div>
 
               <div className="mb-4">
-                <span className="rounded-full bg-[#f8e7c7] px-3 py-1 text-sm font-bold text-[#7a5930]">
+                <span className="rounded-full border border-[#E8920A]/35 bg-[#E8920A]/10 px-3 py-1 text-sm font-bold text-[#7a5930] dark:border-[#84d8ff] dark:bg-[#84d8ff]/15 dark:text-[#94a3b8]">
                   {filteredCharacters.length} Үсэг
                 </span>
               </div>

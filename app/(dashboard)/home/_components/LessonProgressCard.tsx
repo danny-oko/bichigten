@@ -40,7 +40,7 @@ export default function LessonProgressCard({
         </p>
         <Link
           href={nextLessonHref}
-          className="inline-flex w-full items-center justify-center rounded-xl bg-[#1C2B4A] px-4 py-2.5 text-sm font-extrabold text-white transition hover:bg-[#193766]"
+          className="inline-flex w-full items-center justify-center rounded-xl dark:bg-[#1C2B4A] px-4 py-2.5 text-sm font-extrabold text-white transition dark:hover:bg-[#193766] bg-[#e8920a] hover:bg-[#c97806]"
         >
           {mnUi.continueLearning}
         </Link>

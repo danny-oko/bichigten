@@ -19,6 +19,8 @@ const buttonVariants = cva(
         destructive:
           "bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40",
         link: "text-primary underline-offset-4 hover:underline",
+        sortbutton:
+          "h-auto min-h-0 gap-0 rounded-full border-3 px-5 py-2 font-balsamiq font-bold shadow-none transition hover:translate-y-0 hover:shadow-none active:translate-y-0 active:scale-100 border-[#ead9bb] bg-transparent text-[#3b2f2f] hover:border-[#e8920a] hover:text-[#c97806] focus-visible:border-[#e8920a] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e8920a] focus-visible:ring-offset-2 aria-pressed:border-[#e8920a] aria-pressed:bg-[#e8920a] aria-pressed:text-white aria-pressed:shadow-[0_10px_24px_rgba(232,146,10,0.25)] aria-pressed:hover:bg-[#c97806] dark:border-[#37464f] dark:not-aria-pressed:bg-transparent dark:text-[#94a3b8] dark:hover:border-[#84d8ff] dark:hover:bg-[#84d8ff]/15 dark:hover:text-white dark:focus-visible:border-[#84d8ff] dark:focus-visible:ring-[#84d8ff] dark:aria-pressed:border-[#84d8ff] dark:aria-pressed:bg-[#84d8ff]/15 dark:aria-pressed:text-white dark:aria-pressed:shadow-none dark:aria-pressed:hover:border-[#84d8ff] dark:aria-pressed:hover:bg-[#84d8ff]/15 dark:aria-pressed:hover:text-white",
       },
       size: {
         default:
@@ -32,6 +34,7 @@ const buttonVariants = cva(
         "icon-sm":
           "size-7 rounded-[min(var(--radius-md),12px)] in-data-[slot=button-group]:rounded-lg",
         "icon-lg": "size-9",
+        sort: "h-auto min-h-0 gap-1.5 rounded-full px-5 py-2 text-sm [&_svg:not([class*='size-'])]:size-3",
       },
     },
     defaultVariants: {

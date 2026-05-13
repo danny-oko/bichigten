@@ -40,29 +40,29 @@ export const CharacterDetail = ({
   return (
     <div
       className={[
-        "rounded-2xl border border-[#ead9bb] bg-white text-[#3b2f2f] shadow-[0_18px_45px_rgba(122,89,48,0.12)]",
-        compact ? "h-full p-5" : "p-6 md:p-8",
+        "rounded-2xl border-3 border-[#E8920A] bg-transparent text-[#3b2f2f] shadow-[0_18px_45px_rgba(232,146,10,0.1)] dark:border-[#84d8ff]/45 dark:text-[#94a3b8] dark:shadow-[0_18px_45px_rgba(0,0,0,0.28)]",
+        compact ? "h-full p-5" : "p-4 sm:p-6 md:p-8",
       ].join(" ")}
     >
-      <div className={compact ? "mb-5" : "mb-9"}>
+      <div className={compact ? "mb-5" : "mb-4 md:mb-9"}>
         <h2
           className={[
-            "font-balsamiq font-bold text-[#3b2f2f]",
-            compact ? "text-3xl" : "text-4xl",
+            "font-balsamiq font-bold text-[#E8920A] dark:text-[#84d8ff]",
+            compact ? "text-3xl" : "text-3xl sm:text-4xl",
           ].join(" ")}
         >
           {character.name}
         </h2>
-        <p className="mt-1 font-balsamiq text-sm font-bold text-[#7a5930]">
+        <p className="mt-1 font-balsamiq text-sm font-bold text-[#7a5930] dark:text-[#94a3b8]">
           /{character.latinForm}/ phoneme
         </p>
       </div>
 
-      <section className={compact ? "mb-5" : "mb-8"}>
-        <h3 className="mb-4 font-balsamiq text-xs font-bold uppercase text-[#7a5930]">
+      <section className={compact ? "mb-5" : "mb-4 md:mb-8"}>
+        <h3 className="mb-2 font-balsamiq text-xs font-bold uppercase text-[#7a5930] dark:text-[#94a3b8] md:mb-4">
           Дүрслэл
         </h3>
-        <div className="grid grid-cols-3 gap-4">
+        <div className="grid grid-cols-3 gap-2 sm:gap-4">
           {forms.map((form) => {
             const active = selectedForm?.type === form.type;
             return (
@@ -70,25 +70,36 @@ export const CharacterDetail = ({
                 key={form.type}
                 type="button"
                 onClick={() => setSelectedFormType(form.type)}
-                className="flex flex-col items-center gap-2 font-balsamiq font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e8920a] focus-visible:ring-offset-2"
+                className="flex flex-col items-center gap-2 font-balsamiq font-bold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#e8920a] focus-visible:ring-offset-2 dark:focus-visible:ring-[#84d8ff]"
               >
                 <div
                   className={[
                     "flex items-center justify-center rounded-full border-2",
-                    compact ? "h-16 w-16" : "h-20 w-20",
+                    compact ? "h-16 w-16" : "h-18 w-18 sm:h-20 sm:w-20",
                     active
-                      ? "border-[#e8920a] bg-[#fff2d6]"
-                      : "border-[#ead9bb] bg-[#fffdf7]",
+                      ? "border-[#e8920a] bg-[#E8920A]/15 dark:border-[#84d8ff] dark:bg-[#84d8ff]/15"
+                      : "border-[#ead9bb] bg-transparent dark:border-[#37464f]",
                   ].join(" ")}
                 >
                   <span
-                    className="mongol-script text-2xl text-[#3b2f2f]"
+                    className={[
+                      "mongol-script text-2xl",
+                      active
+                        ? "text-[#e8920a] dark:text-white"
+                        : "text-[#3b2f2f] dark:text-[#94a3b8]",
+                    ].join(" ")}
                     style={{ unicodeBidi: "isolate", display: "inline-block" }}
                   >
                     {form.glyph}
                   </span>
                 </div>
-                <span className={active ? "text-[#c97806]" : "text-[#7a5930]"}>
+                <span
+                  className={
+                    active
+                      ? "text-[#e8920a] dark:text-[#84d8ff]"
+                      : "text-[#7a5930] dark:text-[#94a3b8]"
+                  }
+                >
                   {FORM_LABELS[form.type]}
                 </span>
               </button>
@@ -99,21 +110,21 @@ export const CharacterDetail = ({
 
       <section
         className={[
-          "rounded-2xl border border-[#ead9bb] bg-[#fffdf7]",
-          compact ? "mb-5 p-5" : "mb-8 p-6 md:p-8",
+          "rounded-2xl border border-[#ead9bb] bg-[#E8920A]/10 dark:border-[#37464f] dark:bg-[#84d8ff]/10",
+          compact ? "mb-5 p-5" : "mb-0 p-3 sm:mb-8 sm:p-6 md:p-8",
         ].join(" ")}
       >
-        <div className="mb-4">
-          <h3 className="font-balsamiq text-sm font-bold text-[#3b2f2f]">
+        <div className="mb-2 md:mb-4">
+          <h3 className="font-balsamiq text-sm font-bold text-[#3b2f2f] dark:text-[#d8d2c4]">
             Бичиглэл
           </h3>
         </div>
         <div
           className={[
-            "flex items-center justify-center rounded-[20px] bg-white",
+            "flex min-h-0 items-center justify-center rounded-[20px] border border-[#ead9bb] bg-white dark:border-[#37464f] dark:bg-transparent",
             compact
               ? "h-52 p-4 sm:p-5"
-              : "h-72 p-5 sm:p-6 md:h-80 md:p-8 md:pb-10",
+              : "h-36 max-h-[40vh] p-3 sm:h-52 sm:max-h-none sm:p-5 md:h-80 md:p-8 md:pb-10",
           ].join(" ")}
         >
           {selectedForm?.strokePath ? (
@@ -123,7 +134,9 @@ export const CharacterDetail = ({
               viewBox={selectedForm.viewBox ?? "0 0 21 49"}
             />
           ) : (
-            <span className="text-sm text-[#a98958]">No stroke data</span>
+            <span className="text-sm text-[#7a5930] dark:text-[#94a3b8]">
+              No stroke data
+            </span>
           )}
         </div>
       </section>
