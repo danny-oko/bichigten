@@ -1,5 +1,16 @@
 export type ProfileTab = "overview" | "achievements" | "stats" | "settings";
 
+export type ProfileAppUser = {
+  id: string;
+  email: string;
+  userName: string;
+  name: string | null;
+  avatarUrl: string | null;
+  totalXp: number;
+  heartsRemaining: number;
+  createdAt: Date;
+};
+
 export type ProfileBadge = {
   id: string;
   label: string;
