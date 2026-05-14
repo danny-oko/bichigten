@@ -21,13 +21,11 @@ const XP_PER_LEVEL = 300;
 const DAY_MS = 24 * 60 * 60 * 1000;
 const HEATMAP_DAYS = 70;
 
+/** Max age of completion rows loaded for profile (streak, heatmap, badges). Caps DB + payload size. */
 const PROFILE_COMPLETION_LOOKBACK_DAYS = 800;
 
 function formatMemberSince(date: Date): string {
-  return new Intl.DateTimeFormat("mn-MN", {
-    month: "short",
-    year: "numeric",
-  }).format(date);
+  return new Intl.DateTimeFormat("mn-MN", { month: "short", year: "numeric" }).format(date);
 }
 
 function daysUntilNextMondayUtc(): number {
@@ -36,6 +34,7 @@ function daysUntilNextMondayUtc(): number {
   return dow === 0 ? 1 : 8 - dow;
 }
 
+/** Last 7 UTC days (oldest → newest) with weekday labels — used by profile + header streak UI. */
 export function buildLast7StreakDots(completionUtcMidnights: Set<number>) {
   const today = toUtcDateOnly(new Date()).getTime();
   const out: { label: string; completed: boolean }[] = [];
@@ -84,11 +83,7 @@ function buildActivityHeatmap(completedRows: { completedAt: Date | null }[]) {
   });
 }
 
-function buildBadges(
-  completedLessonCount: number,
-  totalXp: number,
-  currentStreak: number,
-): ProfileBadge[] {
+function buildBadges(completedLessonCount: number, totalXp: number, currentStreak: number): ProfileBadge[] {
   const { badges: b } = mnProfile;
   return [
     { id: "b1", label: b.b1, icon: "⭐", unlocked: completedLessonCount >= 1 },
@@ -109,10 +104,7 @@ function buildChallenges(args: {
 }): DailyChallenge[] {
   const weeklyLessonTarget = 5;
   const xpTarget = 50;
-  const pctLessons = Math.min(
-    100,
-    (args.lessonsDoneLast7Days / weeklyLessonTarget) * 100,
-  );
+  const pctLessons = Math.min(100, (args.lessonsDoneLast7Days / weeklyLessonTarget) * 100);
   const pctXp = Math.min(100, (args.xpThisWeek / xpTarget) * 100);
   const ch = mnProfile.challenges;
   const xpU = ch.xpUnit;
@@ -161,6 +153,7 @@ function emptyJourney(): JourneyProgress {
   };
 }
 
+/** Narrow rows from Prisma — used by profile page + `buildProfileUserFromData`. */
 export type ProfileCompletedRow = { completedAt: Date; lessonId: string };
 export type ProfileProgressRow = { lessonId: string; status: LessonStatus };
 export type ProfileSectionRow = {
@@ -170,6 +163,7 @@ export type ProfileSectionRow = {
   lessons: { id: string; order: number }[];
 };
 
+/** Single round-trip payload for the profile route (aside + tabs). */
 export type ProfileDashboardData = {
   completedRows: ProfileCompletedRow[];
   allProgressRows: ProfileProgressRow[];
@@ -179,12 +173,14 @@ export type ProfileDashboardData = {
     name: string | null;
     userName: string;
     totalXp: number;
-    avatarUrl: string | null;
   }[];
   weeklyXpSum: number;
   usersAbove: number;
 };
 
+/**
+ * All DB reads for `/profile` in one parallel batch (replaces two sequential batches).
+ */
 export async function fetchProfileDashboardData(
   userId: string,
   totalXp: number,
@@ -231,13 +227,7 @@ export async function fetchProfileDashboardData(
     prisma.user.findMany({
       orderBy: { totalXp: "desc" },
       take: 12,
-      select: {
-        id: true,
-        name: true,
-        userName: true,
-        totalXp: true,
-        avatarUrl: true,
-      },
+      select: { id: true, name: true, userName: true, totalXp: true },
     }),
     prisma.userLessonProgress.aggregate({
       where: { userId, completedAt: { gte: weekAgo } },
@@ -249,10 +239,7 @@ export async function fetchProfileDashboardData(
   ]);
 
   const completedRows: ProfileCompletedRow[] = completedRowsRaw
-    .filter(
-      (r): r is { lessonId: string; completedAt: Date } =>
-        r.completedAt != null,
-    )
+    .filter((r): r is { lessonId: string; completedAt: Date } => r.completedAt != null)
     .map((r) => ({ lessonId: r.lessonId, completedAt: r.completedAt }));
 
   return {
@@ -299,8 +286,7 @@ export function buildProfileUserFromData(
 
   const todayMidnight = toUtcDateOnly(new Date()).getTime();
   const completedLessonToday = completedRows.some(
-    (r) =>
-      r.completedAt && toUtcDateOnly(r.completedAt).getTime() === todayMidnight,
+    (r) => r.completedAt && toUtcDateOnly(r.completedAt).getTime() === todayMidnight,
   );
 
   const activeDaySet = new Set(
@@ -356,13 +342,8 @@ export function buildProfileUserFromData(
     };
   }
 
-  const completedLessonCount = new Set(completedRows.map((r) => r.lessonId))
-    .size;
-  const badges = buildBadges(
-    completedLessonCount,
-    appUser.totalXp,
-    currentStreak,
-  );
+  const completedLessonCount = new Set(completedRows.map((r) => r.lessonId)).size;
+  const badges = buildBadges(completedLessonCount, appUser.totalXp, currentStreak);
   const dailyChallenges = buildChallenges({
     lessonsDoneLast7Days,
     completedLessonToday,
@@ -376,8 +357,6 @@ export function buildProfileUserFromData(
     rank: i + 1,
     name: u.name ?? u.userName,
     xp: u.totalXp,
-    avatarUrl: u.avatarUrl,
-    xpChange: 110,
     isCurrentUser: u.id === userId,
   }));
 
@@ -389,8 +368,6 @@ export function buildProfileUserFromData(
         rank: leaguePosition,
         name: displayName,
         xp: appUser.totalXp,
-        avatarUrl: appUser.avatarUrl,
-        xpChange: 0,
         isCurrentUser: true,
       },
     ];

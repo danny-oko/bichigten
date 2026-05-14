@@ -26,62 +26,6 @@ export default async function ProfilePageBody({
     redirect("/sign-in");
   }
 
-  const dashboard = await fetchProfileDashboardData(
-    appUser.id,
-    appUser.totalXp,
-  );
-  const profile = buildProfileUserFromData(appUser, dashboard);
-  const currentUser: ProfileUser = { ...profile, activeTab };
-
-  const nextLesson =
-    dashboard.inProgressLesson?.lesson ?? dashboard.firstLesson;
-  const nextLessonHref = nextLesson
-    ? `/lesson/${nextLesson.id}`
-    : "/dictionary";
-  const nextLessonTitle = nextLesson?.title ?? mnProfile.exploreDictionary;
-
-  // Энд (entry: any) гэж нэмсэн нь улаан зураасыг арилгаж, өгөгдлийг чөлөөтэй авах боломж олгоно
-  const nearbyPlayers = currentUser.league.entries
-    .slice(0, 5)
-    .map((entry: any) => ({
-      id: `${entry.rank}-${entry.name}`,
-      rank: entry.rank,
-      name: entry.name,
-      xp: entry.xp,
-      xpChange: entry.xpChange || 0,
-      avatarUrl: entry.avatarUrl || null,
-      isMe: Boolean(entry.isCurrentUser),
-    }));
-
-  const profileAside = (
-    <div className="flex flex-col gap-y-4">
-      <LessonProgressCard
-        completedLessons={currentUser.completedLessonsCount}
-        totalLessons={dashboard.totalLessonsCount}
-        nextLessonHref={nextLessonHref}
-        nextLessonTitle={nextLessonTitle}
-      />
-      <WebNearbyPlayers players={nearbyPlayers} />
-    </div>
-  );
-
-  return (
-    <MainLayout aside={profileAside}>
-      {/* w-full нэмж, агуулгыг баруун талын багана руу шахахаас сэргийлэв */}
-      <div className="flex flex-col gap-y-6 w-full max-w-4xl">
-        <ProfileHero
-          name={currentUser.name}
-          username={currentUser.username}
-          memberSince={currentUser.memberSince}
-          avatarUrl={currentUser.avatarUrl}
-          avatarInitial={currentUser.avatarInitial}
-          rankTitle={currentUser.rankTitle}
-          language={currentUser.language}
-        />
-        <ProfileSummaryStats user={currentUser} />
-        <ProfileTabsSection initialTab={activeTab} currentUser={currentUser} />
-      </div>
-    </MainLayout>
   const displayName = appUser.name ?? appUser.userName;
 
   const profileAside = (
