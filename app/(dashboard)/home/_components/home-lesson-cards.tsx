@@ -295,19 +295,19 @@ export const LessonCards = ({
                 if (!isLocked) setSelectedLesson(l);
               }}
               style={{
-                width: isActive ? 80 : 72,
-                height: isActive ? 60 : 52,
+                width: isActive ? 80 : 80,
+                height: isActive ? 60 : 60,
               }}
               className={cn(
-                "relative flex items-center justify-center rounded-full transition-all duration-300",
+                "relative flex items-center justify-center rounded-full border-2 transition-all duration-300",
                 isActive && !isLocked
                   ? "hover:-translate-y-1 active:translate-y-0 active:brightness-90 scale-105"
                   : "scale-100",
                 isLocked
-                  ? "cursor-not-allowed border-2 border-dashed border-[#BFC9C1] bg-[#E8E5DC] dark:border-[#252f35] dark:bg-[#1a2124]"
+                  ? "cursor-not-allowed border-2 border-[#BFC9C1] bg-[#E8E5DC] shadow-[0_5px_0_#b0b8b2] dark:border-[#3f4a52] dark:bg-[#1a2124] dark:shadow-[0_5px_0_#0d1215]"
                   : isDone
-                    ? "cursor-pointer border-none bg-[#2C6601] shadow-[0_5px_0_#000000] dark:bg-[#132a24] dark:shadow-[0_5px_0_#09120f]"
-                    : "cursor-pointer border-none dark:bg-[#58cc02] dark:shadow-[0_5px_0_rgba(0,118,255,0.39)] bg-[#ffad33] shadow-[0_5px_0_#cc8a29]",
+                    ? "cursor-pointer border-solid border-[#1a4d0f] bg-[#2C6601] shadow-[0_5px_0_#0f3d00] dark:border-[#1e5240] dark:bg-[#1a3d2e] dark:shadow-[0_5px_0_#09120f]"
+                    : "cursor-pointer border-solid border-[#cc8a29] bg-[#ffad33] shadow-[0_5px_0_#cc8a29] dark:border-[#3d9e02] dark:bg-[#58cc02] dark:shadow-[0_5px_0_rgba(0,118,255,0.39)]",
               )}
             >
               <Icon
@@ -317,7 +317,7 @@ export const LessonCards = ({
                   isLocked
                     ? "dark:text-[#BFC9C1] text-[#52606b]"
                     : "text-white dark:text-[#131f24]",
-                  isDone ? "fill-transparent" : "fill-current",
+                  isDone ? "fill-transparent" : "",
                 )}
               />
             </button>
@@ -331,10 +331,10 @@ export const LessonCards = ({
             {!isActive && (
               <p
                 className={cn(
-                  "mt-2 mx-auto max-w-[min(85vw,11rem)] rounded-2xl dark:bg-[#ECE8D8] bg-[#252f35] px-3 py-1.5 text-center text-[13px] font-bold leading-snug wrap-break-word sm:max-w-none sm:whitespace-nowrap",
+                  "mt-2 mx-auto max-w-[min(85vw,11rem)] rounded-2xl border-2 px-3 py-1.5 text-center text-[13px] font-bold leading-snug wrap-break-word sm:max-w-none sm:whitespace-nowrap",
                   isLocked
-                    ? "text-[#BFC9C1] dark:text-[#52606b]"
-                    : "text-[#0F5238] dark:text-[#4ade80]",
+                    ? "border-2 border-[#BFC9C1] bg-[#E8E5DC] text-[#64748b] dark:border-[#3f4a52] dark:bg-[#1a2124] dark:text-[#94a3b8]"
+                    : "border-solid border-[#1a4d0f]/50 bg-[#e2f4e6] text-[#0F5238] dark:border-[#236341] dark:bg-[#132a24] dark:text-[#86efac]",
                 )}
               >
                 {l.title}

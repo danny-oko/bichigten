@@ -7,6 +7,7 @@ import { cacheTagUser } from "@/lib/server/cache-tags";
 import { invalidateAfterProgressWrite } from "@/lib/server/invalidate-data-cache";
 import { unauthorizedApiResponse } from "@/lib/server/dev-postman-bypass";
 import { getClerkUserIdFromRequest } from "@/lib/server/get-current-app-user";
+import { MAX_USER_HEARTS } from "@/lib/server/hearts-refill";
 
 export const GET = async (req: NextRequest) => {
   const lessonId = req.nextUrl.searchParams.get("lessonId");
@@ -56,7 +57,10 @@ export const POST = async (req: NextRequest) => {
     return NextResponse.json({ message: "Missing required fields" }, { status: 400 });
   }
 
-  const user = await prisma.user.findUnique({ where: { id: userId } });
+  const user = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { heartsRemaining: true },
+  });
   if (!user) {
     return NextResponse.json({ message: "User not found" }, { status: 404 });
   }
@@ -93,10 +97,29 @@ export const POST = async (req: NextRequest) => {
 
   const xpDelta = Math.max(0, xpEarned - (existing?.xpEarned ?? 0));
 
+  const heartData: {
+    heartsRemaining?: number;
+    heartsDepletedAt?: Date | null;
+  } = {};
+  if (heartsRemaining !== null) {
+    const raw = Number(heartsRemaining);
+    if (Number.isFinite(raw)) {
+      const clamped = Math.max(0, Math.min(MAX_USER_HEARTS, raw));
+      heartData.heartsRemaining = clamped;
+      if (clamped === 0) {
+        if (user.heartsRemaining > 0) {
+          heartData.heartsDepletedAt = new Date();
+        }
+      } else {
+        heartData.heartsDepletedAt = null;
+      }
+    }
+  }
+
   await prisma.user.update({
     where: { id: userId },
     data: {
-      ...(heartsRemaining !== null && { heartsRemaining }),
+      ...heartData,
       ...(xpDelta > 0 && { totalXp: { increment: xpDelta } }),
     },
   });

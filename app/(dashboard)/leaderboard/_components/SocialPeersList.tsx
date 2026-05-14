@@ -19,7 +19,9 @@ export default function WebNearbyPlayers({ players }: WebNearbyPlayersProps) {
         <p className="min-w-0 flex-1 text-xs font-semibold leading-snug tracking-wide text-[#7a5930] dark:text-[#94a3b8] sm:text-sm">
           Ойролцоо түвшний сурагчид
         </p>
-        <p className="shrink-0 text-xs text-[#7a5930] dark:text-[#94a3b8]">Ranks 1-5</p>
+        <p className="shrink-0 text-xs text-[#7a5930] dark:text-[#94a3b8]">
+          Ranks 1-5
+        </p>
       </div>
 
       <p className="mb-3 text-sm font-semibold text-[#3b2f2f] dark:text-[#d8d2c4]">
@@ -31,9 +33,7 @@ export default function WebNearbyPlayers({ players }: WebNearbyPlayersProps) {
           <div
             key={player.id}
             className={`flex items-center gap-3 rounded-xl px-3 py-2 ${
-              player.isMe
-                ? "bg-[#E8920A]/10 dark:bg-[#84d8ff]/10"
-                : ""
+              player.isMe ? "bg-[#E8920A]/10 dark:bg-[#84d8ff]/10" : ""
             }`}
           >
             <span className="w-4 shrink-0 text-sm font-semibold text-[#7a5930] dark:text-[#94a3b8]">
@@ -75,14 +75,6 @@ export default function WebNearbyPlayers({ players }: WebNearbyPlayersProps) {
               <p className="text-sm font-bold text-[#E8920A] dark:text-[#84d8ff]">
                 {player.xp.toLocaleString()}
               </p>
-              {player.xpChange !== undefined && (
-                <p
-                  className={`text-[10px] font-medium ${player.xpChange >= 0 ? "text-[#2E8B6F] dark:text-[#4ade80]" : "text-[#D63F3F] dark:text-[#f87171]"}`}
-                >
-                  {player.xpChange >= 0 ? "+" : ""}
-                  {player.xpChange} XP
-                </p>
-              )}
             </div>
           </div>
         ))}

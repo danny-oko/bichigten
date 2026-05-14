@@ -40,7 +40,7 @@ export const ReadingResultDialog = ({
   if (!result) return null;
 
   const passThreshold = requiredAccuracy ?? 0;
-  const isPassed = result.isPassed ?? result.accuracy >= passThreshold;
+  const isPassed = result.accuracy >= passThreshold;
   const xpEarned = isPassed ? xpReward : 0;
   const title = isPassed ? "Баяр хүргэе!" : "Дахин оролдоорой";
   const description = isPassed
@@ -76,7 +76,6 @@ export const ReadingResultDialog = ({
 
         <div className="grid gap-3 sm:grid-cols-2">
           <StatCard label="Зөв гүйцэтгэл" value={`${result.accuracy}%`} />
-          <StatCard label="Гүйцэтгэл" value={`${result.coverage}%`} />
           <StatCard label="Алдаа" value={`${result.mistakes}`} />
           <StatCard label="Уншсан үг" value={`${result.wordsRead}`} />
           <StatCard label="Хурд (үг/минут)" value={`${result.wpm}`} />

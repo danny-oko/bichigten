@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 import prisma from "@/lib/prisma";
 import { CACHE_REVALIDATE_SECONDS } from "@/lib/server/cache";
+import { ensureHeartsRefilledIfDue } from "@/lib/server/hearts-refill";
 import { CACHE_TAG_LEADERBOARD, cacheTagUser } from "@/lib/server/cache-tags";
 import { invalidateAfterUserRowMutation } from "@/lib/server/invalidate-data-cache";
 import { getRankNameFromXp } from "@/lib/utils/getRankNameFromXp";
@@ -11,6 +12,7 @@ type Params = { params: Promise<{ id: string }> };
 
 export const GET = async (_req: NextRequest, { params }: Params) => {
   const { id } = await params;
+  await ensureHeartsRefilledIfDue(id);
   const user = await unstable_cache(
     async () =>
       prisma.user.findUnique({

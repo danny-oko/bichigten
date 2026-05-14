@@ -1,12 +1,11 @@
 import type {
-  Prisma,
   ReadingDifficulty as PrismaReadingDifficulty,
 } from "@prisma/client";
-import { unstable_cache } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
 import prisma from "@/lib/prisma";
-import { CACHE_REVALIDATE_SECONDS } from "@/lib/server/cache";
+import { getCurrentAppUserFromRequest } from "@/lib/server/get-current-app-user";
+import { getReadingCardsForUser } from "@/lib/server/reading-progress";
 
 const READING_DIFFICULTIES = ["EASY", "MEDIUM", "HARD"] as const;
 
@@ -122,6 +121,7 @@ export const GET = async (req: NextRequest) => {
   try {
     const difficulty = req.nextUrl.searchParams.get("difficulty");
     const search = req.nextUrl.searchParams.get("search")?.trim();
+    const user = await getCurrentAppUserFromRequest(req);
 
     if (difficulty && !isReadingDifficulty(difficulty)) {
       return NextResponse.json(
@@ -130,37 +130,15 @@ export const GET = async (req: NextRequest) => {
       );
     }
 
-    const diffKey = difficulty ?? "";
-    const searchKey = search ?? "";
+    const targets = await getReadingCardsForUser({
+      difficulty: difficulty ? (difficulty as PrismaReadingDifficulty) : undefined,
+      search,
+      userId: user?.id ?? null,
+    });
 
-    const targets = await unstable_cache(
-      async () => {
-        const where: Prisma.SpeechTargetWhereInput = {};
-        if (difficulty) {
-          where.difficulty = difficulty as PrismaReadingDifficulty;
-        }
-        if (search) {
-          where.OR = [
-            { title: { contains: search, mode: "insensitive" } },
-            { description: { contains: search, mode: "insensitive" } },
-            { cyrillicText: { contains: search, mode: "insensitive" } },
-          ];
-        }
-        return prisma.speechTarget.findMany({
-          where,
-          include: {
-            _count: {
-              select: { attempts: true },
-            },
-          },
-          orderBy: { createdAt: "desc" },
-        });
-      },
-      ["api-reading-get", diffKey, searchKey],
-      { revalidate: CACHE_REVALIDATE_SECONDS },
-    )();
-
-    return NextResponse.json(targets);
+    return NextResponse.json(targets, {
+      headers: { "Cache-Control": "no-store" },
+    });
   } catch (error) {
     console.error("Failed to load reading targets:", error);
 

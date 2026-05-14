@@ -95,10 +95,6 @@ export const useSpeechRecognition = ({
       }, 130_000);
 
       try {
-        if (blob.size === 0) {
-          throw new Error("Recording is empty. Please try recording again.");
-        }
-
         const audioType = blob.type || "audio/webm";
         const extension = getAudioExtension(audioType);
         const formData = new FormData();
@@ -109,52 +105,50 @@ export const useSpeechRecognition = ({
           }),
         );
 
-        const res = await fetch("/api/ai-chimege", {
+        const res = await fetch("/api/chimege-ai", {
           method: "POST",
           body: formData,
           signal: controller.signal,
         });
 
         const data = (await res.json()) as TranscribeResponse;
+
         if (!res.ok) {
           throw new Error(
             data.error || `Transcription failed with status ${res.status}`,
           );
         }
 
-        if (typeof data.data !== "string") {
+        const responseText = data.transcribedText ?? data.data;
+        if (typeof responseText !== "string") {
           throw new Error("Transcription response did not include text.");
         }
 
-        if (!isMountedRef.current) return;
-
-        setTranscript(data.data);
+        const transcribedText = responseText.trim();
 
         const localResult = calculateReadingScore(
           targetTextCyrillic,
-          data.data,
+          transcribedText,
           durationSec,
         );
 
-        setResult(localResult);
+        if (!isMountedRef.current) return;
 
-        if (targetId) {
-          const attemptRes = await fetch("/api/reading-attempt", {
+        setTranscript(transcribedText);
+        setResult(localResult);
+        setStatus("done");
+
+        if (targetId && transcribedText.trim().length > 0) {
+          await fetch("/api/reading-attempts", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               targetId,
-              transcribedText: data.data,
+              transcribedText,
               durationSec,
             }),
           });
-
-          if (!attemptRes.ok) {
-            throw new Error(`Attempt save failed: ${attemptRes.status}`);
-          }
         }
-
-        setStatus("done");
       } catch (err) {
         if (!isMountedRef.current) return;
 
@@ -194,16 +188,7 @@ export const useSpeechRecognition = ({
         const audioType =
           recorder.mimeType || audioChunksRef.current[0]?.type || "audio/webm";
         const blob = new Blob(audioChunksRef.current, { type: audioType });
-
-        if (process.env.NODE_ENV === "development") {
-          console.log("Recording blob:", {
-            size: blob.size,
-            type: blob.type,
-            durationSec: Math.max(elapsed, 1),
-            chunks: audioChunksRef.current.length,
-          });
-        }
-
+        const elapsedSec = Math.max(elapsed, 1);
         if (recordingUrlRef.current) {
           URL.revokeObjectURL(recordingUrlRef.current);
         }
@@ -212,7 +197,7 @@ export const useSpeechRecognition = ({
         if (isMountedRef.current) {
           setRecordingUrl(url);
         }
-        void transcribeAndScore(blob, Math.max(elapsed, 1));
+        void transcribeAndScore(blob, elapsedSec);
       } finally {
         isStoppingRef.current = false;
         stopMedia();

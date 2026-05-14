@@ -5,9 +5,15 @@ import prisma from "@/lib/prisma";
 import { CACHE_REVALIDATE_SECONDS } from "@/lib/server/cache";
 import { CACHE_TAG_SPEECH, cacheTagUser } from "@/lib/server/cache-tags";
 import { unauthorizedApiResponse } from "@/lib/server/dev-postman-bypass";
-import { getClerkUserIdFromRequest } from "@/lib/server/get-current-app-user";
+import {
+  getClerkUserIdFromRequest,
+  getCurrentAppUserFromRequest,
+} from "@/lib/server/get-current-app-user";
 import { invalidateAfterProgressWrite } from "@/lib/server/invalidate-data-cache";
-import { submitSpeechAttempt } from "@/lib/server/reading-progress";
+import {
+  ReadingAttemptError,
+  submitSpeechAttempt,
+} from "@/lib/server/reading-progress";
 
 export const GET = async (req: NextRequest) => {
   const userId = await getClerkUserIdFromRequest(req);
@@ -30,26 +36,43 @@ export const GET = async (req: NextRequest) => {
 };
 
 export const POST = async (req: NextRequest) => {
-  const userId = await getClerkUserIdFromRequest(req);
-  if (!userId) return unauthorizedApiResponse(req);
+  try {
+    const user = await getCurrentAppUserFromRequest(req);
+    if (!user) return unauthorizedApiResponse(req);
 
-  const { durationSec, targetId, transcribedText } = await req.json();
-  if (
-    typeof targetId !== "string" ||
-    typeof transcribedText !== "string" ||
-    (durationSec !== undefined && typeof durationSec !== "number")
-  ) {
+    const { durationSec, targetId, transcribedText } = await req.json();
+    if (
+      typeof targetId !== "string" ||
+      typeof transcribedText !== "string" ||
+      (durationSec !== undefined && typeof durationSec !== "number")
+    ) {
+      return NextResponse.json(
+        { message: "Missing required fields" },
+        { status: 400 },
+      );
+    }
+
+    const attempt = await submitSpeechAttempt({
+      userId: user.id,
+      targetId: targetId.trim(),
+      transcribedText: transcribedText.trim(),
+      durationSec: durationSec ?? 60,
+    });
+    invalidateAfterProgressWrite(user.id);
+    return NextResponse.json(attempt, { status: 201 });
+  } catch (error) {
+    console.error("Failed to save reading attempt:", error);
+
+    if (error instanceof ReadingAttemptError) {
+      return NextResponse.json(
+        { message: error.message },
+        { status: error.status },
+      );
+    }
+
     return NextResponse.json(
-      { message: "Missing required fields" },
-      { status: 400 },
+      { message: "Failed to save reading attempt" },
+      { status: 500 },
     );
   }
-  const attempt = await submitSpeechAttempt({
-    userId,
-    targetId,
-    transcribedText,
-    durationSec: durationSec ?? 60,
-  });
-  invalidateAfterProgressWrite(userId);
-  return NextResponse.json(attempt, { status: 201 });
 };

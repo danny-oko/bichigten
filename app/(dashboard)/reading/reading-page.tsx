@@ -25,7 +25,10 @@ export const ReadingPage = () => {
         const url = searchParams
           ? `/api/reading?${searchParams}`
           : "/api/reading";
-        const res = await fetch(url, { signal: controller.signal });
+        const res = await fetch(url, {
+          cache: "no-store",
+          signal: controller.signal,
+        });
 
         if (!res.ok) {
           throw new Error(`Failed to load readings: ${res.status}`);
