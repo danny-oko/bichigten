@@ -19,9 +19,9 @@ export const mnProfile = {
   summaryLeague: "Онооны самбар",
   summaryHearts: "Зүрх",
   summaryStreak: "Ирц",
-  summaryBadges: "Шагналууд",
+  summaryBadges: "Амжилтууд",
 
-  achievementsTitle: "Шагналууд",
+  achievementsTitle: "Амжилтууд",
   achievementsEarned: (unlocked: number, total: number) =>
     `${unlocked}/${total}`,
 
