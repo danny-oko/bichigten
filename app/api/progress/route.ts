@@ -42,6 +42,7 @@ export const GET = async (req: NextRequest) => {
     )();
     return NextResponse.json(progress);
   } catch (err) {
+    console.log("error message: ", err);
     return NextResponse.json({ error_message: err });
   }
   
