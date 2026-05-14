@@ -49,12 +49,12 @@ const ProgressRow = ({
 
 const ReadingCardComponent = ({ reading }: ReadingCardProps) => {
   const hasAttempt = Boolean(reading.latestAttempt);
-  const latestAccuracy = reading.latestAttempt?.accuracy;
-  const bestAccuracy = reading.bestAttempt?.accuracy;
+  const latestScore = reading.latestAttempt?.finalScore;
+  const bestScore = reading.bestAttempt?.finalScore;
   const statusLabel = hasAttempt
     ? reading.completed
-      ? "Давсан"
-      : "Дахин оролдох"
+      ? "Амжилттай"
+      : "Үргэлжилж байна"
     : "Эхлээгүй";
   const xpLabel = hasAttempt ? `${reading.xpEarned ?? 0} XP` : "0 XP";
 
@@ -94,8 +94,8 @@ const ReadingCardComponent = ({ reading }: ReadingCardProps) => {
         </div>
 
         <div className="mt-3 space-y-3">
-          <ProgressRow label="Өмнөх дүн" value={latestAccuracy} />
-          <ProgressRow label="Дээд амжилт" value={bestAccuracy} />
+          <ProgressRow label="Өмнөх дүн" value={latestScore} />
+          <ProgressRow label="Дээд амжилт" value={bestScore} />
         </div>
 
         <div className="mt-3 flex flex-wrap gap-2">

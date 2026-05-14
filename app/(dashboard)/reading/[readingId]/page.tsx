@@ -189,8 +189,8 @@ const ReadingTestPage = () => {
   }
 
   return (
-    <main className="min-h-screen w-full overflow-x-hidden bg-[#fffaf2]/70 px-4 pt-5 pb-[calc(7rem+env(safe-area-inset-bottom))] text-stone-900 md:pb-8 lg:px-10">
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-5">
+    <main className="min-h-screen w-full overflow-x-hidden bg-[#fffaf2]/70 px-4 pt-5 pb-[calc(6rem+env(safe-area-inset-bottom))] text-stone-900 md:pb-8 lg:px-10">
+      <div className="mx-auto flex w-full max-w-7xl flex-col gap-3 md:gap-5">
         <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <Link
@@ -199,12 +199,12 @@ const ReadingTestPage = () => {
             >
               Буцах
             </Link>
-            <h1 className="mt-2 text-2xl font-semibold tracking-tight text-stone-950 sm:text-3xl lg:text-4xl">
+            <h1 className="mt-2 hidden text-2xl font-semibold tracking-tight text-stone-950 sm:block sm:text-3xl lg:text-4xl">
               {reading.title}
             </h1>
           </div>
 
-          <span className="w-fit rounded-full border-3 border-[#E8920A] bg-transparent px-4 py-2 text-sm font-semibold text-amber-900 dark:border-[#84d8ff] dark:text-[#e8e4dc]">
+          <span className="hidden w-fit rounded-full border-3 border-[#E8920A] bg-transparent px-4 py-2 text-sm font-semibold text-amber-900 sm:inline-flex dark:border-[#84d8ff] dark:text-[#e8e4dc]">
             {getStatusLabel(status)}
           </span>
         </header>
@@ -216,12 +216,18 @@ const ReadingTestPage = () => {
         >
           <div className="order-2 flex min-w-0 flex-col gap-5 lg:order-1">
             <ReadingTextCard
+              canStart={canStart}
               text={reading.traditionalText}
+              isRecording={isRecording}
               isStarted={isReadingTextStarted}
               durationSec={DEFAULT_READING_DURATION_SEC}
               requiredAccuracy={reading.requiredAccuracy}
+              secondsLeft={secondsLeft}
+              status={status}
               xpReward={reading.xpReward}
               wordsCount={reading.wordsCount}
+              onStart={handleStart}
+              onStop={stopRecording}
             />
 
             <ReadingResultPanel
@@ -232,7 +238,7 @@ const ReadingTestPage = () => {
           </div>
 
           <PracticeControlPanel
-            className="order-1 lg:order-2"
+            className="hidden lg:order-2 lg:block"
             canStart={canStart}
             durationSec={DEFAULT_READING_DURATION_SEC}
             elapsedSeconds={elapsedSeconds}
