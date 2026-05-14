@@ -1,8 +1,10 @@
 import { cache } from "react";
+import { unstable_cache } from "next/cache";
 
 import prisma from "@/lib/prisma";
 
-/** Rows suitable for mapping to the “nearby players” sidebar list. */
+import { CACHE_REVALIDATE_SECONDS } from "@/lib/server/cache";
+
 export type NearbyPlayerSourceRow = {
   id: string;
   name: string | null;
@@ -21,7 +23,6 @@ export type NearbyPlayer = {
   isMe: boolean;
 };
 
-/** Shared mapping for home / profile sidebar and leaderboard aside (top slice). */
 export function mapUsersToNearbyPlayers(
   viewerId: string | null | undefined,
   rows: NearbyPlayerSourceRow[],
@@ -38,8 +39,8 @@ export function mapUsersToNearbyPlayers(
   }));
 }
 
-export const loadHomeNearbyPlayers = cache(async (userId: string) => {
-  const topPlayers = await prisma.user.findMany({
+async function fetchTopPlayersForSidebar() {
+  return prisma.user.findMany({
     orderBy: { totalXp: "desc" },
     take: 5,
     select: {
@@ -50,6 +51,15 @@ export const loadHomeNearbyPlayers = cache(async (userId: string) => {
       avatarUrl: true,
     },
   });
+}
 
+const getTopPlayersForSidebarCached = unstable_cache(
+  fetchTopPlayersForSidebar,
+  ["loadHomeNearbyPlayers-top5"],
+  { revalidate: CACHE_REVALIDATE_SECONDS },
+);
+
+export const loadHomeNearbyPlayers = cache(async (userId: string) => {
+  const topPlayers = await getTopPlayersForSidebarCached();
   return mapUsersToNearbyPlayers(userId, topPlayers);
 });

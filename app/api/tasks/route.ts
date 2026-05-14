@@ -1,17 +1,23 @@
-import prisma from "@/lib/prisma";
+import { unstable_cache } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
-// GET /api/tasks
+import prisma from "@/lib/prisma";
+import { CACHE_REVALIDATE_SECONDS } from "@/lib/server/cache";
+
 export const GET = async (req: NextRequest) => {
   const lessonId = req.nextUrl.searchParams.get("lessonId");
-  const tasks = await prisma.task.findMany({
-    where: lessonId ? { lessonId } : undefined,
-    orderBy: { order: "asc" },
-  });
+  const tasks = await unstable_cache(
+    async () =>
+      prisma.task.findMany({
+        where: lessonId ? { lessonId } : undefined,
+        orderBy: { order: "asc" },
+      }),
+    ["api-tasks-get", lessonId ?? ""],
+    { revalidate: CACHE_REVALIDATE_SECONDS },
+  )();
   return NextResponse.json(tasks);
 };
 
-// POST /api/tasks
 export const POST = async (req: NextRequest) => {
   try {
     const body = await req.json();

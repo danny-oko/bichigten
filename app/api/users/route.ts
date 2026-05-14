@@ -1,9 +1,10 @@
-import prisma from "@/lib/prisma";
-import { getRankNameFromXp } from "@/lib/utils/getRankNameFromXp";
+import { unstable_cache } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
-// POST /api/users
-// Body: name OR displayName (or both), email, userName, avatarUrl optional, totalXp optional
+import prisma from "@/lib/prisma";
+import { CACHE_REVALIDATE_SECONDS } from "@/lib/server/cache";
+import { getRankNameFromXp } from "@/lib/utils/getRankNameFromXp";
+
 export const POST = async (req: NextRequest) => {
   const body = await req.json();
   const { name, userName, email, avatarUrl, totalXp: totalXpRaw } = body;
@@ -38,20 +39,24 @@ export const POST = async (req: NextRequest) => {
   return NextResponse.json(user, { status: 201 });
 };
 
-// GET /api/users
 export const GET = async () => {
-  const users = await prisma.user.findMany({
-    orderBy: {
-      totalXp: "desc",
-    },
-    select: {
-      id: true,
-      name: true,
-      userName: true,
-      totalXp: true,
-      avatarUrl: true,
-    },
-  });
+  const users = await unstable_cache(
+    async () =>
+      prisma.user.findMany({
+        orderBy: {
+          totalXp: "desc",
+        },
+        select: {
+          id: true,
+          name: true,
+          userName: true,
+          totalXp: true,
+          avatarUrl: true,
+        },
+      }),
+    ["api-users-get"],
+    { revalidate: CACHE_REVALIDATE_SECONDS },
+  )();
 
   const data = users.map((user) => {
     const title = getRankNameFromXp(user.totalXp);

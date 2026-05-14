@@ -1,7 +1,9 @@
 import { Prisma } from "@prisma/client";
+import { unstable_cache } from "next/cache";
 
 import { calculateReadingResult } from "@/app/(dashboard)/reading/lib/calculateReadingScore";
 import prisma from "@/lib/prisma";
+import { CACHE_REVALIDATE_SECONDS } from "@/lib/server/cache";
 
 const RETRYABLE_TRANSACTION_CODES = new Set(["P2002", "P2034"]);
 
@@ -193,12 +195,12 @@ export const submitSpeechAttempt = async ({
   throw new Error("Failed to submit speech attempt");
 };
 
-export const getReadingCardsForUser = async ({
+async function getReadingCardsForUserUncached({
   difficulty,
   lessonId,
   search,
   userId,
-}: GetReadingCardsForUserInput) => {
+}: GetReadingCardsForUserInput) {
   const where: Prisma.SpeechTargetWhereInput = {};
 
   if (difficulty) where.difficulty = difficulty;
@@ -293,4 +295,18 @@ export const getReadingCardsForUser = async ({
       xpEarned: xpEarnedByTargetId.get(target.id) ?? 0,
     };
   });
-};
+}
+
+export function getReadingCardsForUser(input: GetReadingCardsForUserInput) {
+  return unstable_cache(
+    async () => getReadingCardsForUserUncached(input),
+    [
+      "getReadingCardsForUser",
+      input.userId ?? "",
+      input.difficulty ?? "",
+      input.lessonId ?? "",
+      input.search ?? "",
+    ],
+    { revalidate: CACHE_REVALIDATE_SECONDS },
+  )();
+}

@@ -1,16 +1,22 @@
-import prisma from "@/lib/prisma";
+import { unstable_cache } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
-// GET /api/sections
+import prisma from "@/lib/prisma";
+import { CACHE_REVALIDATE_SECONDS } from "@/lib/server/cache";
+
 export const GET = async () => {
-  const sections = await prisma.section.findMany({
-    include: { lessons: true },
-    orderBy: { order: "asc" },
-  });
+  const sections = await unstable_cache(
+    async () =>
+      prisma.section.findMany({
+        include: { lessons: true },
+        orderBy: { order: "asc" },
+      }),
+    ["api-sections-get"],
+    { revalidate: CACHE_REVALIDATE_SECONDS },
+  )();
   return NextResponse.json(sections);
 };
 
-// POST /api/sections
 export const POST = async (req: NextRequest) => {
   const { title, order } = await req.json();
   if (!title || order === undefined) {

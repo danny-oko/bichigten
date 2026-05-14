@@ -1,6 +1,8 @@
 import { LessonPageClient } from "../_components/lesson-page-client";
 import { auth, currentUser } from "@clerk/nextjs/server";
+import { unstable_cache } from "next/cache";
 import { redirect } from "next/navigation";
+import { CACHE_REVALIDATE_SECONDS } from "@/lib/server/cache";
 import { ensureUser } from "@/lib/server/ensure-user";
 import prisma from "@/lib/prisma";
 
@@ -24,10 +26,15 @@ export default async function LessonPage({ params }: Props) {
     avatarUrl: clerkUser?.imageUrl,
   });
 
-  const dbUser = await prisma.user.findUnique({
-    where: { id: userId },
-    select: { createdAt: true },
-  });
+  const dbUser = await unstable_cache(
+    async () =>
+      prisma.user.findUnique({
+        where: { id: userId },
+        select: { createdAt: true },
+      }),
+    ["lesson-page-user-createdAt", userId],
+    { revalidate: CACHE_REVALIDATE_SECONDS },
+  )();
   const twoDaysMs = 2 * 24 * 60 * 60 * 1000;
   const nowMs = new Date().getTime();
   const isFirstWeekUser = dbUser

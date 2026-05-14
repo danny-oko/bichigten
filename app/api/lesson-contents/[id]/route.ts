@@ -1,12 +1,19 @@
-import prisma from "@/lib/prisma";
+import { unstable_cache } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
+
+import prisma from "@/lib/prisma";
+import { CACHE_REVALIDATE_SECONDS } from "@/lib/server/cache";
 
 export const GET = async (
   _: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) => {
   const { id } = await params;
-  const content = await prisma.lessonContent.findUnique({ where: { id } });
+  const content = await unstable_cache(
+    async () => prisma.lessonContent.findUnique({ where: { id } }),
+    ["api-lesson-contents-id-get", id],
+    { revalidate: CACHE_REVALIDATE_SECONDS },
+  )();
   if (!content)
     return NextResponse.json({ message: "Not found" }, { status: 404 });
   return NextResponse.json(content);

@@ -1,9 +1,11 @@
-import prisma from "@/lib/prisma";
-import { unauthorizedApiResponse } from "@/lib/server/dev-postman-bypass";
-import { getClerkUserIdFromRequest } from "@/lib/server/get-current-app-user";
+import { unstable_cache } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
-// GET /api/progress?lessonId=… (user from session or dev impersonation)
+import prisma from "@/lib/prisma";
+import { CACHE_REVALIDATE_SECONDS } from "@/lib/server/cache";
+import { unauthorizedApiResponse } from "@/lib/server/dev-postman-bypass";
+import { getClerkUserIdFromRequest } from "@/lib/server/get-current-app-user";
+
 export const GET = async (req: NextRequest) => {
   const lessonId = req.nextUrl.searchParams.get("lessonId");
   const userId = await getClerkUserIdFromRequest(req);
@@ -11,16 +13,26 @@ export const GET = async (req: NextRequest) => {
   if (!userId) return unauthorizedApiResponse(req);
 
   if (lessonId) {
-    const progress = await prisma.userLessonProgress.findUnique({
-      where: { userId_lessonId: { userId, lessonId } },
-    });
+    const progress = await unstable_cache(
+      async () =>
+        prisma.userLessonProgress.findUnique({
+          where: { userId_lessonId: { userId, lessonId } },
+        }),
+      ["api-progress-get", userId, lessonId],
+      { revalidate: CACHE_REVALIDATE_SECONDS },
+    )();
     return NextResponse.json(progress);
   }
 
-  const progress = await prisma.userLessonProgress.findMany({
-    where: { userId },
-    include: { lesson: true },
-  });
+  const progress = await unstable_cache(
+    async () =>
+      prisma.userLessonProgress.findMany({
+        where: { userId },
+        include: { lesson: true },
+      }),
+    ["api-progress-get-all", userId],
+    { revalidate: CACHE_REVALIDATE_SECONDS },
+  )();
   return NextResponse.json(progress);
 };
 

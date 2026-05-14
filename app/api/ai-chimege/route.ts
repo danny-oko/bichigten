@@ -1,5 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 
+import { CACHE_REVALIDATE_SECONDS } from "@/lib/server/cache";
+
 export const POST = async (req: NextRequest) => {
   const data = await req.formData();
   const file = data.get("audio") as File;
@@ -13,6 +15,7 @@ export const POST = async (req: NextRequest) => {
       Token: "86d6ceb9ca4d406247fbb4f14d5c2b443e27d8686ab8a776583ab83867e928ad",
     },
     body: audioBuffer,
+    next: { revalidate: CACHE_REVALIDATE_SECONDS },
   });
   const audioToText = await response.text();
   console.log(audioToText);

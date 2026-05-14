@@ -1,13 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import {
-  DifficultyTabs,
-  ReadingGrid,
-  ReadingGridSkeleton,
-  ReadingHeader,
-  SearchBar,
-} from "./components";
+import { DifficultyTabs } from "./components/DifficultyTabs";
+import { ReadingGrid, ReadingGridSkeleton } from "./components/ReadingGrid";
+import { ReadingHeader } from "./components/ReadingHeader";
+import { SearchBar } from "./components/SearchBar";
 import { useReadingFilter } from "./hooks/useReadingFilter";
 import type { ReadingCardData } from "./types/reading";
 

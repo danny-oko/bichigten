@@ -1,23 +1,30 @@
-import prisma from "@/lib/prisma";
-import { getRankNameFromXp } from "@/lib/utils/getRankNameFromXp";
+import { unstable_cache } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
+
+import prisma from "@/lib/prisma";
+import { CACHE_REVALIDATE_SECONDS } from "@/lib/server/cache";
+import { getRankNameFromXp } from "@/lib/utils/getRankNameFromXp";
 
 type Params = { params: Promise<{ id: string }> };
 
-// GET /api/users/:id
 export const GET = async (_req: NextRequest, { params }: Params) => {
   const { id } = await params;
-  const user = await prisma.user.findUnique({
-    where: { id },
-    select: {
-      id: true,
-      name: true,
-      userName: true,
-      avatarUrl: true,
-      totalXp: true,
-      heartsRemaining: true,
-    },
-  });
+  const user = await unstable_cache(
+    async () =>
+      prisma.user.findUnique({
+        where: { id },
+        select: {
+          id: true,
+          name: true,
+          userName: true,
+          avatarUrl: true,
+          totalXp: true,
+          heartsRemaining: true,
+        },
+      }),
+    ["api-users-id-get", id],
+    { revalidate: CACHE_REVALIDATE_SECONDS },
+  )();
 
   if (!user)
     return NextResponse.json({ message: "User not found" }, { status: 404 });
@@ -28,7 +35,6 @@ export const GET = async (_req: NextRequest, { params }: Params) => {
   });
 };
 
-// PATCH /api/users/:id
 export const PATCH = async (req: NextRequest, { params }: Params) => {
   const { id } = await params;
   const body = await req.json();
@@ -41,7 +47,6 @@ export const PATCH = async (req: NextRequest, { params }: Params) => {
   return NextResponse.json(user);
 };
 
-// DELETE /api/users/:id
 export const DELETE = async (_req: NextRequest, { params }: Params) => {
   const { id } = await params;
 

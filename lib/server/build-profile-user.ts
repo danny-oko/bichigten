@@ -5,7 +5,10 @@ import type {
   ProfileUser,
 } from "@/app/(dashboard)/profile/common/types";
 import type { LessonStatus, User } from "@prisma/client";
+import { unstable_cache } from "next/cache";
+
 import prisma from "@/lib/prisma";
+import { CACHE_REVALIDATE_SECONDS } from "@/lib/server/cache";
 import { getRankNameFromXp } from "@/lib/utils/getRankNameFromXp";
 
 import { mnProfile } from "@/lib/i18n/mn-profile";
@@ -178,10 +181,7 @@ export type ProfileDashboardData = {
   usersAbove: number;
 };
 
-/**
- * All DB reads for `/profile` in one parallel batch (replaces two sequential batches).
- */
-export async function fetchProfileDashboardData(
+async function fetchProfileDashboardDataUncached(
   userId: string,
   totalXp: number,
 ): Promise<ProfileDashboardData> {
@@ -250,6 +250,17 @@ export async function fetchProfileDashboardData(
     weeklyXpSum: weeklyAgg._sum.xpEarned ?? 0,
     usersAbove,
   };
+}
+
+export async function fetchProfileDashboardData(
+  userId: string,
+  totalXp: number,
+): Promise<ProfileDashboardData> {
+  return unstable_cache(
+    () => fetchProfileDashboardDataUncached(userId, totalXp),
+    ["fetchProfileDashboardData", userId, String(totalXp)],
+    { revalidate: CACHE_REVALIDATE_SECONDS },
+  )();
 }
 
 export function buildProfileUserFromData(

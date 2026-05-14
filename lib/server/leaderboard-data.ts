@@ -2,7 +2,8 @@ import { unstable_cache } from "next/cache";
 
 import prisma from "@/lib/prisma";
 
-/** Top 100 by XP — hot path for `/leaderboard`. Cached briefly to cut repeat DB work. */
+import { CACHE_REVALIDATE_SECONDS } from "@/lib/server/cache";
+
 export function fetchLeaderboardTop100Cached() {
   return unstable_cache(
     async () =>
@@ -17,7 +18,19 @@ export function fetchLeaderboardTop100Cached() {
         },
         take: 100,
       }),
-    ["leaderboard-top-100-v1"],
-    { revalidate: 20 },
+    ["fetchLeaderboardTop100Cached"],
+    { revalidate: CACHE_REVALIDATE_SECONDS },
+  )();
+}
+
+export function fetchUserTotalXpCached(userId: string) {
+  return unstable_cache(
+    async () =>
+      prisma.user.findUnique({
+        where: { id: userId },
+        select: { totalXp: true },
+      }),
+    ["fetchUserTotalXpCached", userId],
+    { revalidate: CACHE_REVALIDATE_SECONDS },
   )();
 }

@@ -12,12 +12,6 @@ const difficultyLabels: Record<string, string> = {
   HARD: "Ахисан",
 };
 
-const difficultyLabels: Record<string, string> = {
-  EASY: "Хялбар",
-  MEDIUM: "Дунд",
-  HARD: "Ахисан",
-};
-
 export const ReadingGrid = ({ readings }: ReadingGridProps) => {
   const groupedReadings = useMemo(
     () => ({
