@@ -12,10 +12,13 @@ type PatchBody = {
   cyrillicText?: unknown;
   description?: unknown;
   difficulty?: unknown;
+  isRequired?: unknown;
+  lessonId?: unknown;
   requiredAccuracy?: unknown;
   title?: unknown;
   traditionalText?: unknown;
   wordsCount?: unknown;
+  xpReward?: unknown;
 };
 
 const isReadingDifficulty = (value: unknown): value is ReadingDifficulty => {
@@ -46,15 +49,27 @@ const getInt = (value: unknown): number | undefined => {
   return Number.isInteger(parsed) ? parsed : undefined;
 };
 
+const getBoolean = (value: unknown): boolean | undefined => {
+  if (typeof value === "boolean") return value;
+  if (typeof value !== "string") return undefined;
+
+  if (value === "true") return true;
+  if (value === "false") return false;
+  return undefined;
+};
+
 const parsePatchBody = (body: PatchBody) => {
   const data: {
     cyrillicText?: string;
     description?: string | null;
     difficulty?: ReadingDifficulty;
+    isRequired?: boolean;
+    lessonId?: string | null;
     requiredAccuracy?: number;
     title?: string;
     traditionalText?: string;
     wordsCount?: number;
+    xpReward?: number;
   } = {};
 
   const title = getString(body.title);
@@ -63,13 +78,19 @@ const parsePatchBody = (body: PatchBody) => {
   const traditionalText = getString(body.traditionalText);
   const wordsCount = getInt(body.wordsCount);
   const requiredAccuracy = getInt(body.requiredAccuracy);
+  const xpReward = getInt(body.xpReward);
+  const lessonId = getOptionalString(body.lessonId);
+  const isRequired = getBoolean(body.isRequired);
 
   if (title) data.title = title;
   if (description !== undefined) data.description = description;
+  if (lessonId !== undefined) data.lessonId = lessonId;
   if (cyrillicText) data.cyrillicText = cyrillicText;
   if (traditionalText) data.traditionalText = traditionalText;
   if (wordsCount !== undefined) data.wordsCount = wordsCount;
   if (requiredAccuracy !== undefined) data.requiredAccuracy = requiredAccuracy;
+  if (xpReward !== undefined) data.xpReward = xpReward;
+  if (isRequired !== undefined) data.isRequired = isRequired;
 
   if (body.difficulty !== undefined) {
     if (!isReadingDifficulty(body.difficulty)) {

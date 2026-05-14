@@ -131,6 +131,7 @@ const ReadingTestPage = () => {
     transcript,
   } = useSpeechRecognition({
     durationSec: DEFAULT_READING_DURATION_SEC,
+    targetId: reading?.id ?? null,
     targetTextCyrillic: reading?.cyrillicText ?? "",
   });
 

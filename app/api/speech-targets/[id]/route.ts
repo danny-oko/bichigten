@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import { unauthorizedApiResponse } from "@/lib/server/dev-postman-bypass";
 import { getClerkUserIdFromRequest } from "@/lib/server/get-current-app-user";
+import { submitSpeechAttempt } from "@/lib/server/reading-progress";
 import { NextRequest, NextResponse } from "next/server";
 
 // GET /api/speech-targets/:id — attempts for the authenticated (or impersonated) user
@@ -20,25 +21,22 @@ export const POST = async (req: NextRequest) => {
   const userId = await getClerkUserIdFromRequest(req);
   if (!userId) return unauthorizedApiResponse(req);
 
-  const { targetId, transcribedText, wordsRead } = await req.json();
-  if (!targetId || !transcribedText || wordsRead === undefined) {
+  const { durationSec, targetId, transcribedText } = await req.json();
+  if (
+    typeof targetId !== "string" ||
+    typeof transcribedText !== "string" ||
+    (durationSec !== undefined && typeof durationSec !== "number")
+  ) {
     return NextResponse.json(
       { message: "Missing required fields" },
       { status: 400 },
     );
   }
-  const attempt = await prisma.speechAttempt.create({
-    data: {
-      userId,
-      targetId,
-      transcribedText,
-      durationSec: 60,
-      mistakes: 0,
-      accuracy: 100,
-      wordsRead: Number(wordsRead),
-      charactersRead: String(transcribedText).length,
-      wpm: Number(wordsRead),
-    },
+  const attempt = await submitSpeechAttempt({
+    userId,
+    targetId,
+    transcribedText,
+    durationSec: durationSec ?? 60,
   });
   return NextResponse.json(attempt, { status: 201 });
 };

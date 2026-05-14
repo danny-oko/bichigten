@@ -11,11 +11,13 @@ import { useReadingTimer } from "./useReadingTimer";
 
 type UseSpeechRecognitionOptions = {
   durationSec: number;
+  targetId: string | null;
   targetTextCyrillic: string;
 };
 
 export const useSpeechRecognition = ({
   durationSec,
+  targetId,
   targetTextCyrillic,
 }: UseSpeechRecognitionOptions) => {
   const streamRef = useRef<MediaStream | null>(null);
@@ -92,6 +94,23 @@ export const useSpeechRecognition = ({
         );
 
         setResult(localResult);
+
+        if (targetId) {
+          const attemptRes = await fetch("/api/reading-attempt", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              targetId,
+              transcribedText: data.data,
+              durationSec,
+            }),
+          });
+
+          if (!attemptRes.ok) {
+            throw new Error(`Attempt save failed: ${attemptRes.status}`);
+          }
+        }
+
         setStatus("done");
       } catch (err) {
         if (!isMountedRef.current) return;
@@ -100,7 +119,7 @@ export const useSpeechRecognition = ({
         setStatus("error");
       }
     },
-    [targetTextCyrillic],
+    [targetId, targetTextCyrillic],
   );
 
   const stopRecording = useCallback(() => {

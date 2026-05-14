@@ -1,9 +1,9 @@
 import prisma from "@/lib/prisma";
-import type {
-  Prisma,
-  ReadingDifficulty as PrismaReadingDifficulty,
-} from "@prisma/client";
+import type { ReadingDifficulty as PrismaReadingDifficulty } from "@prisma/client";
 import { NextRequest, NextResponse } from "next/server";
+
+import { getClerkUserIdFromRequest } from "@/lib/server/get-current-app-user";
+import { getReadingCardsForUser } from "@/lib/server/reading-progress";
 
 const READING_DIFFICULTIES = ["EASY", "MEDIUM", "HARD"] as const;
 
@@ -14,10 +14,13 @@ type ReadingBody = {
   description?: unknown;
   difficulty?: unknown;
   id?: unknown;
+  isRequired?: unknown;
+  lessonId?: unknown;
   requiredAccuracy?: unknown;
   title?: unknown;
   traditionalText?: unknown;
   wordsCount?: unknown;
+  xpReward?: unknown;
 };
 
 const isReadingDifficulty = (value: unknown): value is ReadingDifficulty => {
@@ -47,13 +50,25 @@ const getInt = (value: unknown): number | undefined => {
   return Number.isInteger(parsed) ? parsed : undefined;
 };
 
+const getBoolean = (value: unknown): boolean | undefined => {
+  if (typeof value === "boolean") return value;
+  if (typeof value !== "string") return undefined;
+
+  if (value === "true") return true;
+  if (value === "false") return false;
+  return undefined;
+};
+
 const parseBody = (body: ReadingBody) => {
   const title = getString(body.title);
   const cyrillicText = getString(body.cyrillicText);
   const traditionalText = getString(body.traditionalText);
   const wordsCount = getInt(body.wordsCount);
   const requiredAccuracy = getInt(body.requiredAccuracy);
+  const xpReward = getInt(body.xpReward);
   const description = getOptionalString(body.description);
+  const lessonId = getOptionalString(body.lessonId);
+  const isRequired = getBoolean(body.isRequired);
   const difficulty = body.difficulty ?? "EASY";
 
   if (!title || !cyrillicText || !traditionalText || wordsCount === undefined) {
@@ -72,7 +87,10 @@ const parseBody = (body: ReadingBody) => {
       title,
       description,
       difficulty,
+      lessonId,
       requiredAccuracy,
+      xpReward: xpReward ?? 10,
+      isRequired: isRequired ?? true,
       cyrillicText,
       traditionalText,
       wordsCount,
@@ -85,10 +103,13 @@ const parsePatchBody = (body: ReadingBody) => {
     cyrillicText?: string;
     description?: string | null;
     difficulty?: ReadingDifficulty;
+    isRequired?: boolean;
+    lessonId?: string | null;
     requiredAccuracy?: number;
     title?: string;
     traditionalText?: string;
     wordsCount?: number;
+    xpReward?: number;
   } = {};
 
   const title = getString(body.title);
@@ -97,13 +118,19 @@ const parsePatchBody = (body: ReadingBody) => {
   const traditionalText = getString(body.traditionalText);
   const wordsCount = getInt(body.wordsCount);
   const requiredAccuracy = getInt(body.requiredAccuracy);
+  const xpReward = getInt(body.xpReward);
+  const lessonId = getOptionalString(body.lessonId);
+  const isRequired = getBoolean(body.isRequired);
 
   if (title) data.title = title;
   if (description !== undefined) data.description = description;
+  if (lessonId !== undefined) data.lessonId = lessonId;
   if (cyrillicText) data.cyrillicText = cyrillicText;
   if (traditionalText) data.traditionalText = traditionalText;
   if (wordsCount !== undefined) data.wordsCount = wordsCount;
   if (requiredAccuracy !== undefined) data.requiredAccuracy = requiredAccuracy;
+  if (xpReward !== undefined) data.xpReward = xpReward;
+  if (isRequired !== undefined) data.isRequired = isRequired;
 
   if (body.difficulty !== undefined) {
     if (!isReadingDifficulty(body.difficulty)) {
@@ -117,7 +144,9 @@ const parsePatchBody = (body: ReadingBody) => {
 
 export const GET = async (req: NextRequest) => {
   try {
+    const userId = await getClerkUserIdFromRequest(req);
     const difficulty = req.nextUrl.searchParams.get("difficulty");
+    const lessonId = req.nextUrl.searchParams.get("lessonId")?.trim();
     const search = req.nextUrl.searchParams.get("search")?.trim();
 
     if (difficulty && !isReadingDifficulty(difficulty)) {
@@ -127,28 +156,13 @@ export const GET = async (req: NextRequest) => {
       );
     }
 
-    const where: Prisma.SpeechTargetWhereInput = {};
-
-    if (difficulty) {
-      where.difficulty = difficulty as PrismaReadingDifficulty;
-    }
-
-    if (search) {
-      where.OR = [
-        { title: { contains: search, mode: "insensitive" } },
-        { description: { contains: search, mode: "insensitive" } },
-        { cyrillicText: { contains: search, mode: "insensitive" } },
-      ];
-    }
-
-    const targets = await prisma.speechTarget.findMany({
-      where,
-      include: {
-        _count: {
-          select: { attempts: true },
-        },
-      },
-      orderBy: { createdAt: "desc" },
+    const targets = await getReadingCardsForUser({
+      userId,
+      difficulty: difficulty
+        ? (difficulty as PrismaReadingDifficulty)
+        : undefined,
+      lessonId,
+      search,
     });
 
     return NextResponse.json(targets);

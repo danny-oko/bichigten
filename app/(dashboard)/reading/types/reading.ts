@@ -11,16 +11,39 @@ export type Reading = {
   id: string;
   createdAt: string;
   updatedAt: string;
+  lessonId: string | null;
   title: string;
   description: string | null;
   difficulty: Exclude<ReadingDifficulty, "ALL">;
   requiredAccuracy: number | null;
+  xpReward: number;
+  isRequired?: boolean;
   wordsCount: number;
   cyrillicText: string;
   traditionalText: string;
+  latestAttempt?: ReadingAttemptSummary | null;
+  bestAttempt?: ReadingAttemptSummary | null;
+  completed?: boolean;
+  isPassed?: boolean;
+  xpEarned?: number;
   _count?: {
     attempts: number;
   };
+};
+
+export type ReadingAttemptSummary = {
+  id: string;
+  createdAt: string;
+  accuracy: number;
+  coverage: number;
+  finalScore: number;
+  mistakes: number;
+  wordsRead: number;
+  charactersRead: number;
+  wpm: number;
+  isPassed: boolean;
+  xpEarned: number;
+  durationSec: number;
 };
 
 export type TranscribeResponse = {

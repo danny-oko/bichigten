@@ -7,17 +7,18 @@ datasource db {
 }
 
 model User {
-  id              String               @id
-  email           String               @unique
-  userName        String               @unique
-  avatarUrl       String?
-  totalXp         Int                  @default(10)
-  createdAt       DateTime             @default(now())
-  updatedAt       DateTime             @updatedAt
-  name            String?
-  heartsRemaining Int                  @default(5)
-  speechAttempts  SpeechAttempt[]
-  lessonProgress  UserLessonProgress[]
+  id                   String                     @id
+  email                String                     @unique
+  userName             String                     @unique
+  avatarUrl            String?
+  totalXp              Int                        @default(10)
+  createdAt            DateTime                   @default(now())
+  updatedAt            DateTime                   @updatedAt
+  name                 String?
+  heartsRemaining      Int                        @default(5)
+  speechAttempts       SpeechAttempt[]
+  speechTargetProgress UserSpeechTargetProgress[]
+  lessonProgress       UserLessonProgress[]
 
   @@index([totalXp(sort: Desc)])
   @@map("users_table")
@@ -33,17 +34,18 @@ model Section {
 }
 
 model Lesson {
-  id           String               @id @default(cuid())
-  title        String
-  description  String?
-  order        Int
-  levelId      String
-  isCompleted  Boolean              @default(false)
-  videoUrl     String?
-  content      LessonContent[]
-  level        Section              @relation(fields: [levelId], references: [id])
-  tasks        Task[]
-  userProgress UserLessonProgress[]
+  id            String               @id @default(cuid())
+  title         String
+  description   String?
+  order         Int
+  levelId       String
+  isCompleted   Boolean              @default(false)
+  videoUrl      String?
+  content       LessonContent[]
+  level         Section              @relation(fields: [levelId], references: [id])
+  speechTargets SpeechTarget[]
+  tasks         Task[]
+  userProgress  UserLessonProgress[]
 
   @@unique([levelId, order])
   @@map("lessons_table")
@@ -56,8 +58,9 @@ model LessonContent {
   text         String
   unicode      String?
   imageUrl     String?
-  animationCss String?
   order        Int
+  animationCss String?
+  unicode      String?
   lesson       Lesson  @relation(fields: [lessonId], references: [id])
 
   @@map("lesson_contents_table")
@@ -79,58 +82,95 @@ model Task {
 }
 
 model UserLessonProgress {
-  id          String       @id @default(cuid())
-  userId      String
-  lessonId    String
-  status      LessonStatus @default(LOCKED)
-  xpEarned    Int          @default(0)
-  completedAt DateTime?
-  lesson      Lesson       @relation(fields: [lessonId], references: [id])
-  user        User         @relation(fields: [userId], references: [id])
+  id             String          @id @default(cuid())
+  userId         String
+  lessonId       String
+  status         LessonStatus    @default(LOCKED)
+  xpEarned       Int             @default(0)
+  completedAt    DateTime?
+  lesson         Lesson          @relation(fields: [lessonId], references: [id])
+  user           User            @relation(fields: [userId], references: [id])
+  speechAttempts SpeechAttempt[]
 
   @@unique([userId, lessonId])
   @@index([userId, status, completedAt])
   @@map("user_lesson_progress")
 }
 
-
 model SpeechTarget {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
+  id               String                     @id @default(uuid())
+  createdAt        DateTime                   @default(now())
+  updatedAt        DateTime                   @updatedAt
+  lessonId         String?
+  lesson           Lesson?                    @relation(fields: [lessonId], references: [id])
   title            String
   description      String?
-  difficulty       ReadingDifficulty @default(EASY)
+  difficulty       ReadingDifficulty          @default(EASY)
   requiredAccuracy Int?
-  cyrillicText    String
-  traditionalText String
+  isRequired       Boolean                    @default(true)
+  xpReward         Int                        @default(10)
+  cyrillicText     String
+  traditionalText  String
   wordsCount       Int
   attempts         SpeechAttempt[]
+  progress         UserSpeechTargetProgress[]
 
+  @@index([lessonId])
   @@map("speech_targets")
 }
 
 model SpeechAttempt {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
+  id                String                     @id @default(uuid())
+  createdAt         DateTime                   @default(now())
+  targetId          String
+  userId            String
+  lessonProgressId  String?
+  transcribedText   String
+  durationSec       Int
+  mistakes          Int
+  accuracy          Float
+  coverage          Float                      @default(0)
+  finalScore        Float                      @default(0)
+  wordsRead         Int
+  charactersRead    Int
+  wpm               Int
+  isPassed          Boolean                    @default(false)
+  xpEarned          Int                        @default(0)
+  bestForProgress   UserSpeechTargetProgress[] @relation("BestSpeechTargetProgressAttempt")
+  latestForProgress UserSpeechTargetProgress[] @relation("LatestSpeechTargetProgressAttempt")
+  lessonProgress    UserLessonProgress?        @relation(fields: [lessonProgressId], references: [id])
+  target            SpeechTarget               @relation(fields: [targetId], references: [id], onDelete: Cascade)
+  user              User                       @relation(fields: [userId], references: [id])
 
-  targetId String
-  target   SpeechTarget @relation(fields: [targetId], references: [id], onDelete: Cascade)
-  userId   String
-  user     User         @relation(fields: [userId], references: [id])
-
-  transcribedText String
-  durationSec     Int
-
-  // Computed results — store these so you never need to recalculate
-  mistakes       Int
-  accuracy       Float
-  wordsRead      Int
-  charactersRead Int
-  wpm            Int
-
+  @@index([lessonProgressId])
+  @@index([userId, targetId, createdAt])
   @@map("speech_attempts")
+}
+
+model UserSpeechTargetProgress {
+  id              String         @id @default(cuid())
+  createdAt       DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  userId          String
+  targetId        String
+  latestAttemptId String?
+  bestAttemptId   String?
+  passedAt        DateTime?
+  isPassed        Boolean        @default(false)
+  xpEarned        Int            @default(0)
+  bestAccuracy    Float?
+  latestAccuracy  Float?
+  bestAttempt     SpeechAttempt? @relation("BestSpeechTargetProgressAttempt", fields: [bestAttemptId], references: [id], onDelete: SetNull)
+  latestAttempt   SpeechAttempt? @relation("LatestSpeechTargetProgressAttempt", fields: [latestAttemptId], references: [id], onDelete: SetNull)
+  target          SpeechTarget   @relation(fields: [targetId], references: [id], onDelete: Cascade)
+  user            User           @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, targetId])
+  @@index([userId, isPassed])
+  @@index([targetId])
+  @@index([bestAttemptId])
+  @@index([latestAttemptId])
+  @@map("user_speech_target_progress")
 }
 
 enum LessonStatus {
