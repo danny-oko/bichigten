@@ -3,8 +3,10 @@ import { NextRequest, NextResponse } from "next/server";
 
 import prisma from "@/lib/prisma";
 import { CACHE_REVALIDATE_SECONDS } from "@/lib/server/cache";
+import { CACHE_TAG_SPEECH, cacheTagUser } from "@/lib/server/cache-tags";
 import { unauthorizedApiResponse } from "@/lib/server/dev-postman-bypass";
 import { getClerkUserIdFromRequest } from "@/lib/server/get-current-app-user";
+import { invalidateAfterProgressWrite } from "@/lib/server/invalidate-data-cache";
 import { submitSpeechAttempt } from "@/lib/server/reading-progress";
 
 export const GET = async (req: NextRequest) => {
@@ -19,7 +21,10 @@ export const GET = async (req: NextRequest) => {
         orderBy: { createdAt: "desc" },
       }),
     ["api-speech-targets-id-get", userId],
-    { revalidate: CACHE_REVALIDATE_SECONDS },
+    {
+      revalidate: CACHE_REVALIDATE_SECONDS,
+      tags: [CACHE_TAG_SPEECH, cacheTagUser(userId)],
+    },
   )();
   return NextResponse.json(attempts);
 };
@@ -45,5 +50,6 @@ export const POST = async (req: NextRequest) => {
     transcribedText,
     durationSec: durationSec ?? 60,
   });
+  invalidateAfterProgressWrite(userId);
   return NextResponse.json(attempt, { status: 201 });
 };

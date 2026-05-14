@@ -3,6 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 import prisma from "@/lib/prisma";
 import { CACHE_REVALIDATE_SECONDS } from "@/lib/server/cache";
+import { CACHE_TAG_LEADERBOARD } from "@/lib/server/cache-tags";
+import { invalidateAfterLeaderboardPoolChange } from "@/lib/server/invalidate-data-cache";
 import { getRankNameFromXp } from "@/lib/utils/getRankNameFromXp";
 
 export const POST = async (req: NextRequest) => {
@@ -36,6 +38,7 @@ export const POST = async (req: NextRequest) => {
     },
   });
 
+  invalidateAfterLeaderboardPoolChange();
   return NextResponse.json(user, { status: 201 });
 };
 
@@ -55,7 +58,7 @@ export const GET = async () => {
         },
       }),
     ["api-users-get"],
-    { revalidate: CACHE_REVALIDATE_SECONDS },
+    { revalidate: CACHE_REVALIDATE_SECONDS, tags: [CACHE_TAG_LEADERBOARD] },
   )();
 
   const data = users.map((user) => {

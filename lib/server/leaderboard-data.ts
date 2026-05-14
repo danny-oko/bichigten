@@ -3,6 +3,7 @@ import { unstable_cache } from "next/cache";
 import prisma from "@/lib/prisma";
 
 import { CACHE_REVALIDATE_SECONDS } from "@/lib/server/cache";
+import { CACHE_TAG_LEADERBOARD } from "@/lib/server/cache-tags";
 
 export function fetchLeaderboardTop100Cached() {
   return unstable_cache(
@@ -19,7 +20,7 @@ export function fetchLeaderboardTop100Cached() {
         take: 100,
       }),
     ["fetchLeaderboardTop100Cached"],
-    { revalidate: CACHE_REVALIDATE_SECONDS },
+    { revalidate: CACHE_REVALIDATE_SECONDS, tags: [CACHE_TAG_LEADERBOARD] },
   )();
 }
 
@@ -31,6 +32,6 @@ export function fetchUserTotalXpCached(userId: string) {
         select: { totalXp: true },
       }),
     ["fetchUserTotalXpCached", userId],
-    { revalidate: CACHE_REVALIDATE_SECONDS },
+    { revalidate: CACHE_REVALIDATE_SECONDS, tags: [CACHE_TAG_LEADERBOARD] },
   )();
 }

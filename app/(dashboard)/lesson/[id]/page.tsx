@@ -3,6 +3,7 @@ import { auth, currentUser } from "@clerk/nextjs/server";
 import { unstable_cache } from "next/cache";
 import { redirect } from "next/navigation";
 import { CACHE_REVALIDATE_SECONDS } from "@/lib/server/cache";
+import { cacheTagUser } from "@/lib/server/cache-tags";
 import { ensureUser } from "@/lib/server/ensure-user";
 import prisma from "@/lib/prisma";
 
@@ -33,7 +34,7 @@ export default async function LessonPage({ params }: Props) {
         select: { createdAt: true },
       }),
     ["lesson-page-user-createdAt", userId],
-    { revalidate: CACHE_REVALIDATE_SECONDS },
+    { revalidate: CACHE_REVALIDATE_SECONDS, tags: [cacheTagUser(userId)] },
   )();
   const twoDaysMs = 2 * 24 * 60 * 60 * 1000;
   const nowMs = new Date().getTime();

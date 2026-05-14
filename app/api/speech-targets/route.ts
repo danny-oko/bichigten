@@ -37,5 +37,6 @@ export const POST = async (req: NextRequest) => {
     },
   });
 
+  invalidateAfterSpeechMutation();
   return NextResponse.json(target, { status: 201 });
 };
