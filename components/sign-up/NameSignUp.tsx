@@ -1,6 +1,6 @@
 import { Field, FieldLabel } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
-import { mnLabels, mnSignUp } from "@/lib/i18n/mn-copy";
+import { mnLabels } from "@/lib/i18n/mn-copy";
 
 type NameSignUpProps = {
   fullName: string;
@@ -61,7 +61,6 @@ export function NameSignUp({
           type="text"
           inputMode="numeric"
           autoComplete="bday-year"
-          placeholder={mnSignUp.agePlaceholder}
           value={age}
           onChange={(e) => onChangeAge(e.target.value.replace(/\D/g, ""))}
           className="h-11 rounded-2xl border-amber-300/80 bg-[#F8F4E3] text-sm transition-shadow focus-visible:border-amber-500 focus-visible:ring-2 focus-visible:ring-amber-400/35 sm:h-12 sm:text-base"
