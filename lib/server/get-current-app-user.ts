@@ -7,6 +7,8 @@ import {
   isProvisionalDbUsername,
 } from "@/lib/server/clerk-to-db-user-fields";
 import { withDbRetry } from "@/lib/server/db-retry";
+import { fallbackUsernameFromClerkId } from "@/lib/server/fallback-username";
+import { ensureHeartsRefilledIfDue } from "@/lib/server/hearts-refill";
 import {
   getDevImpersonatedUserId,
   isDevPostmanBypassRequest,
@@ -26,6 +28,8 @@ export async function getCurrentAppUser() {
   if (!userId) {
     return null;
   }
+
+  await ensureHeartsRefilledIfDue(userId);
 
   /** Avoid `Promise.all` with DB + Clerk: two outbound calls at once can worsen pool
    *  contention; transient "Server has closed the connection" is retried below. */
@@ -100,6 +104,7 @@ export async function getCurrentAppUserFromRequest(req: Request) {
     if (!id) {
       return null;
     }
+    await ensureHeartsRefilledIfDue(id);
     return prisma.user.findUnique({ where: { id } });
   }
 

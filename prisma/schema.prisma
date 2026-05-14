@@ -16,6 +16,7 @@ model User {
   updatedAt            DateTime                   @updatedAt
   name                 String?
   heartsRemaining      Int                        @default(5)
+  heartsDepletedAt     DateTime?
   speechAttempts       SpeechAttempt[]
   speechTargetProgress UserSpeechTargetProgress[]
   lessonProgress       UserLessonProgress[]

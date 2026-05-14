@@ -45,6 +45,7 @@ export interface LessonContent {
   imageUrl?: string | null;
   order: number;
   animationCss?: string;
+  unicode?: string | null;
 }
 
 export interface Task {

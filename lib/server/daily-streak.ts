@@ -1,8 +1,23 @@
-export function toUtcDateOnly(value: Date) {
-  return new Date(Date.UTC(value.getUTCFullYear(), value.getUTCMonth(), value.getUTCDate()));
+/** Prisma `Date` fields may arrive as ISO strings after `unstable_cache` serialization. */
+export type StreakInstant = Date | string | number;
+
+function parseInstant(value: StreakInstant): Date {
+  if (value instanceof Date && !Number.isNaN(value.getTime())) {
+    return value;
+  }
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) {
+    throw new TypeError(`toUtcDateOnly: invalid date ${String(value)}`);
+  }
+  return d;
 }
 
-export function calculateDailyStreak(completedAt: Date[]) {
+export function toUtcDateOnly(value: StreakInstant): Date {
+  const d = parseInstant(value);
+  return new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()));
+}
+
+export function calculateDailyStreak(completedAt: StreakInstant[]) {
   const uniqueDays = Array.from(new Set(completedAt.map((d) => toUtcDateOnly(d).getTime()))).sort(
     (a, b) => b - a,
   );
@@ -23,7 +38,7 @@ export function calculateDailyStreak(completedAt: Date[]) {
 }
 
 /** Longest run of consecutive UTC days with at least one completion. */
-export function bestStreakFromCompletionDates(completedAt: Date[]) {
+export function bestStreakFromCompletionDates(completedAt: StreakInstant[]) {
   const uniqueDays = Array.from(new Set(completedAt.map((d) => toUtcDateOnly(d).getTime()))).sort(
     (a, b) => a - b,
   );

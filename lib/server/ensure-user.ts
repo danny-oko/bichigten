@@ -2,6 +2,7 @@ import { Prisma } from "@prisma/client";
 
 import prisma from "@/lib/prisma";
 import { fallbackUsernameFromClerkId } from "@/lib/server/fallback-username";
+import { ensureHeartsRefilledIfDue } from "@/lib/server/hearts-refill";
 
 type EnsureUserArgs = {
   id: string;
@@ -45,6 +46,7 @@ export async function ensureUser(args: EnsureUserArgs) {
 
   const existing = await prisma.user.findUnique({ where: { id } });
   if (existing) {
+    await ensureHeartsRefilledIfDue(id);
     return prisma.user.update({
       where: { id },
       data: updateData,
@@ -60,6 +62,7 @@ export async function ensureUser(args: EnsureUserArgs) {
     ) {
       const afterRace = await prisma.user.findUnique({ where: { id } });
       if (afterRace) {
+        await ensureHeartsRefilledIfDue(id);
         return prisma.user.update({
           where: { id },
           data: updateData,

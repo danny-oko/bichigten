@@ -79,7 +79,7 @@ export const loadHomeProgressSidebar = cache(async (userId: string) => {
 
   const completedAtDates = completionRows
     .map((r) => r.completedAt)
-    .filter((d): d is Date => Boolean(d));
+    .filter((d): d is NonNullable<typeof d> => d != null);
   const streak = calculateDailyStreak(completedAtDates);
   const completionMidnightSet = new Set(
     completedAtDates.map((d) => toUtcDateOnly(d).getTime()),

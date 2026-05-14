@@ -285,7 +285,7 @@ export function buildProfileUserFromData(
 
   const completionDates = completedRows
     .map((r) => r.completedAt)
-    .filter((d): d is Date => Boolean(d));
+    .filter((d): d is NonNullable<typeof d> => d != null);
 
   const currentStreak = calculateDailyStreak(completionDates);
   const bestStreak = Math.max(
@@ -300,9 +300,10 @@ export function buildProfileUserFromData(
   const activityHeatmap = buildActivityHeatmap(completedRows);
 
   const xpThisWeek = data.weeklyXpSum;
-  const lessonsDoneLast7Days = completedRows.filter(
-    (r) => r.completedAt && r.completedAt >= weekAgo,
-  ).length;
+  const lessonsDoneLast7Days = completedRows.filter((r) => {
+    if (!r.completedAt) return false;
+    return new Date(r.completedAt).getTime() >= weekAgo.getTime();
+  }).length;
 
   const todayMidnight = toUtcDateOnly(new Date()).getTime();
   const completedLessonToday = completedRows.some(
@@ -311,7 +312,10 @@ export function buildProfileUserFromData(
 
   const activeDaySet = new Set(
     completedRows
-      .filter((r) => r.completedAt && r.completedAt >= weekAgo)
+      .filter((r) => {
+        if (!r.completedAt) return false;
+        return new Date(r.completedAt).getTime() >= weekAgo.getTime();
+      })
       .map((r) => toUtcDateOnly(r.completedAt!).getTime()),
   );
   const daysThisWeek = `${Math.min(7, activeDaySet.size)}/7`;
