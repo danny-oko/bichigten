@@ -73,7 +73,7 @@ export default async function HomeSection() {
               />
             )}
           </div>
-          <div className="flex min-h-0 w-full flex-1 flex-col items-center pt-20 sm:pt-24 md:pt-28">
+          <div className="flex min-h-0 w-full flex-1 flex-col items-center">
             <HomePath />
           </div>
         </div>

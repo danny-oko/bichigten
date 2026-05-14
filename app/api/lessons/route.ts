@@ -4,14 +4,21 @@ import { NextRequest, NextResponse } from "next/server";
 // GET /api/lessons — list view only needs metadata (omit content/tasks for speed)
 export const GET = async () => {
   const lessons = await prisma.lesson.findMany({
-    // select: {
-    //   id: true,
-    //   title: true,
-    //   description: true,
-    //   order: true,
-    //   levelId: true,
-    // },
-    orderBy: { order: "asc" },
+    select: {
+      id: true,
+      title: true,
+      description: true,
+      order: true,
+      levelId: true,
+      videoUrl: true,
+      level: {
+        select: {
+          title: true,
+          order: true,
+        },
+      },
+    },
+    orderBy: [{ level: { order: "asc" } }, { order: "asc" }],
   });
   return NextResponse.json(lessons);
 };
