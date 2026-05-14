@@ -2,9 +2,10 @@ import type {
   DailyChallenge,
   JourneyProgress,
   ProfileBadge,
+  ProfileAppUser,
   ProfileUser,
 } from "@/app/(dashboard)/profile/common/types";
-import type { LessonStatus, User } from "@prisma/client";
+import type { LessonStatus } from "@prisma/client";
 import { unstable_cache } from "next/cache";
 
 import prisma from "@/lib/prisma";
@@ -272,7 +273,7 @@ export async function fetchProfileDashboardData(
 }
 
 export function buildProfileUserFromData(
-  appUser: User,
+  appUser: ProfileAppUser,
   data: ProfileDashboardData,
 ): ProfileUser {
   const userId = appUser.id;
