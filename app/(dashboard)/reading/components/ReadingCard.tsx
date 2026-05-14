@@ -31,13 +31,24 @@ export const ReadingCard = ({ reading }: ReadingCardProps) => {
         </p>
       </div>
 
+      {reading.latestAttempt && (
+        <div className="mt-4 grid grid-cols-2 gap-2 text-xs font-semibold text-stone-600">
+          <span>Сүүлийн: {reading.latestAttempt.accuracy}%</span>
+          <span>Шилдэг: {reading.bestAttempt?.finalScore ?? 0}%</span>
+          <span>{reading.completed ? "Давсан" : "Дуусаагүй"}</span>
+          <span>{reading.xpEarned ?? 0} XP</span>
+        </div>
+      )}
+
       <div className="mt-6 flex items-center justify-between gap-4">
         {reading.requiredAccuracy ? (
           <p className="text-xs font-semibold text-amber-800">
-            {reading.requiredAccuracy}% шаардлагатай
+            {reading.requiredAccuracy}% шаардлагатай · {reading.xpReward} XP
           </p>
         ) : (
-          <span />
+          <p className="text-xs font-semibold text-amber-800">
+            {reading.xpReward} XP
+          </p>
         )}
         <Link
           href={`/reading/${reading.id}`}
