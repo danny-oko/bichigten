@@ -1,5 +1,7 @@
-// Loads .env from the project root when run via `bunx prisma` / Prisma CLI (Bun also injects env for .env files).
 import { defineConfig } from "prisma/config";
+import * as dotenv from "dotenv";
+
+dotenv.config({ path: ".env" });
 
 export default defineConfig({
   schema: "prisma/schema.prisma",

@@ -6,9 +6,7 @@ export const GET = async (
   { params }: { params: Promise<{ id: string }> },
 ) => {
   const { id } = await params;
-  const content = await prisma.lessonContent.findUnique({
-    where: { id },
-  });
+  const content = await prisma.lessonContent.findUnique({ where: { id } });
   if (!content)
     return NextResponse.json({ message: "Not found" }, { status: 404 });
   return NextResponse.json(content);
@@ -23,9 +21,13 @@ export const PATCH = async (
   const content = await prisma.lessonContent.update({
     where: { id },
     data: {
-      ...(body.name && { name: body.name }),
-      ...(body.text && { text: body.text }),
+      ...(body.name !== undefined && { name: body.name }),
+      ...(body.text !== undefined && { text: body.text }),
+      ...(body.unicode !== undefined && { unicode: body.unicode }),
       ...(body.imageUrl !== undefined && { imageUrl: body.imageUrl }),
+      ...(body.animationCss !== undefined && {
+        animationCss: body.animationCss,
+      }),
       ...(body.order !== undefined && { order: parseInt(body.order) }),
     },
   });
