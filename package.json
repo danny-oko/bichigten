@@ -3,11 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "postinstall": "prisma generate",
-    "dev": "bunx next dev",
-    "build": "bunx next build",
-    "start": "bunx next start",
-    "lint": "bunx eslint .",
+    "postinstall": "bunx prisma generate",
+    "dev": "bun dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
     "db:generate": "bunx prisma generate",
     "db:migrate": "bunx prisma migrate dev",
     "db:studio": "bunx prisma studio"
