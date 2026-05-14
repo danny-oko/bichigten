@@ -1,8 +1,5 @@
+import { defineConfig, env } from "@prisma/config";
 import "dotenv/config";
-import { defineConfig } from "prisma/config";
-import * as dotenv from "dotenv";
-
-dotenv.config({ path: ".env" });
 
 export default defineConfig({
   schema: "prisma/schema.prisma",
@@ -12,6 +9,8 @@ export default defineConfig({
   },
 
   datasource: {
-    url: process.env.DATABASE_URL!,
+    // Prisma 7 uses this field for migrations.
+    // Ensure this environment variable is your DIRECT connection.
+    url: env("DIRECT_URL"),
   },
 });
