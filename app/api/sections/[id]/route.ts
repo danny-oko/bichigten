@@ -3,6 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 import prisma from "@/lib/prisma";
 import { CACHE_REVALIDATE_SECONDS } from "@/lib/server/cache";
+import { CACHE_TAG_CATALOG } from "@/lib/server/cache-tags";
+import { invalidateAfterCatalogMutation } from "@/lib/server/invalidate-data-cache";
 
 export const GET = async (
   _: NextRequest,
@@ -17,7 +19,7 @@ export const GET = async (
         include: { lessons: true },
       }),
     ["api-sections-id-get", id],
-    { revalidate: CACHE_REVALIDATE_SECONDS },
+    { revalidate: CACHE_REVALIDATE_SECONDS, tags: [CACHE_TAG_CATALOG] },
   )();
 
   if (!section)
@@ -40,6 +42,7 @@ export const PATCH = async (
         ...(body.order !== undefined && { order: parseInt(body.order) }),
       },
     });
+    invalidateAfterCatalogMutation();
     return NextResponse.json(section);
   } catch (error) {
     return NextResponse.json({ error: "Update failed" }, { status: 400 });
@@ -54,6 +57,7 @@ export const DELETE = async (
 
   try {
     await prisma.section.delete({ where: { id } });
+    invalidateAfterCatalogMutation();
     return NextResponse.json({ message: "Deleted" });
   } catch (error) {
     return NextResponse.json({ error: "Record not found" }, { status: 404 });

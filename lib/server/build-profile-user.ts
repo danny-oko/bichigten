@@ -2,13 +2,19 @@ import type {
   DailyChallenge,
   JourneyProgress,
   ProfileBadge,
+  ProfileAppUser,
   ProfileUser,
 } from "@/app/(dashboard)/profile/common/types";
-import type { LessonStatus, User } from "@prisma/client";
+import type { LessonStatus } from "@prisma/client";
 import { unstable_cache } from "next/cache";
 
 import prisma from "@/lib/prisma";
 import { CACHE_REVALIDATE_SECONDS } from "@/lib/server/cache";
+import {
+  CACHE_TAG_CATALOG,
+  CACHE_TAG_LEADERBOARD,
+  cacheTagUser,
+} from "@/lib/server/cache-tags";
 import { getRankNameFromXp } from "@/lib/utils/getRankNameFromXp";
 
 import { mnProfile } from "@/lib/i18n/mn-profile";
@@ -259,12 +265,15 @@ export async function fetchProfileDashboardData(
   return unstable_cache(
     () => fetchProfileDashboardDataUncached(userId, totalXp),
     ["fetchProfileDashboardData", userId, String(totalXp)],
-    { revalidate: CACHE_REVALIDATE_SECONDS },
+    {
+      revalidate: CACHE_REVALIDATE_SECONDS,
+      tags: [cacheTagUser(userId), CACHE_TAG_LEADERBOARD, CACHE_TAG_CATALOG],
+    },
   )();
 }
 
 export function buildProfileUserFromData(
-  appUser: User,
+  appUser: ProfileAppUser,
   data: ProfileDashboardData,
 ): ProfileUser {
   const userId = appUser.id;

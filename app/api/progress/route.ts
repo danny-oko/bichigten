@@ -3,6 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 import prisma from "@/lib/prisma";
 import { CACHE_REVALIDATE_SECONDS } from "@/lib/server/cache";
+import { cacheTagUser } from "@/lib/server/cache-tags";
+import { invalidateAfterProgressWrite } from "@/lib/server/invalidate-data-cache";
 import { unauthorizedApiResponse } from "@/lib/server/dev-postman-bypass";
 import { getClerkUserIdFromRequest } from "@/lib/server/get-current-app-user";
 
@@ -19,7 +21,10 @@ export const GET = async (req: NextRequest) => {
           where: { userId_lessonId: { userId, lessonId } },
         }),
       ["api-progress-get", userId, lessonId],
-      { revalidate: CACHE_REVALIDATE_SECONDS },
+      {
+        revalidate: CACHE_REVALIDATE_SECONDS,
+        tags: [cacheTagUser(userId)],
+      },
     )();
     return NextResponse.json(progress);
   }
@@ -31,7 +36,7 @@ export const GET = async (req: NextRequest) => {
         include: { lesson: true },
       }),
     ["api-progress-get-all", userId],
-    { revalidate: CACHE_REVALIDATE_SECONDS },
+    { revalidate: CACHE_REVALIDATE_SECONDS, tags: [cacheTagUser(userId)] },
   )();
   return NextResponse.json(progress);
 };
@@ -96,5 +101,6 @@ export const POST = async (req: NextRequest) => {
     },
   });
 
+  invalidateAfterProgressWrite(userId);
   return NextResponse.json(progress, { status: 201 });
 };

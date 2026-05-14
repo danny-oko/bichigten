@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { Webhook } from "svix";
 
 import { ensureUser } from "@/lib/server/ensure-user";
+import { invalidateAfterUserRowMutation } from "@/lib/server/invalidate-data-cache";
 
 /**
  * Clerk → your database sync.
@@ -74,6 +75,7 @@ export async function POST(req: Request) {
 
   if (evt.type === "user.created" || evt.type === "user.updated") {
     await ensureUser(mapClerkUserToEnsureArgs(evt.data));
+    invalidateAfterUserRowMutation(evt.data.id);
   }
 
   return NextResponse.json({ ok: true });

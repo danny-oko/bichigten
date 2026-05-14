@@ -3,6 +3,7 @@ import { unstable_cache } from "next/cache";
 
 import prisma from "@/lib/prisma";
 import { CACHE_REVALIDATE_SECONDS } from "@/lib/server/cache";
+import { CACHE_TAG_CATALOG, cacheTagUser } from "@/lib/server/cache-tags";
 import { buildLast7StreakDots } from "@/lib/server/build-profile-user";
 import { calculateDailyStreak, toUtcDateOnly } from "@/lib/server/daily-streak";
 import { ensureUser } from "@/lib/server/ensure-user";
@@ -55,7 +56,10 @@ export const loadHomeProgressSidebar = cache(async (userId: string) => {
   } = await unstable_cache(
     () => loadHomeProgressSidebarQueries(userId),
     ["loadHomeProgressSidebar", userId],
-    { revalidate: CACHE_REVALIDATE_SECONDS },
+    {
+      revalidate: CACHE_REVALIDATE_SECONDS,
+      tags: [cacheTagUser(userId), CACHE_TAG_CATALOG],
+    },
   )();
 
   const completedAtDates = completionRows

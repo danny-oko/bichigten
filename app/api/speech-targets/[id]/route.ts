@@ -3,11 +3,13 @@ import { NextRequest, NextResponse } from "next/server";
 
 import prisma from "@/lib/prisma";
 import { CACHE_REVALIDATE_SECONDS } from "@/lib/server/cache";
+import { CACHE_TAG_SPEECH, cacheTagUser } from "@/lib/server/cache-tags";
 import { unauthorizedApiResponse } from "@/lib/server/dev-postman-bypass";
 import {
   getClerkUserIdFromRequest,
   getCurrentAppUserFromRequest,
 } from "@/lib/server/get-current-app-user";
+import { invalidateAfterProgressWrite } from "@/lib/server/invalidate-data-cache";
 import {
   ReadingAttemptError,
   submitSpeechAttempt,
@@ -25,7 +27,10 @@ export const GET = async (req: NextRequest) => {
         orderBy: { createdAt: "desc" },
       }),
     ["api-speech-targets-id-get", userId],
-    { revalidate: CACHE_REVALIDATE_SECONDS },
+    {
+      revalidate: CACHE_REVALIDATE_SECONDS,
+      tags: [CACHE_TAG_SPEECH, cacheTagUser(userId)],
+    },
   )();
   return NextResponse.json(attempts);
 };
@@ -49,10 +54,11 @@ export const POST = async (req: NextRequest) => {
 
     const attempt = await submitSpeechAttempt({
       userId: user.id,
-      targetId,
-      transcribedText,
+      targetId: targetId.trim(),
+      transcribedText: transcribedText.trim(),
       durationSec: durationSec ?? 60,
     });
+    invalidateAfterProgressWrite(user.id);
     return NextResponse.json(attempt, { status: 201 });
   } catch (error) {
     console.error("Failed to save reading attempt:", error);

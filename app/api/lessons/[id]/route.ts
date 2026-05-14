@@ -1,5 +1,7 @@
 import prisma from "@/lib/prisma";
 import { CACHE_REVALIDATE_SECONDS } from "@/lib/server/cache";
+import { CACHE_TAG_CATALOG } from "@/lib/server/cache-tags";
+import { invalidateAfterCatalogMutation } from "@/lib/server/invalidate-data-cache";
 import { Prisma } from "@prisma/client";
 import { unstable_cache } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
@@ -17,7 +19,7 @@ export const GET = async (
         include: { content: true, tasks: true, userProgress: true, level: true },
       }),
     ["api-lessons-id-get", id],
-    { revalidate: CACHE_REVALIDATE_SECONDS },
+    { revalidate: CACHE_REVALIDATE_SECONDS, tags: [CACHE_TAG_CATALOG] },
   )();
 
   if (!lesson) {
@@ -56,6 +58,7 @@ export const PATCH = async (
       },
     });
 
+    invalidateAfterCatalogMutation();
     return NextResponse.json(lesson);
   } catch (error) {
     if (error instanceof Prisma.PrismaClientKnownRequestError) {
@@ -87,6 +90,7 @@ export const DELETE = async (
   try {
     const { id } = await params;
     await prisma.lesson.delete({ where: { id } });
+    invalidateAfterCatalogMutation();
     return NextResponse.json({ message: "Deleted successfully" });
   } catch (error) {
     if (

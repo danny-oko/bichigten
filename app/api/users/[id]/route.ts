@@ -3,6 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 import prisma from "@/lib/prisma";
 import { CACHE_REVALIDATE_SECONDS } from "@/lib/server/cache";
+import { CACHE_TAG_LEADERBOARD, cacheTagUser } from "@/lib/server/cache-tags";
+import { invalidateAfterUserRowMutation } from "@/lib/server/invalidate-data-cache";
 import { getRankNameFromXp } from "@/lib/utils/getRankNameFromXp";
 
 type Params = { params: Promise<{ id: string }> };
@@ -23,7 +25,7 @@ export const GET = async (_req: NextRequest, { params }: Params) => {
         },
       }),
     ["api-users-id-get", id],
-    { revalidate: CACHE_REVALIDATE_SECONDS },
+    { revalidate: CACHE_REVALIDATE_SECONDS, tags: [cacheTagUser(id), CACHE_TAG_LEADERBOARD] },
   )();
 
   if (!user)
@@ -44,6 +46,7 @@ export const PATCH = async (req: NextRequest, { params }: Params) => {
     data: body,
   });
 
+  invalidateAfterUserRowMutation(id);
   return NextResponse.json(user);
 };
 
@@ -52,5 +55,6 @@ export const DELETE = async (_req: NextRequest, { params }: Params) => {
 
   await prisma.user.delete({ where: { id } });
 
+  invalidateAfterUserRowMutation(id);
   return NextResponse.json({ message: "User deleted" });
 };

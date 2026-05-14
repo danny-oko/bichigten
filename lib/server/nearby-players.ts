@@ -4,6 +4,7 @@ import { unstable_cache } from "next/cache";
 import prisma from "@/lib/prisma";
 
 import { CACHE_REVALIDATE_SECONDS } from "@/lib/server/cache";
+import { CACHE_TAG_LEADERBOARD } from "@/lib/server/cache-tags";
 
 export type NearbyPlayerSourceRow = {
   id: string;
@@ -56,7 +57,7 @@ async function fetchTopPlayersForSidebar() {
 const getTopPlayersForSidebarCached = unstable_cache(
   fetchTopPlayersForSidebar,
   ["loadHomeNearbyPlayers-top5"],
-  { revalidate: CACHE_REVALIDATE_SECONDS },
+  { revalidate: CACHE_REVALIDATE_SECONDS, tags: [CACHE_TAG_LEADERBOARD] },
 );
 
 export const loadHomeNearbyPlayers = cache(async (userId: string) => {

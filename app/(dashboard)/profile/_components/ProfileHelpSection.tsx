@@ -1,3 +1,5 @@
+import { Mail } from "lucide-react";
+
 import { mnProfile } from "@/lib/i18n/mn-profile";
 
 export function ProfileHelpSection() {
@@ -12,8 +14,9 @@ export function ProfileHelpSection() {
       <p className="mb-4 text-sm text-[#706552]">{mnProfile.helpBody}</p>
       <a
         href="mailto:support@mazaalai.learn"
-        className="inline-flex rounded-2xl border-3 border-[#1d2b55] bg-transparent px-4 py-2.5 text-sm font-bold text-[#1d2b55] transition-colors hover:border-[#E8920A] hover:text-[#E8920A] dark:border-[#84d8ff] dark:text-[#84d8ff] dark:hover:border-[#84d8ff] dark:hover:text-[#e8e4dc]"
+        className="inline-flex items-center gap-2 rounded-2xl border-3 border-[#1d2b55] bg-transparent px-4 py-2.5 text-sm font-bold text-[#1d2b55] transition-colors hover:border-[#E8920A] hover:text-[#E8920A] dark:border-[#84d8ff] dark:text-[#84d8ff] dark:hover:border-[#84d8ff] dark:hover:text-[#e8e4dc]"
       >
+        <Mail aria-hidden className="size-4 shrink-0" />
         {mnProfile.helpEmailCta}
       </a>
     </section>

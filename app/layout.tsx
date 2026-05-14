@@ -1,9 +1,11 @@
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Balsamiq_Sans, Dosis, Geist, Geist_Mono } from "next/font/google";
+import Script from "next/script";
 import "./globals.css";
 
 import localFont from "next/font/local";
+import { THEME_BOOTSTRAP_SCRIPT } from "@/lib/theme-storage";
 import { ConditionalBars } from "./_components/Bar-Sections/conditional-bars";
 import { NavLoadingProvider } from "./_components/nav-loading-context";
 import { NavigationLoader } from "./_components/navigation-loader";
@@ -49,15 +51,22 @@ export const metadata: Metadata = {
   },
 };
 
+
 export default function RootLayout({
   children,
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html
       lang="mn"
+      suppressHydrationWarning
       className={`${geistSans.variable} ${geistMono.variable} ${mongolFont.variable} ${balsamiq.variable} h-full antialiased`}
     >
       <body className="flex h-full min-h-0 flex-row overflow-hidden font-sans">
+        <Script
+          id="theme-from-storage"
+          strategy="beforeInteractive"
+          dangerouslySetInnerHTML={{ __html: THEME_BOOTSTRAP_SCRIPT }}
+        />
         <ClerkProvider
           signInUrl="/sign-in"
           signUpUrl="/sign-up"

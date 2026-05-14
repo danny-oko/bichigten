@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Bell } from "lucide-react";
 
 import { mnProfile } from "@/lib/i18n/mn-profile";
 
@@ -40,12 +41,13 @@ export function NotificationsPreference() {
       >
         <span>{mnProfile.notificationsDaily}</span>
         <span
-          className={`rounded-full border-3 px-3 py-1 text-xs font-bold ${
+          className={`inline-flex shrink-0 items-center gap-1.5 rounded-full border-3 px-3 py-1 text-xs font-bold ${
             enabled
               ? "border-emerald-500 bg-transparent text-emerald-800 dark:border-emerald-400 dark:text-emerald-300"
               : "border-neutral-400 bg-transparent text-neutral-600 dark:border-neutral-600 dark:text-neutral-400"
           }`}
         >
+          <Bell aria-hidden className="size-3.5 shrink-0" />
           {enabled ? mnProfile.notificationsOn : mnProfile.notificationsOff}
         </span>
       </button>

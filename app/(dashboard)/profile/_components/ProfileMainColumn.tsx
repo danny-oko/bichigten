@@ -1,18 +1,16 @@
-import type { User } from "@prisma/client";
-
 import {
   buildProfileUserFromData,
   fetchProfileDashboardData,
 } from "@/lib/server/build-profile-user";
 
-import type { ProfileTab, ProfileUser } from "../common/types";
+import type { ProfileAppUser, ProfileTab, ProfileUser } from "../common/types";
 import ProfileHero from "./ProfileHero";
 import ProfileSummaryStats from "./ProfileSummaryStats";
 import ProfileTabsSection from "./ProfileTabsSection";
 
 type ProfileMainColumnProps = {
   activeTab: ProfileTab;
-  appUser: User;
+  appUser: ProfileAppUser;
 };
 
 export default async function ProfileMainColumn({

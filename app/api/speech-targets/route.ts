@@ -3,6 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 import prisma from "@/lib/prisma";
 import { CACHE_REVALIDATE_SECONDS } from "@/lib/server/cache";
+import { CACHE_TAG_SPEECH } from "@/lib/server/cache-tags";
+import { invalidateAfterSpeechMutation } from "@/lib/server/invalidate-data-cache";
 
 export const GET = async () => {
   const targets = await unstable_cache(
@@ -11,7 +13,7 @@ export const GET = async () => {
         orderBy: { createdAt: "desc" },
       }),
     ["api-speech-targets-get"],
-    { revalidate: CACHE_REVALIDATE_SECONDS },
+    { revalidate: CACHE_REVALIDATE_SECONDS, tags: [CACHE_TAG_SPEECH] },
   )();
 
   return NextResponse.json(targets);
@@ -37,5 +39,6 @@ export const POST = async (req: NextRequest) => {
     },
   });
 
+  invalidateAfterSpeechMutation();
   return NextResponse.json(target, { status: 201 });
 };

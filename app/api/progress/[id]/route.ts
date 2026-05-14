@@ -1,4 +1,5 @@
 import prisma from "@/lib/prisma";
+import { invalidateAfterProgressWrite } from "@/lib/server/invalidate-data-cache";
 import { unauthorizedApiResponse } from "@/lib/server/dev-postman-bypass";
 import { getClerkUserIdFromRequest } from "@/lib/server/get-current-app-user";
 import { NextRequest, NextResponse } from "next/server";
@@ -30,6 +31,7 @@ export const PATCH = async (req: NextRequest, { params }: Params) => {
       ...(body.status === "COMPLETED" && { completedAt: new Date() }),
     },
   });
+  invalidateAfterProgressWrite(userId);
   return NextResponse.json(progress);
 };
 
@@ -50,5 +52,6 @@ export const DELETE = async (req: NextRequest, { params }: Params) => {
   }
 
   await prisma.userLessonProgress.delete({ where: { id } });
+  invalidateAfterProgressWrite(userId);
   return NextResponse.json({ message: "Deleted" });
 };

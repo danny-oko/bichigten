@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 import { unauthorizedApiResponse } from "@/lib/server/dev-postman-bypass";
 import { getCurrentAppUserFromRequest } from "@/lib/server/get-current-app-user";
+import { invalidateAfterProgressWrite } from "@/lib/server/invalidate-data-cache";
 import {
   ReadingAttemptError,
   submitSpeechAttempt,
@@ -71,6 +72,7 @@ export const POST = async (req: NextRequest) => {
       console.log("[READING ATTEMPT] created:", attempt.id);
     }
 
+    invalidateAfterProgressWrite(user.id);
     return NextResponse.json(attempt, { status: 201 });
   } catch (error) {
     console.error("Failed to save reading attempt:", error);

@@ -6,6 +6,7 @@ import {
   isDevPostmanBypassRequest,
 } from "@/lib/server/dev-postman-bypass";
 import { getCurrentAppUserFromRequest } from "@/lib/server/get-current-app-user";
+import { invalidateAfterUserRowMutation } from "@/lib/server/invalidate-data-cache";
 
 export async function GET(req: Request) {
   const user = await getCurrentAppUserFromRequest(req);
@@ -70,6 +71,7 @@ export async function PATCH(req: Request) {
       },
     });
 
+    invalidateAfterUserRowMutation(user.id);
     return NextResponse.json(updated);
   } catch {
     return NextResponse.json(

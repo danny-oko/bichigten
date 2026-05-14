@@ -4,6 +4,7 @@ import { NextResponse } from "next/server";
 
 import prisma from "@/lib/prisma";
 import { CACHE_REVALIDATE_SECONDS } from "@/lib/server/cache";
+import { cacheTagUser } from "@/lib/server/cache-tags";
 
 export const GET = async () => {
   const { userId } = await auth();
@@ -19,7 +20,7 @@ export const GET = async () => {
         select: { totalXp: true },
       }),
     ["api-users-me-get", userId],
-    { revalidate: CACHE_REVALIDATE_SECONDS },
+    { revalidate: CACHE_REVALIDATE_SECONDS, tags: [cacheTagUser(userId)] },
   )();
 
   if (!user) {

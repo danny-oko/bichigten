@@ -3,6 +3,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 import prisma from "@/lib/prisma";
 import { CACHE_REVALIDATE_SECONDS } from "@/lib/server/cache";
+import { CACHE_TAG_CATALOG } from "@/lib/server/cache-tags";
+import { invalidateAfterCatalogMutation } from "@/lib/server/invalidate-data-cache";
 
 export const GET = async (req: NextRequest) => {
   const lessonId = req.nextUrl.searchParams.get("lessonId");
@@ -13,7 +15,7 @@ export const GET = async (req: NextRequest) => {
         orderBy: { order: "asc" },
       }),
     ["api-lesson-contents-get", lessonId ?? ""],
-    { revalidate: CACHE_REVALIDATE_SECONDS },
+    { revalidate: CACHE_REVALIDATE_SECONDS, tags: [CACHE_TAG_CATALOG] },
   )();
   return NextResponse.json(contents);
 };
@@ -39,5 +41,6 @@ export const POST = async (req: NextRequest) => {
       order: parseInt(order),
     },
   });
+  invalidateAfterCatalogMutation();
   return NextResponse.json(content, { status: 201 });
 };

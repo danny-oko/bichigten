@@ -2,6 +2,7 @@ import { auth, currentUser } from "@clerk/nextjs/server";
 import type { Prisma } from "@prisma/client";
 
 import prisma from "@/lib/prisma";
+import { withDbRetry } from "@/lib/server/db-retry";
 import { fallbackUsernameFromClerkId } from "@/lib/server/fallback-username";
 import {
   getDevImpersonatedUserId,
@@ -23,10 +24,12 @@ export async function getCurrentAppUser() {
     return null;
   }
 
-  const [existing, clerkUser] = await Promise.all([
+  /** Avoid `Promise.all` with DB + Clerk: two outbound calls at once can worsen pool
+   *  contention; transient "Server has closed the connection" is retried below. */
+  const existing = await withDbRetry(() =>
     prisma.user.findUnique({ where: { id: userId } }),
-    currentUser(),
-  ]);
+  );
+  const clerkUser = await currentUser();
 
   const primaryEmail = clerkUser?.emailAddresses.find(
     (entry) => entry.id === clerkUser.primaryEmailAddressId,
@@ -74,15 +77,17 @@ export async function getCurrentAppUser() {
     username;
 
   if (!existing) {
-    return prisma.user.create({
-      data: {
-        id: userId,
-        email,
-        userName: username,
-        name,
-        avatarUrl: clerkUser?.imageUrl ?? undefined,
-      },
-    });
+    return withDbRetry(() =>
+      prisma.user.create({
+        data: {
+          id: userId,
+          email,
+          userName: username,
+          name,
+          avatarUrl: clerkUser?.imageUrl ?? undefined,
+        },
+      }),
+    );
   }
 
   const data: Prisma.UserUpdateInput = {};
@@ -113,10 +118,12 @@ export async function getCurrentAppUser() {
     return existing;
   }
 
-  return prisma.user.update({
-    where: { id: userId },
-    data,
-  });
+  return withDbRetry(() =>
+    prisma.user.update({
+      where: { id: userId },
+      data,
+    }),
+  );
 }
 
 /**

@@ -1,29 +1,40 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { Moon, Sun } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { mnProfile } from "@/lib/i18n/mn-profile";
 import { mnUi } from "@/lib/i18n/mn-ui";
-
-const STORAGE_KEY = "mazaalai-profile-dark-preview";
+import { THEME_STORAGE_KEY } from "@/lib/theme-storage";
 
 export function AppearanceToggle() {
   const [dark, setDark] = useState(false);
 
   useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    const root = document.documentElement;
-    const initial = saved === "1" || root.classList.contains("dark");
-    setDark(initial);
-    root.classList.toggle("dark", initial);
+    try {
+      const saved = localStorage.getItem(THEME_STORAGE_KEY);
+      if (saved === "1") {
+        setDark(true);
+      } else if (saved === "0") {
+        setDark(false);
+      } else {
+        setDark(document.documentElement.classList.contains("dark"));
+      }
+    } catch {
+      setDark(document.documentElement.classList.contains("dark"));
+    }
   }, []);
 
   const toggle = () => {
     const next = !dark;
     setDark(next);
     document.documentElement.classList.toggle("dark", next);
-    localStorage.setItem(STORAGE_KEY, next ? "1" : "0");
+    try {
+      localStorage.setItem(THEME_STORAGE_KEY, next ? "1" : "0");
+    } catch {
+      /* private mode etc. */
+    }
   };
 
   return (
@@ -41,7 +52,23 @@ export function AppearanceToggle() {
         onClick={toggle}
         className="rounded-2xl border-[#E8920A]/40 font-bold"
       >
-        {dark ? mnUi.switchToLight : mnUi.switchToDark}
+        <span
+          className="inline-flex items-center gap-2"
+          suppressHydrationWarning
+        >
+          {dark ? (
+            <Sun
+              aria-hidden
+              className="size-4 shrink-0 text-[#E8920A]"
+            />
+          ) : (
+            <Moon
+              aria-hidden
+              className="size-4 shrink-0 text-[#5b6a78] dark:text-[#84d8ff]"
+            />
+          )}
+          {dark ? mnUi.switchToLight : mnUi.switchToDark}
+        </span>
       </Button>
     </section>
   );

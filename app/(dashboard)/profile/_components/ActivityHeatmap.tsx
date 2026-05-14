@@ -38,12 +38,10 @@ function toISODateKeyUTC(date: Date) {
 }
 
 function formatTooltipDateUTC(date: Date) {
-  return date.toLocaleDateString("mn-MN", {
-    month: "short",
-    day: "numeric",
-    year: "numeric",
-    timeZone: "UTC",
-  });
+  const month = mnProfile.heatmapMonthShortUtc[date.getUTCMonth()];
+  const day = date.getUTCDate();
+  const year = date.getUTCFullYear();
+  return `${month} ${day}, ${year}`;
 }
 
 function toLevel(value: number, maxValue: number): number {
@@ -103,9 +101,7 @@ export default function ActivityHeatmap({ days }: ActivityHeatmapProps) {
     for (let c = 0; c < COLS; c += 1) {
       const d = addDaysUTC(startDateUTC, c * 7);
       if (d.getUTCMonth() !== prevMonth) {
-        labels.push(
-          d.toLocaleString("mn-MN", { month: "short", timeZone: "UTC" }),
-        );
+        labels.push(mnProfile.heatmapMonthShortUtc[d.getUTCMonth()]);
         prevMonth = d.getUTCMonth();
       } else {
         labels.push("");
