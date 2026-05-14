@@ -4,6 +4,7 @@ import { unstable_cache } from "next/cache";
 import { redirect } from "next/navigation";
 import { CACHE_REVALIDATE_SECONDS } from "@/lib/server/cache";
 import { cacheTagUser } from "@/lib/server/cache-tags";
+import { deriveAppUserFieldsFromClerk } from "@/lib/server/clerk-to-db-user-fields";
 import { ensureUser } from "@/lib/server/ensure-user";
 import prisma from "@/lib/prisma";
 
@@ -17,14 +18,13 @@ export default async function LessonPage({ params }: Props) {
   if (!userId) redirect("/sign-in");
 
   const clerkUser = await currentUser();
+  const fields = deriveAppUserFieldsFromClerk(userId, clerkUser);
   await ensureUser({
     id: userId,
-    email: clerkUser?.emailAddresses[0]?.emailAddress,
-    username: clerkUser?.username,
-    name:
-      [clerkUser?.firstName, clerkUser?.lastName].filter(Boolean).join(" ") ||
-      undefined,
-    avatarUrl: clerkUser?.imageUrl,
+    email: fields.email,
+    username: fields.userName,
+    name: fields.name,
+    avatarUrl: fields.avatarUrl ?? undefined,
   });
 
   const dbUser = await unstable_cache(

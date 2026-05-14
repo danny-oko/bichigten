@@ -2,8 +2,11 @@ import { auth, currentUser } from "@clerk/nextjs/server";
 import type { Prisma } from "@prisma/client";
 
 import prisma from "@/lib/prisma";
+import {
+  deriveAppUserFieldsFromClerk,
+  isProvisionalDbUsername,
+} from "@/lib/server/clerk-to-db-user-fields";
 import { withDbRetry } from "@/lib/server/db-retry";
-import { fallbackUsernameFromClerkId } from "@/lib/server/fallback-username";
 import {
   getDevImpersonatedUserId,
   isDevPostmanBypassRequest,
@@ -31,50 +34,8 @@ export async function getCurrentAppUser() {
   );
   const clerkUser = await currentUser();
 
-  const primaryEmail = clerkUser?.emailAddresses.find(
-    (entry) => entry.id === clerkUser.primaryEmailAddressId,
-  )?.emailAddress;
-
-  const emailLocal =
-    primaryEmail && primaryEmail.includes("@")
-      ? primaryEmail
-          .split("@")[0]
-          .replace(/[^a-zA-Z0-9._-]/g, "")
-          .slice(0, 20)
-      : "";
-
-  const fallbackEmail = `${userId}@no-email.local`;
-  const email = primaryEmail ?? fallbackEmail;
-
-  const fromFirstName = clerkUser?.firstName
-    ? clerkUser.firstName
-        .toLowerCase()
-        .replace(/\s+/g, "-")
-        .replace(/[^a-zA-Z0-9_-]/g, "")
-        .slice(0, 20)
-    : "";
-
-  const emailLocalSlug = emailLocal
-    .replace(/\./g, "_")
-    .replace(/[^a-zA-Z0-9_]/g, "")
-    .slice(0, 20);
-
-  const usernameFromEmail =
-    emailLocalSlug.length >= 3 && /^[a-zA-Z0-9_]{3,20}$/.test(emailLocalSlug)
-      ? emailLocalSlug
-      : "";
-
-  const username =
-    clerkUser?.username?.trim() ||
-    (fromFirstName.length >= 3 ? fromFirstName : "") ||
-    usernameFromEmail ||
-    fallbackUsernameFromClerkId(userId);
-
-  const name =
-    [clerkUser?.firstName, clerkUser?.lastName].filter(Boolean).join(" ").trim() ||
-    clerkUser?.username?.trim() ||
-    (emailLocal.length >= 2 ? emailLocal : "") ||
-    username;
+  const { email, userName: username, name, avatarUrl } =
+    deriveAppUserFieldsFromClerk(userId, clerkUser);
 
   if (!existing) {
     return withDbRetry(() =>
@@ -84,7 +45,7 @@ export async function getCurrentAppUser() {
           email,
           userName: username,
           name,
-          avatarUrl: clerkUser?.imageUrl ?? undefined,
+          avatarUrl: avatarUrl ?? undefined,
         },
       }),
     );
@@ -94,24 +55,27 @@ export async function getCurrentAppUser() {
   if (existing.email !== email) {
     data.email = email;
   }
-  if (existing.userName?.startsWith("user-user_")) {
+
+  const hadBadUserName = isProvisionalDbUsername(userId, existing.userName);
+  if (hadBadUserName && username) {
+    data.userName = username;
+  } else if (!existing.userName && username) {
     data.userName = username;
   }
-  if (
+
+  const hadBadName =
+    isProvisionalDbUsername(userId, existing.name) ||
     existing.name?.startsWith("user-user_") ||
-    (existing.name === existing.userName &&
-      existing.userName?.startsWith("user-user_"))
-  ) {
+    (existing.name === existing.userName && hadBadUserName);
+
+  if (hadBadName && name) {
+    data.name = name;
+  } else if (!existing.name && name) {
     data.name = name;
   }
-  if (!existing.userName && username) {
-    data.userName = username;
-  }
-  if (!existing.name && name) {
-    data.name = name;
-  }
-  if (!existing.avatarUrl && clerkUser?.imageUrl) {
-    data.avatarUrl = clerkUser.imageUrl;
+
+  if (!existing.avatarUrl && avatarUrl) {
+    data.avatarUrl = avatarUrl;
   }
 
   if (Object.keys(data).length === 0) {

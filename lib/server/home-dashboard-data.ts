@@ -1,10 +1,12 @@
 import { cache } from "react";
+import { currentUser } from "@clerk/nextjs/server";
 import { unstable_cache } from "next/cache";
 
 import prisma from "@/lib/prisma";
 import { CACHE_REVALIDATE_SECONDS } from "@/lib/server/cache";
 import { CACHE_TAG_CATALOG, cacheTagUser } from "@/lib/server/cache-tags";
 import { buildLast7StreakDots } from "@/lib/server/build-profile-user";
+import { deriveAppUserFieldsFromClerk } from "@/lib/server/clerk-to-db-user-fields";
 import { calculateDailyStreak, toUtcDateOnly } from "@/lib/server/daily-streak";
 import { ensureUser } from "@/lib/server/ensure-user";
 
@@ -45,7 +47,20 @@ async function loadHomeProgressSidebarQueries(userId: string) {
 }
 
 export const loadHomeProgressSidebar = cache(async (userId: string) => {
-  const ensuredUser = await ensureUser({ id: userId });
+  const clerkUser = await currentUser();
+  const fields = deriveAppUserFieldsFromClerk(userId, clerkUser);
+  await ensureUser({
+    id: userId,
+    email: fields.email,
+    username: fields.userName,
+    name: fields.name,
+    avatarUrl: fields.avatarUrl ?? undefined,
+  });
+
+  const progressUser = await prisma.user.findUnique({
+    where: { id: userId },
+    select: { totalXp: true, heartsRemaining: true },
+  });
 
   const {
     completionRows,
@@ -80,8 +95,8 @@ export const loadHomeProgressSidebar = cache(async (userId: string) => {
   }
 
   return {
-    xp: ensuredUser.totalXp ?? 0,
-    heartsRemaining: ensuredUser.heartsRemaining ?? 5,
+    xp: progressUser?.totalXp ?? 0,
+    heartsRemaining: progressUser?.heartsRemaining ?? 5,
     streak,
     streakWeekDays,
     completedLessons: completedLessonsCount,
