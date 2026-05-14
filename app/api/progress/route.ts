@@ -10,36 +10,41 @@ import { getClerkUserIdFromRequest } from "@/lib/server/get-current-app-user";
 import { MAX_USER_HEARTS } from "@/lib/server/hearts-refill";
 
 export const GET = async (req: NextRequest) => {
-  const lessonId = req.nextUrl.searchParams.get("lessonId");
-  const userId = await getClerkUserIdFromRequest(req);
+  try {
+    const lessonId = req.nextUrl.searchParams.get("lessonId");
+    const userId = await getClerkUserIdFromRequest(req);
 
-  if (!userId) return unauthorizedApiResponse(req);
+    if (!userId) return unauthorizedApiResponse(req);
 
-  if (lessonId) {
+    if (lessonId) {
+      const progress = await unstable_cache(
+        async () =>
+          prisma.userLessonProgress.findUnique({
+            where: { userId_lessonId: { userId, lessonId } },
+          }),
+        ["api-progress-get", userId, lessonId],
+        {
+          revalidate: CACHE_REVALIDATE_SECONDS,
+          tags: [cacheTagUser(userId)],
+        },
+      )();
+      return NextResponse.json(progress);
+    }
+
     const progress = await unstable_cache(
       async () =>
-        prisma.userLessonProgress.findUnique({
-          where: { userId_lessonId: { userId, lessonId } },
+        prisma.userLessonProgress.findMany({
+          where: { userId },
+          include: { lesson: true },
         }),
-      ["api-progress-get", userId, lessonId],
-      {
-        revalidate: CACHE_REVALIDATE_SECONDS,
-        tags: [cacheTagUser(userId)],
-      },
+      ["api-progress-get-all", userId],
+      { revalidate: CACHE_REVALIDATE_SECONDS, tags: [cacheTagUser(userId)] },
     )();
     return NextResponse.json(progress);
+  } catch (err) {
+    return NextResponse.json({ error_message: err });
   }
-
-  const progress = await unstable_cache(
-    async () =>
-      prisma.userLessonProgress.findMany({
-        where: { userId },
-        include: { lesson: true },
-      }),
-    ["api-progress-get-all", userId],
-    { revalidate: CACHE_REVALIDATE_SECONDS, tags: [cacheTagUser(userId)] },
-  )();
-  return NextResponse.json(progress);
+  
 };
 
 export const POST = async (req: NextRequest) => {
