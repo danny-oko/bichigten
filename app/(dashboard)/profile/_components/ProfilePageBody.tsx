@@ -1,18 +1,21 @@
 import { Suspense } from "react";
 
+import HomeDashboardSidebar from "@/app/(dashboard)/home/_components/HomeDashboardSidebar";
+import { HomeSignedInSidebarSkeleton } from "@/app/(dashboard)/home/_components/HomeSidebarSkeletons";
+import LessonProgressCard from "@/app/(dashboard)/home/_components/LessonProgressCard";
+import WebNearbyPlayers from "@/app/(dashboard)/leaderboard/_components/SocialPeersList";
+import { Header } from "@/app/_components/Bar-Sections/header";
 import { MainLayout } from "@/components/layout/MainLayout";
+import { buildLast7StreakDots } from "@/lib/server/build-profile-user";
 import { getCurrentAppUser } from "@/lib/server/get-current-app-user";
+import { auth } from "@clerk/nextjs/server";
 import { redirect } from "next/navigation";
 
 import type { ProfileTab } from "../common/types";
-import ProfileAsideLessonProgressWrapper from "./ProfileAsideLessonProgressWrapper";
-import ProfileAsideNearbyPlayersWrapper from "./ProfileAsideNearbyPlayersWrapper";
-import {
-  ProfileLessonProgressCardSkeleton,
-  ProfileNearbyPlayersSkeleton,
-} from "./ProfileAsideSkeletons";
 import ProfileMainColumn from "./ProfileMainColumn";
 import ProfileMainColumnSkeleton from "./ProfileMainColumnSkeleton";
+
+const guestStreakWeek = buildLast7StreakDots(new Set());
 
 type ProfilePageBodyProps = {
   activeTab: ProfileTab;
@@ -26,21 +29,33 @@ export default async function ProfilePageBody({
     redirect("/sign-in");
   }
 
-  const displayName = appUser.name ?? appUser.userName;
+  const { userId } = await auth();
 
   const profileAside = (
-    <>
-      <Suspense fallback={<ProfileLessonProgressCardSkeleton />}>
-        <ProfileAsideLessonProgressWrapper userId={appUser.id} />
-      </Suspense>
-      <Suspense fallback={<ProfileNearbyPlayersSkeleton />}>
-        <ProfileAsideNearbyPlayersWrapper
-          userId={appUser.id}
-          totalXp={appUser.totalXp}
-          displayName={displayName}
-        />
-      </Suspense>
-    </>
+    <div className="space-y-4">
+      {userId ? (
+        <Suspense fallback={<HomeSignedInSidebarSkeleton />}>
+          <HomeDashboardSidebar />
+        </Suspense>
+      ) : (
+        <>
+          <Header
+            streak={0}
+            streakWeekDays={guestStreakWeek}
+            totalXp={0}
+            heartsRemaining={5}
+            fixedOnDesktop={false}
+          />
+          <LessonProgressCard
+            completedLessons={0}
+            totalLessons={0}
+            nextLessonHref="/dictionary"
+            nextLessonTitle="Explore Dictionary"
+          />
+          <WebNearbyPlayers players={[]} />
+        </>
+      )}
+    </div>
   );
 
   return (

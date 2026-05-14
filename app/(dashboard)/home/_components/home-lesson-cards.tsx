@@ -2,7 +2,6 @@
 
 import { useNavLoading } from "@/app/_components/nav-loading-context";
 import { Check, Lock, Star } from "lucide-react";
-import { Montserrat } from "next/font/google";
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -16,11 +15,6 @@ import {
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
 
-const montserrat = Montserrat({
-  subsets: ["latin", "cyrillic"],
-  weight: ["400", "500", "600", "700"],
-});
-
 export type Lesson = {
   id: string;
   title: string;
@@ -28,6 +22,10 @@ export type Lesson = {
   videoUrl?: string | null;
   order: number;
   levelId: string;
+  level?: {
+    title: string;
+    order: number;
+  };
   status?: "done" | "active" | "locked";
 };
 
@@ -68,18 +66,69 @@ function toYoutubeEmbedUrl(url: string | null | undefined): string | null {
   return null;
 }
 
-export const X = [47, 78, 47, 18, 47, 78, 47];
+export const PATH_X = [50, 36, 62, 44, 64, 50, 38, 60];
 export const ROW = 160;
+export const SECTION_GAP = 150;
 export const SW = 340;
 
+export function sortLessonsBySection(lessons: Lesson[]) {
+  return [...lessons].sort((a, b) => {
+    const sectionOrder = (a.level?.order ?? 0) - (b.level?.order ?? 0);
+
+    return sectionOrder || a.order - b.order;
+  });
+}
+
+export function getSectionGapCountBefore(lessons: Lesson[], index: number) {
+  let gapCount = 0;
+
+  for (let i = 1; i <= index; i++) {
+    if (lessons[i]?.levelId !== lessons[i - 1]?.levelId) {
+      gapCount += 1;
+    }
+  }
+
+  return gapCount;
+}
+
+export function getLessonSectionIndex(lessons: Lesson[], index: number) {
+  let sectionIndex = 0;
+
+  for (let i = index - 1; i >= 0; i--) {
+    if (lessons[i]?.levelId !== lessons[index]?.levelId) break;
+
+    sectionIndex += 1;
+  }
+
+  return sectionIndex;
+}
+
+export function getLessonXPercent(lessons: Lesson[], index: number) {
+  const sectionIndex = getLessonSectionIndex(lessons, index);
+
+  return PATH_X[sectionIndex % PATH_X.length];
+}
+
+export function getLessonBaseY(lessons: Lesson[], index: number) {
+  return index * ROW + getSectionGapCountBefore(lessons, index) * SECTION_GAP;
+}
+
+export function getLessonsHeight(lessons: Lesson[]) {
+  if (!lessons.length) return 80;
+
+  return (
+    lessons.length * ROW +
+    getSectionGapCountBefore(lessons, lessons.length - 1) * SECTION_GAP +
+    80
+  );
+}
+
 function assignStatuses(lessons: Lesson[], completedUpTo: number): Lesson[] {
-  return lessons
-    .sort((a, b) => a.order - b.order)
-    .map((l, i) => ({
-      ...l,
-      status:
-        i < completedUpTo ? "done" : i === completedUpTo ? "active" : "locked",
-    }));
+  return sortLessonsBySection(lessons).map((l, i) => ({
+    ...l,
+    status:
+      i < completedUpTo ? "done" : i === completedUpTo ? "active" : "locked",
+  }));
 }
 
 type ProgressItem = {
@@ -88,7 +137,7 @@ type ProgressItem = {
 };
 
 function resolveCompletedUpTo(lessons: Lesson[], progress: ProgressItem[]) {
-  const sorted = [...lessons].sort((a, b) => a.order - b.order);
+  const sorted = sortLessonsBySection(lessons);
   const completedSet = new Set(
     progress
       .filter((item) => item.status === "COMPLETED")
@@ -157,7 +206,6 @@ export const LessonCards = ({
         <DialogContent
           showCloseButton
           className={cn(
-            montserrat.className,
             "max-h-[min(90vh,640px)] overflow-y-auto sm:max-w-lg",
             "bg-[#F0EDE3] border-[#ead9bb] dark:bg-[#1a2124] dark:border-[#252f35]",
           )}
@@ -228,7 +276,7 @@ export const LessonCards = ({
         const isDone = l.status === "done";
         const isActive = l.status === "active";
         const Icon = isLocked ? Lock : isDone ? Check : Star;
-        const xPos = X[i % X.length];
+        const xPos = getLessonXPercent(lessons, i);
 
         return (
           <div
@@ -236,7 +284,7 @@ export const LessonCards = ({
             className="absolute flex flex-col items-center transition-all duration-500"
             style={{
               left: `${xPos}%`,
-              top: `${i * ROW + 20}px`,
+              top: `${getLessonBaseY(lessons, i) + 20}px`,
               transform: "translateX(-50%)",
               zIndex: 10,
             }}

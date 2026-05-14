@@ -57,7 +57,7 @@ export default function RootLayout({
       lang="mn"
       className={`${geistSans.variable} ${geistMono.variable} ${mongolFont.variable} ${balsamiq.variable} h-full antialiased`}
     >
-      <body className="flex h-full min-h-0 flex-row overflow-hidden">
+      <body className="flex h-full min-h-0 flex-row overflow-hidden font-sans">
         <ClerkProvider
           signInUrl="/sign-in"
           signUpUrl="/sign-up"

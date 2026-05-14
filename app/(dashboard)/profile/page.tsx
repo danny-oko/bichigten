@@ -1,5 +1,5 @@
-import type { ProfileTab } from "./common/types";
 import ProfilePageBody from "./_components/ProfilePageBody";
+import type { ProfileTab } from "./common/types";
 
 const VALID_TABS: ProfileTab[] = [
   "overview",

@@ -1,4 +1,4 @@
-import { CalendarDays, LockKeyhole, UserRound } from "lucide-react";
+import { LockKeyhole, UserRound } from "lucide-react";
 
 import { mnSignUp } from "@/lib/i18n/mn-copy";
 
@@ -9,7 +9,6 @@ type SignUpProgressProps = {
 const steps = [
   { id: 1, icon: UserRound, label: mnSignUp.stepYou },
   { id: 2, icon: LockKeyhole, label: mnSignUp.stepPassword },
-  { id: 3, icon: CalendarDays, label: mnSignUp.stepAge },
 ] as const;
 
 export function SignUpProgress({ step }: SignUpProgressProps) {

@@ -2,6 +2,7 @@ import { auth, currentUser } from "@clerk/nextjs/server";
 import type { Prisma } from "@prisma/client";
 
 import prisma from "@/lib/prisma";
+import { fallbackUsernameFromClerkId } from "@/lib/server/fallback-username";
 import {
   getDevImpersonatedUserId,
   isDevPostmanBypassRequest,
@@ -31,14 +32,45 @@ export async function getCurrentAppUser() {
     (entry) => entry.id === clerkUser.primaryEmailAddressId,
   )?.emailAddress;
 
+  const emailLocal =
+    primaryEmail && primaryEmail.includes("@")
+      ? primaryEmail
+          .split("@")[0]
+          .replace(/[^a-zA-Z0-9._-]/g, "")
+          .slice(0, 20)
+      : "";
+
   const fallbackEmail = `${userId}@no-email.local`;
   const email = primaryEmail ?? fallbackEmail;
+
+  const fromFirstName = clerkUser?.firstName
+    ? clerkUser.firstName
+        .toLowerCase()
+        .replace(/\s+/g, "-")
+        .replace(/[^a-zA-Z0-9_-]/g, "")
+        .slice(0, 20)
+    : "";
+
+  const emailLocalSlug = emailLocal
+    .replace(/\./g, "_")
+    .replace(/[^a-zA-Z0-9_]/g, "")
+    .slice(0, 20);
+
+  const usernameFromEmail =
+    emailLocalSlug.length >= 3 && /^[a-zA-Z0-9_]{3,20}$/.test(emailLocalSlug)
+      ? emailLocalSlug
+      : "";
+
   const username =
-    clerkUser?.username ??
-    clerkUser?.firstName?.toLowerCase().replace(/\s+/g, "-") ??
-    `user-${userId.slice(0, 8)}`;
+    clerkUser?.username?.trim() ||
+    (fromFirstName.length >= 3 ? fromFirstName : "") ||
+    usernameFromEmail ||
+    fallbackUsernameFromClerkId(userId);
+
   const name =
     [clerkUser?.firstName, clerkUser?.lastName].filter(Boolean).join(" ").trim() ||
+    clerkUser?.username?.trim() ||
+    (emailLocal.length >= 2 ? emailLocal : "") ||
     username;
 
   if (!existing) {
@@ -56,6 +88,16 @@ export async function getCurrentAppUser() {
   const data: Prisma.UserUpdateInput = {};
   if (existing.email !== email) {
     data.email = email;
+  }
+  if (existing.userName?.startsWith("user-user_")) {
+    data.userName = username;
+  }
+  if (
+    existing.name?.startsWith("user-user_") ||
+    (existing.name === existing.userName &&
+      existing.userName?.startsWith("user-user_"))
+  ) {
+    data.name = name;
   }
   if (!existing.userName && username) {
     data.userName = username;

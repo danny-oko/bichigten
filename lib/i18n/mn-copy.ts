@@ -57,10 +57,6 @@ export const mnSignUp = {
   progressAria: "Бүртгэлийн явц",
   stepYou: "Та",
   stepPassword: "Нууц",
-  stepAge: "Нас",
-  nameTitle: "Таны нэр хэн бэ?",
-  passwordTitle: "Бүртгэлээ хамгаалах",
-  ageTitle: "Та хэдэн настай вэ?",
   emailVerifySent:
     "Таны и-мэйлд баталгаажуулах код илгээлээ. Үргэлжлүүлэхийн тулд оруулна уу.",
   signUpIncomplete:
@@ -74,7 +70,5 @@ export const mnSignUp = {
     "Ирээгүй юу? Спамыг шалгана уу. Туршилтын и-мэйлд код ",
   emailVerifyHintSuffix: " кодыг ашиглана уу.",
   codePlaceholder: "6 оронтой код",
-  agePickerAria: "Нас сонгох",
-  decreaseAgeAria: "Нас бууруулах",
-  increaseAgeAria: "Нас нэмэгдүүлэх",
+  agePlaceholder: "нас",
 } as const;

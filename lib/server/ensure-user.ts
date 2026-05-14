@@ -1,4 +1,7 @@
+import { Prisma } from "@prisma/client";
+
 import prisma from "@/lib/prisma";
+import { fallbackUsernameFromClerkId } from "@/lib/server/fallback-username";
 
 type EnsureUserArgs = {
   id: string;
@@ -8,25 +11,61 @@ type EnsureUserArgs = {
   avatarUrl?: string | null;
 };
 
+/**
+ * Ensure a `User` row exists for this Clerk id. No interactive `$transaction`:
+ * parallel callers + small pools can time out waiting for a transaction slot.
+ * Race on first insert is handled with P2002 → fetch + update.
+ */
 export async function ensureUser(args: EnsureUserArgs) {
   const { id, email, username, name, avatarUrl } = args;
   const safeEmail = email ?? `${id}@no-email.local`;
-  const safeUsername = username ?? name ?? `user-${id.slice(0, 8)}`;
+  const trimmedUsername = username?.trim();
+  const trimmedName = name?.trim();
+  const safeUsername =
+    (trimmedUsername && trimmedUsername.length > 0
+      ? trimmedUsername
+      : null) ??
+    (trimmedName && trimmedName.length > 0 ? trimmedName : null) ??
+    fallbackUsernameFromClerkId(id);
 
-  return prisma.user.upsert({
-    where: { id },
-    update: {
-      ...(email ? { email } : {}),
-      ...(username ? { userName: username } : {}),
-      ...(name ? { name } : {}),
-      ...(avatarUrl ? { avatarUrl } : {}),
-    },
-    create: {
-      id,
-      email: safeEmail,
-      userName: safeUsername,
-      name: name ?? safeUsername,
-      avatarUrl: avatarUrl ?? undefined,
-    },
-  });
+  const updateData: Prisma.UserUpdateInput = {
+    ...(email ? { email } : {}),
+    ...(username?.trim() ? { userName: username.trim() } : {}),
+    ...(name?.trim() ? { name: name.trim() } : {}),
+    ...(avatarUrl ? { avatarUrl } : {}),
+  };
+
+  const createData: Prisma.UserCreateInput = {
+    id,
+    email: safeEmail,
+    userName: safeUsername,
+    name: trimmedName ?? safeUsername,
+    avatarUrl: avatarUrl ?? undefined,
+  };
+
+  const existing = await prisma.user.findUnique({ where: { id } });
+  if (existing) {
+    return prisma.user.update({
+      where: { id },
+      data: updateData,
+    });
+  }
+
+  try {
+    return await prisma.user.create({ data: createData });
+  } catch (e) {
+    if (
+      e instanceof Prisma.PrismaClientKnownRequestError &&
+      e.code === "P2002"
+    ) {
+      const afterRace = await prisma.user.findUnique({ where: { id } });
+      if (afterRace) {
+        return prisma.user.update({
+          where: { id },
+          data: updateData,
+        });
+      }
+    }
+    throw e;
+  }
 }

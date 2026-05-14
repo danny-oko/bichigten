@@ -31,31 +31,25 @@ function getPointerCoarseServerSnapshot() {
 function StreakCardBody({
   streak,
   streakWeekDays,
-  isStreakLost,
 }: {
   streak: number;
   streakWeekDays: StreakDayDot[];
-  isStreakLost: boolean;
 }) {
   return (
     <div className="p-4 sm:p-5">
       <div className="flex gap-4">
-        <div className="relative flex h-[5.5rem] w-[5.5rem] shrink-0 items-center justify-center">
-          <Flame
-            className="absolute size-[4.5rem] text-[#E5A13D]"
-            aria-hidden
-            fill="currentColor"
-            stroke="#C8872E"
-            strokeWidth={0.6}
-          />
+        <div className="flex shrink-0 items-center gap-1">
+          <div className="relative flex h-22 w-22 items-center justify-center">
+            <Flame
+              className="absolute size-18 text-[#E5A13D]"
+              aria-hidden
+              fill="currentColor"
+              stroke="#C8872E"
+              strokeWidth={0.6}
+            />
+          </div>
           {streak > 0 ? (
-            <span
-              className={
-                isStreakLost
-                  ? "relative z-[1] text-2xl font-black tracking-tight text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)]"
-                  : "relative z-[1] text-2xl font-black tracking-tight text-white drop-shadow-[0_1px_3px_rgba(89,52,0,0.45)]"
-              }
-            >
+            <span className="text-2xl font-black tracking-tight text-[#c77a0a] tabular-nums">
               {streak}
             </span>
           ) : null}
@@ -129,9 +123,16 @@ function StreakTriggerFace({
           height={20}
         />
       )}
-      {streak > 0 ? (
-        <span className="text-md font-black sm:text-lg">{streak}</span>
-      ) : null}
+      <span
+        className={[
+          "text-md font-black tabular-nums sm:text-lg",
+          isStreakLost
+            ? "text-muted-foreground"
+            : "text-[#c77a0a] dark:text-amber-300",
+        ].join(" ")}
+      >
+        {streak}
+      </span>
     </span>
   );
 }
@@ -158,7 +159,7 @@ export function StreakNavHover({
         <DialogTrigger asChild>
           <button
             type="button"
-            className="inline-flex rounded-lg p-0.5 text-[#0F5238] transition-opacity hover:opacity-90 active:opacity-80"
+            className="inline-flex rounded-lg p-0.5 text-foreground transition-opacity hover:opacity-90 active:opacity-80"
             aria-label={mnProfile.streakTitle}
           >
             <StreakTriggerFace streak={streak} isStreakLost={isStreakLost} />
@@ -171,11 +172,7 @@ export function StreakNavHover({
           <DialogHeader className="sr-only">
             <DialogTitle>{mnProfile.streakTitle}</DialogTitle>
           </DialogHeader>
-          <StreakCardBody
-            streak={streak}
-            streakWeekDays={streakWeekDays}
-            isStreakLost={isStreakLost}
-          />
+          <StreakCardBody streak={streak} streakWeekDays={streakWeekDays} />
         </DialogContent>
       </Dialog>
     );
@@ -185,7 +182,7 @@ export function StreakNavHover({
     <HoverCard.Root openDelay={180} closeDelay={100}>
       <HoverCard.Trigger
         href="#"
-        className="inline-flex rounded-lg p-0.5 text-[#0F5238] no-underline outline-none focus-visible:ring-2 focus-visible:ring-[#E8920A]/50"
+        className="inline-flex rounded-lg p-0.5 text-foreground no-underline outline-none focus-visible:ring-2 focus-visible:ring-[#E8920A]/50"
         onClick={(e) => {
           e.preventDefault();
         }}
@@ -199,14 +196,10 @@ export function StreakNavHover({
           align="center"
           sideOffset={10}
           collisionPadding={16}
-          className="z-[200] w-[min(360px,calc(100vw-24px))] origin-[var(--radix-hover-card-content-transform-origin)] rounded-2xl border border-[#ead9bb] bg-[#fffdf8] text-[#3b2f2f] shadow-xl outline-none data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95"
+          className="z-200 w-[min(360px,calc(100vw-24px))] origin-(--radix-hover-card-content-transform-origin) rounded-2xl border border-[#ead9bb] bg-[#fffdf8] text-[#3b2f2f] shadow-xl outline-none data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=closed]:zoom-out-95 data-[state=open]:animate-in data-[state=open]:fade-in-0 data-[state=open]:zoom-in-95"
         >
           <HoverCard.Arrow className="fill-[#fffdf8]" width={14} height={7} />
-          <StreakCardBody
-            streak={streak}
-            streakWeekDays={streakWeekDays}
-            isStreakLost={isStreakLost}
-          />
+          <StreakCardBody streak={streak} streakWeekDays={streakWeekDays} />
         </HoverCard.Content>
       </HoverCard.Portal>
     </HoverCard.Root>

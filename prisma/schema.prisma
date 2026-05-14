@@ -60,7 +60,6 @@ model LessonContent {
   imageUrl     String?
   order        Int
   animationCss String?
-  unicode      String?
   lesson       Lesson  @relation(fields: [lessonId], references: [id])
 
   @@map("lesson_contents_table")

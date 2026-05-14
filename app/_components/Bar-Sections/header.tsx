@@ -1,14 +1,10 @@
-import "@fontsource/plus-jakarta-sans";
-
 import type { StreakDayDot } from "@/app/(dashboard)/profile/common/types";
 import { buildLast7StreakDots } from "@/lib/server/build-profile-user";
-
 import { StreakNavHover } from "./StreakNavHover";
 
 type HeaderProps = {
   heartsRemaining?: number;
   streak: number;
-  /** Last 7 UTC days for streak popover; defaults to empty week if omitted. */
   streakWeekDays?: StreakDayDot[];
   totalXp: number;
   fixedOnDesktop?: boolean;
@@ -32,12 +28,12 @@ export const Header = ({
   return (
     <div
       className={[
-        "w-full pt-[env(safe-area-inset-top)] font-['Plus_Jakarta_Sans']",
+        "w-full pt-[env(safe-area-inset-top)]",
         fixedOnDesktop ? "md:fixed right-20 top-4 z-100" : "",
       ].join(" ")}
     >
       <div className="w-full">
-        <div className="flex items-center px-4 py-3 font-['Plus_Jakarta_Sans']">
+        <div className="flex items-center px-4 py-3">
           <div className="flex shrink-0 items-center gap-10">
             <div
               className={`flex items-center gap-3 ${
@@ -69,7 +65,7 @@ export const Header = ({
               streak={streak}
               streakWeekDays={streakWeekDays ?? buildLast7StreakDots(new Set())}
             />
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-3">
               <img
                 src="https://d35aaqx5ub95lt.cloudfront.net/images/goals/2b5a211d830a24fab92e291d50f65d1d.svg"
                 alt="XP Icon"

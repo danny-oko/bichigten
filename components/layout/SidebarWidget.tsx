@@ -1,4 +1,3 @@
-import { Montserrat } from "next/font/google";
 import type { ReactNode } from "react";
 
 type SidebarWidgetProps = {
@@ -6,11 +5,6 @@ type SidebarWidgetProps = {
   subtitle?: string;
   children: ReactNode;
 };
-
-const montserrat = Montserrat({
-  subsets: ["latin", "cyrillic"],
-  weight: ["400", "500", "600", "700"],
-});
 
 export function SidebarWidget({
   title,

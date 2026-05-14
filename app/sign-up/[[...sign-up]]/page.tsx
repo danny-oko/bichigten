@@ -10,7 +10,6 @@ import { AuthHeader } from "@/components/auth/AuthHeader";
 import { AuthShell } from "@/components/auth/AuthShell";
 import { FieldError, FieldGroup } from "@/components/ui/field";
 import { getClerkErrorMessage } from "@/lib/clerk/error-message";
-import { AgeSignUp } from "@/components/sign-up/AgeSignUp";
 import { EmailVerificationBlock } from "@/components/sign-up/EmailVerificationBlock";
 import { NameSignUp } from "@/components/sign-up/NameSignUp";
 import { PasswordSignUp } from "@/components/sign-up/PasswordSignUp";
@@ -20,8 +19,8 @@ import { mnSignUp, mnValidation } from "@/lib/i18n/mn-copy";
 import { mnUi } from "@/lib/i18n/mn-ui";
 import {
   ageSchema,
-  signUpNameSchema,
-  signUpPasswordSchema,
+  signUpAccountStepSchema,
+  signUpProfileStepSchema,
 } from "@/lib/validators/auth";
 
 const HOME_ROUTE = "/home";
@@ -59,9 +58,13 @@ export default function SignUpPage() {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [verifyInfo, setVerifyInfo] = useState<string | null>(null);
 
-  const goNextFromName = () => {
+  const goContinueFromProfile = () => {
     setError(null);
-    const parsed = signUpNameSchema.safeParse({ fullName, username, email });
+    const parsed = signUpProfileStepSchema.safeParse({
+      fullName,
+      username,
+      age,
+    });
     if (!parsed.success) {
       return setError(
         parsed.error.issues[0]?.message ?? mnValidation.invalidInput,
@@ -70,24 +73,11 @@ export default function SignUpPage() {
     setStep(2);
   };
 
-  const goNextFromPassword = () => {
-    setError(null);
-    const parsed = signUpPasswordSchema.safeParse({
-      password,
-      confirmPassword,
-    });
-    if (!parsed.success) {
-      return setError(
-        parsed.error.issues[0]?.message ?? mnValidation.invalidPassword,
-      );
-    }
-    setStep(3);
-  };
-
   const finish = async () => {
     setError(null);
     setVerifyInfo(null);
     if (!isLoaded || !signUp) return;
+
     const ageParsed = ageSchema.safeParse(age);
     if (!ageParsed.success) {
       return setError(
@@ -95,6 +85,17 @@ export default function SignUpPage() {
       );
     }
     const ageValue = ageParsed.data;
+
+    const accountParsed = signUpAccountStepSchema.safeParse({
+      email,
+      password,
+      confirmPassword,
+    });
+    if (!accountParsed.success) {
+      return setError(
+        accountParsed.error.issues[0]?.message ?? mnValidation.invalidPassword,
+      );
+    }
 
     const [firstName, ...rest] = fullName.trim().split(/\s+/);
     const lastName = rest.join(" ") || firstName || "-";
@@ -183,33 +184,34 @@ export default function SignUpPage() {
             <NameSignUp
               fullName={fullName}
               username={username}
-              email={email}
+              age={age}
               onChangeFullName={setFullName}
               onChangeUsername={setUsername}
-              onChangeEmail={setEmail}
+              onChangeAge={setAge}
             />
           )}
 
           {step === 2 && (
-            <PasswordSignUp
-              password={password}
-              confirmPassword={confirmPassword}
-              onChangePassword={setPassword}
-              onChangeConfirmPassword={setConfirmPassword}
-            />
-          )}
-
-          {step === 3 && <AgeSignUp value={age} onChange={setAge} />}
-
-          {step === 3 && awaitingEmailVerification && (
-            <div className="mt-4 border-t border-amber-100 pt-4">
-              <EmailVerificationBlock
-                verificationCode={verificationCode}
-                verifyInfo={verifyInfo}
-                onChangeCode={setVerificationCode}
-                onResendCode={resendVerificationCode}
+            <>
+              <PasswordSignUp
+                email={email}
+                password={password}
+                confirmPassword={confirmPassword}
+                onChangeEmail={setEmail}
+                onChangePassword={setPassword}
+                onChangeConfirmPassword={setConfirmPassword}
               />
-            </div>
+              {awaitingEmailVerification && (
+                <div className="mt-4 border-t border-amber-100 pt-4">
+                  <EmailVerificationBlock
+                    verificationCode={verificationCode}
+                    verifyInfo={verifyInfo}
+                    onChangeCode={setVerificationCode}
+                    onResendCode={resendVerificationCode}
+                  />
+                </div>
+              )}
+            </>
           )}
         </div>
 
@@ -223,11 +225,10 @@ export default function SignUpPage() {
           awaitingEmailVerification={awaitingEmailVerification}
           onBack={() => {
             setError(null);
-            setStep((s) => Math.max(1, s - 1));
+            setStep(1);
           }}
-          onContinueFromName={goNextFromName}
-          onNextFromPassword={goNextFromPassword}
-          onFinish={finish}
+          onContinueFromProfile={goContinueFromProfile}
+          onStartLearning={finish}
         />
       </FieldGroup>
 

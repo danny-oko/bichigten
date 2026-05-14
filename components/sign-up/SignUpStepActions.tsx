@@ -28,9 +28,8 @@ type SignUpStepActionsProps = {
   isSubmitting: boolean;
   awaitingEmailVerification: boolean;
   onBack: () => void;
-  onContinueFromName: () => void;
-  onNextFromPassword: () => void;
-  onFinish: () => void;
+  onContinueFromProfile: () => void;
+  onStartLearning: () => void;
 };
 
 export function SignUpStepActions({
@@ -39,16 +38,15 @@ export function SignUpStepActions({
   isSubmitting,
   awaitingEmailVerification,
   onBack,
-  onContinueFromName,
-  onNextFromPassword,
-  onFinish,
+  onContinueFromProfile,
+  onStartLearning,
 }: SignUpStepActionsProps) {
   if (step === 1) {
     return (
       <div className="flex justify-center pt-1">
         <Button
           type="button"
-          onClick={onContinueFromName}
+          onClick={onContinueFromProfile}
           className="inline-flex h-12 w-full max-w-sm items-center justify-center gap-2 rounded-2xl bg-[#E8920A] text-base font-semibold text-white hover:bg-[#cf7d09] sm:h-[3.25rem] sm:text-lg"
         >
           {mnUi.continue}
@@ -63,38 +61,28 @@ export function SignUpStepActions({
         type="button"
         variant="outline"
         onClick={onBack}
-        disabled={isSubmitting}
+        disabled={isSubmitting || awaitingEmailVerification}
         className="min-h-12 flex-1 rounded-2xl border-amber-300 bg-white px-3 text-sm font-semibold text-amber-900 hover:border-[#E8920A] hover:bg-[#E8920A] hover:text-white sm:min-h-[3.25rem] sm:px-4 sm:text-base"
       >
         {mnUi.back}
       </Button>
-      {step < 3 ? (
-        <Button
-          type="button"
-          onClick={onNextFromPassword}
-          className="inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-2xl bg-[#E8920A] px-3 text-sm font-semibold text-white hover:bg-[#cf7d09] sm:min-h-[3.25rem] sm:px-4 sm:text-base"
-        >
-          {mnUi.next}
-        </Button>
-      ) : (
-        <Button
-          type="button"
-          onClick={onFinish}
-          disabled={isSubmitting || !isLoaded}
-          className="inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-2xl bg-[#E8920A] px-3 text-sm font-semibold text-white hover:bg-[#cf7d09] sm:min-h-[3.25rem] sm:px-4 sm:text-base disabled:opacity-70"
-        >
-          {isSubmitting ? (
-            <>
-              <LoadingSpinner />
-              {awaitingEmailVerification ? mnUi.verifying : mnUi.creatingAccount}
-            </>
-          ) : awaitingEmailVerification ? (
-            mnUi.verifyStartLearning
-          ) : (
-            mnUi.startLearning
-          )}
-        </Button>
-      )}
+      <Button
+        type="button"
+        onClick={onStartLearning}
+        disabled={isSubmitting || !isLoaded}
+        className="inline-flex min-h-12 flex-1 items-center justify-center gap-2 rounded-2xl bg-[#E8920A] px-3 text-sm font-semibold text-white hover:bg-[#cf7d09] sm:min-h-[3.25rem] sm:px-4 sm:text-base disabled:opacity-70"
+      >
+        {isSubmitting ? (
+          <>
+            <LoadingSpinner />
+            {awaitingEmailVerification ? mnUi.verifying : mnUi.creatingAccount}
+          </>
+        ) : awaitingEmailVerification ? (
+          mnUi.verifyStartLearning
+        ) : (
+          mnUi.startLearning
+        )}
+      </Button>
     </div>
   );
 }

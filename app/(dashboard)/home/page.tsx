@@ -7,13 +7,11 @@ import { auth } from "@clerk/nextjs/server";
 
 import WebNearbyPlayers from "../leaderboard/_components/SocialPeersList";
 import { HomePath } from "./_components/home-page-client";
-import HomeLessonProgressWrapper from "./_components/HomeLessonProgressWrapper";
+import HomeDashboardSidebar from "./_components/HomeDashboardSidebar";
 import HomeMobileHeaderWrapper from "./_components/HomeMobileHeaderWrapper";
-import HomeNearbyPlayersWrapper from "./_components/HomeNearbyPlayersWrapper";
 import {
-  HomeHeaderProgressSkeleton,
-  HomeLeaderboardSkeleton,
   HomeMobileHeaderSkeleton,
+  HomeSignedInSidebarSkeleton,
 } from "./_components/HomeSidebarSkeletons";
 import LessonProgressCard from "./_components/LessonProgressCard";
 
@@ -23,19 +21,14 @@ export default async function HomeSection() {
   const { userId } = await auth();
 
   return (
-    <div className="min-h-screen pb-28 font-['Plus_Jakarta_Sans']">
+    <div className="min-h-screen pb-28">
       <MainLayout
         aside={
           <div className="space-y-4">
             {userId ? (
-              <>
-                <Suspense fallback={<HomeHeaderProgressSkeleton />}>
-                  <HomeLessonProgressWrapper />
-                </Suspense>
-                <Suspense fallback={<HomeLeaderboardSkeleton />}>
-                  <HomeNearbyPlayersWrapper />
-                </Suspense>
-              </>
+              <Suspense fallback={<HomeSignedInSidebarSkeleton />}>
+                <HomeDashboardSidebar />
+              </Suspense>
             ) : (
               <>
                 <Header
@@ -73,7 +66,7 @@ export default async function HomeSection() {
               />
             )}
           </div>
-          <div className="flex min-h-0 w-full flex-1 flex-col items-center pt-20 sm:pt-24 md:pt-28">
+          <div className="flex min-h-0 w-full flex-1 flex-col items-center">
             <HomePath />
           </div>
         </div>

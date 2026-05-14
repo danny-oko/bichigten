@@ -1,3 +1,13 @@
+/** Single aside boundary: matches {@link HomeDashboardSidebar} layout. */
+export function HomeSignedInSidebarSkeleton() {
+  return (
+    <div className="space-y-4">
+      <HomeHeaderProgressSkeleton />
+      <HomeLeaderboardSkeleton />
+    </div>
+  );
+}
+
 export function HomeHeaderProgressSkeleton() {
   return (
     <div className="space-y-4">
