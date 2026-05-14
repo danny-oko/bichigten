@@ -22,9 +22,11 @@ export default function CurrentJourneyPanel({
       <h2 className="wrap-break-word text-xl font-extrabold tracking-tight text-[#27221d] dark:text-[#f0ebe3] sm:text-2xl md:text-3xl">
         {journey.title}
       </h2>
-      <p className="mt-1 wrap-break-word text-sm text-[#756c5e] dark:text-[#a8a095]">
-        {journey.description}
-      </p>
+      {journey.description ? (
+        <p className="mt-1 wrap-break-word text-sm text-[#756c5e] dark:text-[#a8a095]">
+          {journey.description}
+        </p>
+      ) : null}
       <div className="mt-4 h-3 overflow-hidden rounded-full bg-[#e9e2d5]">
         <div
           className="h-full rounded-full bg-gradient-to-r from-[#f5c96a] via-[#E8920A] to-[#c9780a]"
