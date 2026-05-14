@@ -121,8 +121,8 @@ export const submitSpeechAttempt = async ({
           const bestAttempt = await tx.speechAttempt.findFirst({
             where: { userId, targetId },
             orderBy: [
-              { finalScore: "desc" },
               { accuracy: "desc" },
+              { finalScore: "desc" },
               { createdAt: "desc" },
             ],
             select: { id: true, accuracy: true },
@@ -239,23 +239,17 @@ async function getReadingCardsForUserUncached({
   }
 
   const targetIds = targets.map((target) => target.id);
-  const [latestAttempts, bestAttempts, attemptProgressRows] = await Promise.all([
+  const [latestAttempts, bestAccuracyRows, attemptProgressRows] = await Promise.all([
     prisma.speechAttempt.findMany({
       where: { userId, targetId: { in: targetIds } },
       select: { targetId: true, ...attemptSummarySelect },
       distinct: ["targetId"],
-      orderBy: [{ targetId: "asc" }, { createdAt: "desc" }],
+      orderBy: [{ createdAt: "desc" }, { id: "desc" }],
     }),
-    prisma.speechAttempt.findMany({
+    prisma.speechAttempt.groupBy({
+      by: ["targetId"],
       where: { userId, targetId: { in: targetIds } },
-      select: { targetId: true, ...attemptSummarySelect },
-      distinct: ["targetId"],
-      orderBy: [
-        { targetId: "asc" },
-        { finalScore: "desc" },
-        { accuracy: "desc" },
-        { createdAt: "desc" },
-      ],
+      _max: { accuracy: true },
     }),
     prisma.speechAttempt.groupBy({
       by: ["targetId", "isPassed"],
@@ -264,14 +258,44 @@ async function getReadingCardsForUserUncached({
     }),
   ]);
 
+  const bestAttemptFilters = bestAccuracyRows.flatMap((row) =>
+    row._max.accuracy === null
+      ? []
+      : [{ targetId: row.targetId, accuracy: row._max.accuracy }],
+  );
+
+  const bestAttempts =
+    bestAttemptFilters.length > 0
+      ? await prisma.speechAttempt.findMany({
+          where: { userId, OR: bestAttemptFilters },
+          select: { targetId: true, ...attemptSummarySelect },
+          orderBy: [
+            { accuracy: "desc" },
+            { finalScore: "desc" },
+            { createdAt: "desc" },
+            { id: "desc" },
+          ],
+        })
+      : [];
+
   const latestAttemptByTargetId = new Map(
     latestAttempts.map((attempt) => [attempt.targetId, attempt]),
   );
-  const bestAttemptByTargetId = new Map(
-    bestAttempts.map((attempt) => [attempt.targetId, attempt]),
+  const bestAccuracyByTargetId = new Map(
+    bestAccuracyRows.map((row) => [row.targetId, row._max.accuracy ?? 0]),
   );
+  const bestAttemptByTargetId = new Map<
+    string,
+    (typeof bestAttempts)[number]
+  >();
   const xpEarnedByTargetId = new Map<string, number>();
   const passedTargetIds = new Set<string>();
+
+  for (const attempt of bestAttempts) {
+    if (!bestAttemptByTargetId.has(attempt.targetId)) {
+      bestAttemptByTargetId.set(attempt.targetId, attempt);
+    }
+  }
 
   for (const row of attemptProgressRows) {
     xpEarnedByTargetId.set(
@@ -285,12 +309,20 @@ async function getReadingCardsForUserUncached({
   }
 
   return targets.map((target) => {
+    const latestAttempt = latestAttemptByTargetId.get(target.id) ?? null;
+    const bestAttempt = bestAttemptByTargetId.get(target.id) ?? null;
+    const bestAccuracy = Math.max(
+      bestAccuracyByTargetId.get(target.id) ?? 0,
+      latestAttempt?.accuracy ?? 0,
+    );
     const isPassed = passedTargetIds.has(target.id);
 
     return {
       ...target,
-      latestAttempt: latestAttemptByTargetId.get(target.id) ?? null,
-      bestAttempt: bestAttemptByTargetId.get(target.id) ?? null,
+      latestAttempt,
+      bestAttempt: latestAttempt
+        ? { ...(bestAttempt ?? latestAttempt), accuracy: bestAccuracy }
+        : null,
       completed: isPassed,
       isPassed,
       xpEarned: xpEarnedByTargetId.get(target.id) ?? 0,

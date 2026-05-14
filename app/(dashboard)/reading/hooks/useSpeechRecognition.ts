@@ -15,6 +15,26 @@ type UseSpeechRecognitionOptions = {
   targetTextCyrillic: string;
 };
 
+const getSupportedMimeType = () => {
+  if (typeof MediaRecorder === "undefined") return undefined;
+
+  const candidates = [
+    "audio/webm;codecs=opus",
+    "audio/webm",
+    "audio/mp4",
+    "audio/ogg;codecs=opus",
+  ];
+
+  return candidates.find((type) => MediaRecorder.isTypeSupported(type));
+};
+
+const getAudioExtension = (audioType: string) => {
+  if (audioType.includes("webm")) return "webm";
+  if (audioType.includes("mp4")) return "mp4";
+  if (audioType.includes("ogg")) return "ogg";
+  return "audio";
+};
+
 export const useSpeechRecognition = ({
   durationSec,
   targetId,
@@ -69,20 +89,43 @@ export const useSpeechRecognition = ({
       if (!isMountedRef.current) return;
 
       setStatus("transcribing");
+      const controller = new AbortController();
+      const timeoutId = window.setTimeout(() => {
+        controller.abort();
+      }, 130_000);
+
       try {
+        if (blob.size === 0) {
+          throw new Error("Recording is empty. Please try recording again.");
+        }
+
+        const audioType = blob.type || "audio/webm";
+        const extension = getAudioExtension(audioType);
         const formData = new FormData();
         formData.append(
           "audio",
-          new File([blob], "recording.wav", { type: "audio/wav" }),
+          new File([blob], `recording.${extension}`, {
+            type: audioType,
+          }),
         );
 
         const res = await fetch("/api/ai-chimege", {
           method: "POST",
           body: formData,
+          signal: controller.signal,
         });
-        if (!res.ok) throw new Error(`Transcription failed: ${res.status}`);
 
         const data = (await res.json()) as TranscribeResponse;
+        if (!res.ok) {
+          throw new Error(
+            data.error || `Transcription failed with status ${res.status}`,
+          );
+        }
+
+        if (typeof data.data !== "string") {
+          throw new Error("Transcription response did not include text.");
+        }
+
         if (!isMountedRef.current) return;
 
         setTranscript(data.data);
@@ -115,8 +158,16 @@ export const useSpeechRecognition = ({
       } catch (err) {
         if (!isMountedRef.current) return;
 
-        setError(err instanceof Error ? err.message : "Transcription failed");
+        const message =
+          err instanceof DOMException && err.name === "AbortError"
+            ? "Transcription timed out. Please try a shorter recording or try again."
+            : err instanceof Error
+              ? err.message
+              : "Transcription failed";
+        setError(message);
         setStatus("error");
+      } finally {
+        window.clearTimeout(timeoutId);
       }
     },
     [targetId, targetTextCyrillic],
@@ -140,7 +191,19 @@ export const useSpeechRecognition = ({
     recorder.onstop = () => {
       try {
         const elapsed = elapsedRef.current;
-        const blob = new Blob(audioChunksRef.current, { type: "audio/wav" });
+        const audioType =
+          recorder.mimeType || audioChunksRef.current[0]?.type || "audio/webm";
+        const blob = new Blob(audioChunksRef.current, { type: audioType });
+
+        if (process.env.NODE_ENV === "development") {
+          console.log("Recording blob:", {
+            size: blob.size,
+            type: blob.type,
+            durationSec: Math.max(elapsed, 1),
+            chunks: audioChunksRef.current.length,
+          });
+        }
+
         if (recordingUrlRef.current) {
           URL.revokeObjectURL(recordingUrlRef.current);
         }
@@ -156,6 +219,9 @@ export const useSpeechRecognition = ({
       }
     };
 
+    if (typeof recorder.requestData === "function") {
+      recorder.requestData();
+    }
     recorder.stop();
   }, [elapsedRef, stopMedia, stopTimer, transcribeAndScore]);
 
@@ -182,7 +248,10 @@ export const useSpeechRecognition = ({
 
       streamRef.current = stream;
 
-      const recorder = new MediaRecorder(stream);
+      const mimeType = getSupportedMimeType();
+      const recorder = mimeType
+        ? new MediaRecorder(stream, { mimeType })
+        : new MediaRecorder(stream);
       mediaRecorderRef.current = recorder;
       audioChunksRef.current = [];
 
@@ -190,7 +259,16 @@ export const useSpeechRecognition = ({
         if (data.size > 0) audioChunksRef.current.push(data);
       };
 
-      recorder.start();
+      recorder.onerror = () => {
+        if (!isMountedRef.current) return;
+
+        setError("Recording failed. Please try again.");
+        setStatus("error");
+        stopTimer();
+        stopMedia();
+      };
+
+      recorder.start(1000);
       setIsRecording(true);
       setStatus("recording");
       startTimer();
@@ -201,7 +279,7 @@ export const useSpeechRecognition = ({
       setStatus("error");
       stopMedia();
     }
-  }, [canStart, resetTimer, startTimer, stopMedia]);
+  }, [canStart, resetTimer, startTimer, stopMedia, stopTimer]);
 
   useEffect(() => {
     stopRecordingRef.current = stopRecording;

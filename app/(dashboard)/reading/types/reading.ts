@@ -69,7 +69,8 @@ export type ReadingAttemptSummary = {
 };
 
 export type TranscribeResponse = {
-  data: string;
+  data?: string;
+  error?: string;
 };
 
 export type ReadingResult = {

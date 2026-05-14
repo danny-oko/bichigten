@@ -50,7 +50,7 @@ const ProgressRow = ({
 const ReadingCardComponent = ({ reading }: ReadingCardProps) => {
   const hasAttempt = Boolean(reading.latestAttempt);
   const latestAccuracy = reading.latestAttempt?.accuracy;
-  const bestAccuracy = reading.bestAttempt?.finalScore;
+  const bestAccuracy = reading.bestAttempt?.accuracy;
   const statusLabel = hasAttempt
     ? reading.completed
       ? "Давсан"

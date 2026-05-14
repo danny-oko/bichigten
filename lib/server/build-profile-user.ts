@@ -342,7 +342,7 @@ export function buildProfileUserFromData(
     journey = {
       moduleLabel: mnProfile.journeyModuleLabel,
       title: currentSection.title,
-      description: mnProfile.journeyDescription(currentSection.title),
+      description: "",
       lessonProgressText: mnProfile.lessonsProgress(done, total),
       completionPercent,
       lessonsLeftText:

@@ -79,7 +79,7 @@ export const PracticeControlPanel = ({
         </h2>
         <p className="mt-2 text-sm leading-5 text-stone-600 md:min-h-10 md:leading-6">
           {status === "idle" || status === "error"
-            ? "Start дарсны дараа эх тодорч, 60 секундийн тоолуур эхэлнэ."
+            ? "Эхлэх дарсны дараа эх тодорч, 60 секундийн тоолуур эхэлнэ."
             : status === "done"
               ? "Дүнгээ хараад дахин уншиж оноогоо ахиулж болно."
               : "Тогтуун хэмнэлээр, тод дуудаж уншаарай."}

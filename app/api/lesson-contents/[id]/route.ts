@@ -14,7 +14,7 @@ export const GET = async (
   const content = await unstable_cache(
     async () => prisma.lessonContent.findUnique({ where: { id } }),
     ["api-lesson-contents-id-get", id],
-    { revalidate: CACHE_REVALIDATE_SECONDS, tags: [CACHE_TAG_CATALOG] },
+    { revalidate: CACHE_REVALIDATE_SECONDS },
   )();
   if (!content)
     return NextResponse.json({ message: "Not found" }, { status: 404 });

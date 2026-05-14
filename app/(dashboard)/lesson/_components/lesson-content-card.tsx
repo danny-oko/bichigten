@@ -19,6 +19,7 @@ export function LessonContentCard({ item }: LessonContentCardProps) {
           </div>
         </div>
       </div>
+
       {item.imageUrl && (
         <img
           src={item.imageUrl}
