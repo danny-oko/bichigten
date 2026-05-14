@@ -62,6 +62,7 @@ export type ReadingResult = {
   correctWords: number;
   missingWords: number;
   extraWords: number;
+  isPassed?: boolean;
 };
 
 export type AlignmentResult = {
