@@ -66,30 +66,6 @@ export const loadHomeProgressSidebar = cache(async (userId: string) => {
   };
 });
 
-export const loadHomeNearbyPlayers = cache(async (userId: string) => {
-  const topPlayers = await prisma.user.findMany({
-    orderBy: { totalXp: "desc" },
-    take: 5,
-    select: {
-      id: true,
-      name: true,
-      userName: true,
-      totalXp: true,
-      avatarUrl: true,
-    },
-  });
-
-  return topPlayers.map((player, index) => ({
-    id: player.id,
-    rank: index + 1,
-    name: player.name ?? player.userName,
-    xp: player.totalXp,
-    xpChange: 0,
-    avatarUrl: player.avatarUrl,
-    isMe: player.id === userId,
-  }));
-});
-
 export const loadHomeSectionHeader = cache(async (userId?: string | null) => {
   const sections = await prisma.section.findMany({
     orderBy: { order: "asc" },

@@ -1,10 +1,4 @@
-import { Montserrat } from "next/font/google";
 import { Task } from "./lesson-types";
-
-const montserrat = Montserrat({
-  subsets: ["latin", "cyrillic"],
-  weight: ["400", "500", "600", "700"],
-});
 
 interface LessonTaskCardProps {
   task: Task;
@@ -12,7 +6,7 @@ interface LessonTaskCardProps {
 
 export function LessonTaskCard({ task }: LessonTaskCardProps) {
   return (
-    <div className={`flex flex-col gap-3 ${montserrat.className}`}>
+    <div className="flex flex-col gap-3">
       <div className="flex items-center gap-2">
         <span
           className="text-[10px] font-black tracking-widest uppercase px-2 py-1 rounded-full"

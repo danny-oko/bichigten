@@ -1,12 +1,6 @@
-import { Montserrat } from "next/font/google";
 import { useEffect, useRef, useState } from "react";
 import { TaskType } from "./lesson-types";
 import { LessonChoice, MatchRenderData } from "./use-lesson-game";
-
-const montserrat = Montserrat({
-  subsets: ["latin", "cyrillic"],
-  weight: ["400", "500", "600", "700"],
-});
 
 interface LessonChoiceGridProps {
   taskType: TaskType;
@@ -196,9 +190,7 @@ export function LessonChoiceGrid({
           .anim-shake { animation: shake 0.65s ease-in-out; }
           .anim-pop   { animation: pop 0.5s ease-out; }
         `}</style>
-        <div
-          className={`grid grid-cols-1 gap-4 sm:grid-cols-2 ${montserrat.className}`}
-        >
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div className="space-y-3">
             <p className="text-xs font-black uppercase tracking-widest text-[#6B7280]">
               Left Side
@@ -285,7 +277,7 @@ export function LessonChoiceGrid({
   }
 
   return (
-    <div className={`flex flex-col gap-3 ${montserrat.className}`}>
+    <div className="flex flex-col gap-3">
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {choices.map((choice, index) => (
           <button

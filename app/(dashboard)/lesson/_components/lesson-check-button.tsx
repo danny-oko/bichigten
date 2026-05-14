@@ -1,12 +1,5 @@
-import { Montserrat } from "next/font/google";
-
 import { mnUi } from "@/lib/i18n/mn-ui";
 import IncorrectBear from "./lesson-incorrect-animation";
-
-const montserrat = Montserrat({
-  subsets: ["latin", "cyrillic"],
-  weight: ["400", "500", "600", "700"],
-});
 
 interface LessonCheckButtonProps {
   disabled: boolean;
@@ -54,9 +47,7 @@ export function LessonCheckButton({
                 className="h-20 w-20 rounded-lg object-cover border border-[#F59E0B]"
               />
             ) : (
-              <span
-                className={`text-lg font-black text-black ${montserrat.className}`}
-              >
+              <span className="text-lg font-black text-black">
                 {correctAnswer}
               </span>
             )}

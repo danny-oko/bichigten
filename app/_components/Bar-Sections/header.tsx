@@ -1,5 +1,3 @@
-import "@fontsource/plus-jakarta-sans";
-
 import type { StreakDayDot } from "@/app/(dashboard)/profile/common/types";
 import { buildLast7StreakDots } from "@/lib/server/build-profile-user";
 import { StreakNavHover } from "./StreakNavHover";
@@ -30,12 +28,12 @@ export const Header = ({
   return (
     <div
       className={[
-        "w-full pt-[env(safe-area-inset-top)] font-['Plus_Jakarta_Sans']",
+        "w-full pt-[env(safe-area-inset-top)]",
         fixedOnDesktop ? "md:fixed right-20 top-4 z-100" : "",
       ].join(" ")}
     >
       <div className="w-full">
-        <div className="flex items-center px-4 py-3 font-['Plus_Jakarta_Sans']">
+        <div className="flex items-center px-4 py-3">
           <div className="flex shrink-0 items-center gap-10">
             <div
               className={`flex items-center gap-3 ${

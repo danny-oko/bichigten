@@ -1,6 +1,7 @@
-import prisma from "@/lib/prisma";
 import { MainLayout } from "@/components/layout/MainLayout";
+import prisma from "@/lib/prisma";
 import { fetchLeaderboardTop100Cached } from "@/lib/server/leaderboard-data";
+import { mapUsersToNearbyPlayers } from "@/lib/server/nearby-players";
 import { getRankNameFromXp } from "@/lib/utils/getRankNameFromXp";
 import { auth } from "@clerk/nextjs/server"; // Import Clerk auth
 import WebLeaguePath from "./_components/LeagueProgression";
@@ -43,17 +44,19 @@ export default async function RankPage() {
 
   const podiumUsers = allUsers.slice(0, 3);
   const listUsers = allUsers.slice(3);
+  const nearbySidebarPlayers = mapUsersToNearbyPlayers(
+    userId,
+    dbUsers.slice(0, 5),
+  );
 
   return (
     <div className="min-h-screen bg-transparent pb-24 font-balsamiq text-[#3b2f2f] dark:text-[#9ba3a7] md:pb-10">
       <MainLayout
         aside={
-          <>
-            <WebNearbyPlayers
-              players={allUsers.slice(0, 5).map((u) => ({ ...u, xpChange: 0 }))}
-            />
+          <div className="space-y-4">
+            <WebNearbyPlayers players={nearbySidebarPlayers} />
             <WebLeaguePath userXp={currentUser?.totalXp || 0} />
-          </>
+          </div>
         }
       >
         <div className="space-y-4 md:space-y-5">

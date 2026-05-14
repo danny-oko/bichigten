@@ -1,8 +1,6 @@
 "use client";
 
 import { mnUi } from "@/lib/i18n/mn-ui";
-import "@fontsource/plus-jakarta-sans";
-import { Montserrat } from "next/font/google";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { LessonCheckButton } from "./lesson-check-button";
@@ -13,11 +11,6 @@ import { LessonStatusScreen } from "./lesson-status-screen";
 import { LessonTaskCard } from "./lesson-task-card";
 import { LessonTopBar } from "./lesson-top-bar";
 import { useLessonGame } from "./use-lesson-game";
-
-const montserrat = Montserrat({
-  subsets: ["latin", "cyrillic"],
-  weight: ["400", "500", "600", "700"],
-});
 
 export function LessonPageClient({
   lessonId,
@@ -92,9 +85,7 @@ export function LessonPageClient({
   }
 
   return (
-    <div
-      className={`min-h-screen flex flex-col font-['Plus_Jakarta_Sans'] ${montserrat.className}`}
-    >
+    <div className="flex min-h-screen flex-col">
       <div className="w-full flex flex-1 flex-col">
         <LessonTopBar
           progress={progress}

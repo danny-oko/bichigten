@@ -1,6 +1,6 @@
-import { ArrowLeft, BookOpenText } from "lucide-react";
-import Link from "next/link";
 import { cn } from "@/lib/utils";
+import { BookOpenText } from "lucide-react";
+import Link from "next/link";
 
 type HomeSectionDividerProps = {
   className?: string;
@@ -52,11 +52,11 @@ export const HomeSectionDivider = ({
           tone.panel,
         )}
       >
-        <div className="flex min-w-0 items-center justify-between gap-3">
-          <div className="min-w-0">
+        <div className="flex min-w-0 items-start justify-between gap-3">
+          <div className="min-w-0 flex-1 pr-1">
             <p
               className={cn(
-                "text-[11px] font-black uppercase tracking-widest transition-colors duration-300",
+                "truncate text-[11px] font-black uppercase tracking-widest transition-colors duration-300",
                 tone.label,
               )}
             >
@@ -64,7 +64,7 @@ export const HomeSectionDivider = ({
             </p>
             <h1
               id="home-section-title"
-              className="mt-1 text-lg font-black leading-tight sm:text-xl"
+              className="mt-1 text-[16px] font-black leading-snug wrap-break-word"
             >
               {title}
             </h1>
@@ -72,7 +72,7 @@ export const HomeSectionDivider = ({
           <Link
             href="/dictionary"
             className={cn(
-              "flex size-11 shrink-0 items-center justify-center rounded-xl border-2 transition hover:bg-white/25 active:translate-y-px",
+              "mt-0.5 flex size-11 shrink-0 items-center justify-center rounded-xl border-2 transition hover:bg-white/25 active:translate-y-px",
               tone.button,
             )}
             aria-label="Open guidebook"

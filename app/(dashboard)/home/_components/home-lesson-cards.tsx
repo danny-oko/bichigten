@@ -2,7 +2,6 @@
 
 import { useNavLoading } from "@/app/_components/nav-loading-context";
 import { Check, Lock, Star } from "lucide-react";
-import { Montserrat } from "next/font/google";
 import { useEffect, useState } from "react";
 
 import { Button } from "@/components/ui/button";
@@ -15,11 +14,6 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { cn } from "@/lib/utils";
-
-const montserrat = Montserrat({
-  subsets: ["latin", "cyrillic"],
-  weight: ["400", "500", "600", "700"],
-});
 
 export type Lesson = {
   id: string;
@@ -212,7 +206,6 @@ export const LessonCards = ({
         <DialogContent
           showCloseButton
           className={cn(
-            montserrat.className,
             "max-h-[min(90vh,640px)] overflow-y-auto sm:max-w-lg",
             "bg-[#F0EDE3] border-[#ead9bb] dark:bg-[#1a2124] dark:border-[#252f35]",
           )}

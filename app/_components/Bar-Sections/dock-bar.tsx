@@ -32,7 +32,7 @@ export const DockBar = ({ menuLabels, menuPaths }: DockBarProps) => {
               key={label}
               type="button"
               onClick={() => navigateTo(menuPaths[label])}
-              className={`flex flex-col items-center gap-1 px-2 py-2 transition-all duration-200 font-['Plus_Jakarta_Sans'] rounded-4xl w-[60px] h-[60px] justify-center
+              className={`flex flex-col items-center gap-1 px-2 py-2 transition-all duration-200 rounded-4xl w-[60px] h-[60px] justify-center
                 border 
                 ${
                   isActive
@@ -42,9 +42,9 @@ export const DockBar = ({ menuLabels, menuPaths }: DockBarProps) => {
             >
               <NavMenuIcon
                 label={label}
-                width={30}
-                height={30}
-                className={`transition-all duration-200`}
+                width={32}
+                height={32}
+                className="size-8 shrink-0 object-contain transition-all duration-200"
               />
             </button>
           );
