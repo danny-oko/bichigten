@@ -4,16 +4,17 @@ import { useEffect, useState } from "react";
 import {
   DifficultyTabs,
   ReadingGrid,
+  ReadingGridSkeleton,
   ReadingHeader,
   SearchBar,
 } from "./components";
 import { useReadingFilter } from "./hooks/useReadingFilter";
-import type { Reading } from "./types/reading";
+import type { ReadingCardData } from "./types/reading";
 
 export const ReadingPage = () => {
   const { difficulty, query, searchParams, setDifficulty, setQuery } =
     useReadingFilter();
-  const [readings, setReadings] = useState<Reading[]>([]);
+  const [readings, setReadings] = useState<ReadingCardData[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -33,11 +34,13 @@ export const ReadingPage = () => {
           throw new Error(`Failed to load readings: ${res.status}`);
         }
 
-        const data = (await res.json()) as Reading[];
+        const data = (await res.json()) as ReadingCardData[];
         setReadings(data);
       } catch (err) {
         if (err instanceof DOMException && err.name === "AbortError") return;
-        setError(err instanceof Error ? err.message : "Failed to load readings");
+        setError(
+          err instanceof Error ? err.message : "Failed to load readings",
+        );
       } finally {
         if (!controller.signal.aborted) {
           setIsLoading(false);
@@ -53,7 +56,7 @@ export const ReadingPage = () => {
   }, [searchParams]);
 
   return (
-    <main className="min-h-screen w-full overflow-x-hidden bg-[#fffaf2]/70 px-4 pt-5 pb-[calc(7rem+env(safe-area-inset-bottom))] text-stone-900 md:pb-8 lg:px-10">
+    <main className="min-h-screen w-full overflow-x-hidden px-4 pt-5 pb-[calc(7rem+env(safe-area-inset-bottom))] text-stone-900 md:pb-8 lg:px-10">
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-5 md:gap-6">
         <ReadingHeader
           title="Минутын уншлага"
@@ -74,9 +77,7 @@ export const ReadingPage = () => {
         )}
 
         {isLoading ? (
-          <section className="rounded-2xl border-3 border-[#E8920A] bg-transparent p-6 text-sm font-semibold text-stone-600 shadow-[0_8px_24px_rgba(232,146,10,0.08)] dark:border-[#84d8ff]/40">
-            Уншлагуудыг ачаалж байна...
-          </section>
+          <ReadingGridSkeleton />
         ) : (
           <ReadingGrid readings={readings} />
         )}

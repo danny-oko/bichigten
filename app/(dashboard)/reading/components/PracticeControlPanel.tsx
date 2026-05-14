@@ -40,7 +40,7 @@ const getButtonText = (status: ReadingStatus) => {
     return "Дахин унших";
   }
 
-  return "Start";
+  return "Эхлэх";
 };
 
 const StatCard = ({ label, value }: { label: string; value: string }) => (
@@ -124,15 +124,15 @@ export const PracticeControlPanel = ({
             variant="outline"
             className="h-11 w-full rounded-full border-2 border-stone-300 bg-transparent text-sm font-semibold text-stone-800 transition hover:border-[#E8920A] hover:text-amber-800 dark:border-[#475569] dark:text-[#e8e4dc]"
           >
-            Finish early
+            Болчихлоо!
           </Button>
         )}
       </div>
 
       <div className="mt-4 hidden gap-3 md:grid md:grid-cols-3 lg:grid-cols-1">
-        <StatCard label="Accuracy goal" value={`${requiredAccuracy ?? 0}%`} />
-        <StatCard label="XP reward" value={`${xpReward} XP`} />
-        <StatCard label="Words count" value={`${wordsCount}`} />
+        <StatCard label="Онооны босго" value={`${requiredAccuracy ?? 0}%`} />
+        <StatCard label="Урамшуулал оноо" value={`${xpReward} XP`} />
+        <StatCard label="Нийт үг" value={`${wordsCount}`} />
       </div>
     </section>
   );

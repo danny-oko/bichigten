@@ -75,12 +75,12 @@ export const ReadingResultDialog = ({
         </DialogHeader>
 
         <div className="grid gap-3 sm:grid-cols-2">
-          <StatCard label="Accuracy" value={`${result.accuracy}%`} />
-          <StatCard label="Coverage" value={`${result.coverage}%`} />
-          <StatCard label="Mistakes" value={`${result.mistakes}`} />
-          <StatCard label="Words read" value={`${result.wordsRead}`} />
-          <StatCard label="WPM" value={`${result.wpm}`} />
-          <StatCard label="XP earned" value={`${xpEarned} XP`} />
+          <StatCard label="Зөв гүйцэтгэл" value={`${result.accuracy}%`} />
+          <StatCard label="Гүйцэтгэл" value={`${result.coverage}%`} />
+          <StatCard label="Алдаа" value={`${result.mistakes}`} />
+          <StatCard label="Уншсан үг" value={`${result.wordsRead}`} />
+          <StatCard label="Хурд (үг/минут)" value={`${result.wpm}`} />
+          <StatCard label="Урамшуулал оноо" value={`${xpEarned} XP`} />
         </div>
 
         <div

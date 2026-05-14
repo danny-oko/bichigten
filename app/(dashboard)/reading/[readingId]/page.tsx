@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { PracticeControlPanel } from "../components/PracticeControlPanel";
 import { ReadingResultDialog } from "../components/ReadingResultDialog";
@@ -77,6 +77,7 @@ const ReadingResultPanel = ({
 
 const ReadingTestPage = () => {
   const params = useParams<{ readingId: string }>();
+  const router = useRouter();
   const [reading, setReading] = useState<Reading | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
@@ -149,6 +150,10 @@ const ReadingTestPage = () => {
     setStartedReadingId(reading?.id ?? params.readingId);
     setDismissedResult(null);
     void startRecording();
+  };
+
+  const handleClose = () => {
+    router.push("/reading");
   };
 
   const isResultDialogOpen = Boolean(result && dismissedResult !== result);
@@ -248,7 +253,7 @@ const ReadingTestPage = () => {
         result={result}
         requiredAccuracy={reading.requiredAccuracy}
         xpReward={reading.xpReward}
-        onClose={() => setDismissedResult(result)}
+        onClose={handleClose}
       />
     </main>
   );

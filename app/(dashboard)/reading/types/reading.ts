@@ -31,6 +31,28 @@ export type Reading = {
   };
 };
 
+export type ReadingCardData = Pick<
+  Reading,
+  | "id"
+  | "title"
+  | "description"
+  | "difficulty"
+  | "requiredAccuracy"
+  | "xpReward"
+  | "wordsCount"
+> & {
+  latestAttempt: ReadingAttemptCardSummary | null;
+  bestAttempt: ReadingAttemptCardSummary | null;
+  completed: boolean;
+  isPassed: boolean;
+  xpEarned: number;
+};
+
+export type ReadingAttemptCardSummary = Pick<
+  ReadingAttemptSummary,
+  "id" | "createdAt" | "accuracy" | "finalScore" | "isPassed" | "xpEarned"
+>;
+
 export type ReadingAttemptSummary = {
   id: string;
   createdAt: string;

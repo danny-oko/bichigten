@@ -1,15 +1,22 @@
 import Link from "next/link";
-import type { Reading } from "../types/reading";
-import { ReadingBadge } from "./ReadingBadge";
+import { memo } from "react";
+import { cn } from "@/lib/utils";
+import type { ReadingCardData } from "../types/reading";
 
-const DIFFICULTY_LABELS: Record<Reading["difficulty"], string> = {
+const DIFFICULTY_LABELS: Record<ReadingCardData["difficulty"], string> = {
   EASY: "Хялбар",
   MEDIUM: "Дунд",
   HARD: "Ахисан",
 };
 
+const difficultyStyles: Record<ReadingCardData["difficulty"], string> = {
+  EASY: "border-green-300 bg-green-50 text-green-700",
+  MEDIUM: "border-amber-300 bg-amber-50 text-amber-700",
+  HARD: "border-red-300 bg-red-50 text-red-700",
+};
+
 type ReadingCardProps = {
-  reading: Reading;
+  reading: ReadingCardData;
 };
 
 const formatPercent = (value: number | undefined) => `${value ?? 0}%`;
@@ -27,7 +34,9 @@ const ProgressRow = ({
   <div>
     <div className="flex items-center justify-between gap-3 text-xs font-semibold">
       <span className="text-stone-600">{label}</span>
-      <span className="tabular-nums text-stone-950">{formatPercent(value)}</span>
+      <span className="tabular-nums text-stone-950">
+        {formatPercent(value)}
+      </span>
     </div>
     <div className="mt-2 h-2 overflow-hidden rounded-full bg-[#f3dfbd]">
       <div
@@ -38,7 +47,7 @@ const ProgressRow = ({
   </div>
 );
 
-export const ReadingCard = ({ reading }: ReadingCardProps) => {
+const ReadingCardComponent = ({ reading }: ReadingCardProps) => {
   const hasAttempt = Boolean(reading.latestAttempt);
   const latestAccuracy = reading.latestAttempt?.accuracy;
   const bestAccuracy = reading.bestAttempt?.finalScore;
@@ -52,7 +61,14 @@ export const ReadingCard = ({ reading }: ReadingCardProps) => {
   return (
     <article className="flex min-h-56 flex-col rounded-2xl border-3 border-[#E8920A] bg-[#fff8ec] p-4 shadow-[0_10px_28px_rgba(232,146,10,0.1)] transition hover:-translate-y-0.5 md:min-h-64 md:p-5 dark:border-[#84d8ff]/40">
       <div className="flex items-start justify-between gap-3">
-        <ReadingBadge>{DIFFICULTY_LABELS[reading.difficulty]}</ReadingBadge>
+        <span
+          className={cn(
+            "w-fit rounded-full border-3 px-3 py-1 text-xs font-semibold uppercase tracking-[0.12em]",
+            difficultyStyles[reading.difficulty],
+          )}
+        >
+          {DIFFICULTY_LABELS[reading.difficulty]}
+        </span>
         <span className="text-xs font-semibold text-stone-400">
           {reading.wordsCount} үг
         </span>
@@ -78,8 +94,8 @@ export const ReadingCard = ({ reading }: ReadingCardProps) => {
         </div>
 
         <div className="mt-3 space-y-3">
-          <ProgressRow label="Сүүлчийн оноо" value={latestAccuracy} />
-          <ProgressRow label="Шилдэг оноо" value={bestAccuracy} />
+          <ProgressRow label="Өмнөх дүн" value={latestAccuracy} />
+          <ProgressRow label="Дээд амжилт" value={bestAccuracy} />
         </div>
 
         <div className="mt-3 flex flex-wrap gap-2">
@@ -120,3 +136,5 @@ export const ReadingCard = ({ reading }: ReadingCardProps) => {
     </article>
   );
 };
+
+export const ReadingCard = memo(ReadingCardComponent);
