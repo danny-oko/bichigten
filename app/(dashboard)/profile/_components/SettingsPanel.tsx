@@ -15,7 +15,6 @@ const sectionHref: Record<string, string> = {
   account: "/profile?tab=settings#account",
   appearance: "/profile?tab=settings#appearance",
   notifications: "/profile?tab=settings#notifications",
-  help: "/profile?tab=settings#help",
 };
 
 export default function SettingsPanel({ settings }: SettingsPanelProps) {
