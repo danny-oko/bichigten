@@ -6,7 +6,6 @@ import { auth } from "@clerk/nextjs/server";
 
 import LessonProgressCard from "./LessonProgressCard";
 
-/** Desktop aside: header + lesson progress + nearby players in one RSC, parallel data load. */
 export default async function HomeDashboardSidebar() {
   const { userId } = await auth();
   if (!userId) {
