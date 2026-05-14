@@ -1,19 +1,26 @@
+import { unstable_cache } from "next/cache";
+import { NextRequest, NextResponse } from "next/server";
+
 import prisma from "@/lib/prisma";
+import { CACHE_REVALIDATE_SECONDS } from "@/lib/server/cache";
 import { unauthorizedApiResponse } from "@/lib/server/dev-postman-bypass";
 import { getClerkUserIdFromRequest } from "@/lib/server/get-current-app-user";
 import { submitSpeechAttempt } from "@/lib/server/reading-progress";
-import { NextRequest, NextResponse } from "next/server";
 
-// GET /api/speech-targets/:id — attempts for the authenticated (or impersonated) user
 export const GET = async (req: NextRequest) => {
   const userId = await getClerkUserIdFromRequest(req);
   if (!userId) return unauthorizedApiResponse(req);
 
-  const attempts = await prisma.speechAttempt.findMany({
-    where: { userId },
-    include: { target: true },
-    orderBy: { createdAt: "desc" },
-  });
+  const attempts = await unstable_cache(
+    async () =>
+      prisma.speechAttempt.findMany({
+        where: { userId },
+        include: { target: true },
+        orderBy: { createdAt: "desc" },
+      }),
+    ["api-speech-targets-id-get", userId],
+    { revalidate: CACHE_REVALIDATE_SECONDS },
+  )();
   return NextResponse.json(attempts);
 };
 

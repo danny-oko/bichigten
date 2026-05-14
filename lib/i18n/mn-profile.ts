@@ -23,7 +23,7 @@ export const mnProfile = {
 
   achievementsTitle: "Шагналууд",
   achievementsEarned: (unlocked: number, total: number) =>
-    `${unlocked}/${total} олсон`,
+    `${unlocked}/${total}`,
 
   leagueYou: "Та",
   leagueXpSuffix: " XP",
@@ -100,8 +100,6 @@ export const mnProfile = {
   journeyEmptyTitle: "Түвшин байхгүй",
   journeyEmptyDescription:
     "Өгөгдлийн санд хэсэг, хичээл нэмснээр явц энд харагдана.",
-  journeyDescription: (sectionTitle: string) =>
-    `${sectionTitle} хэсгийн таны явц.`,
   lessonsProgress: (done: number, total: number) => `${done} / ${total} хичээл`,
   lessonsLeftOne: "1 хичээл үлдлээ",
   lessonsLeftMany: (n: number) => `${n} хичээл үлдлээ`,

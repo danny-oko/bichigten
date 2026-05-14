@@ -1,9 +1,12 @@
-import prisma from "@/lib/prisma";
 import type {
   Prisma,
   ReadingDifficulty as PrismaReadingDifficulty,
 } from "@prisma/client";
+import { unstable_cache } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
+
+import prisma from "@/lib/prisma";
+import { CACHE_REVALIDATE_SECONDS } from "@/lib/server/cache";
 
 const READING_DIFFICULTIES = ["EASY", "MEDIUM", "HARD"] as const;
 
@@ -127,29 +130,35 @@ export const GET = async (req: NextRequest) => {
       );
     }
 
-    const where: Prisma.SpeechTargetWhereInput = {};
+    const diffKey = difficulty ?? "";
+    const searchKey = search ?? "";
 
-    if (difficulty) {
-      where.difficulty = difficulty as PrismaReadingDifficulty;
-    }
-
-    if (search) {
-      where.OR = [
-        { title: { contains: search, mode: "insensitive" } },
-        { description: { contains: search, mode: "insensitive" } },
-        { cyrillicText: { contains: search, mode: "insensitive" } },
-      ];
-    }
-
-    const targets = await prisma.speechTarget.findMany({
-      where,
-      include: {
-        _count: {
-          select: { attempts: true },
-        },
+    const targets = await unstable_cache(
+      async () => {
+        const where: Prisma.SpeechTargetWhereInput = {};
+        if (difficulty) {
+          where.difficulty = difficulty as PrismaReadingDifficulty;
+        }
+        if (search) {
+          where.OR = [
+            { title: { contains: search, mode: "insensitive" } },
+            { description: { contains: search, mode: "insensitive" } },
+            { cyrillicText: { contains: search, mode: "insensitive" } },
+          ];
+        }
+        return prisma.speechTarget.findMany({
+          where,
+          include: {
+            _count: {
+              select: { attempts: true },
+            },
+          },
+          orderBy: { createdAt: "desc" },
+        });
       },
-      orderBy: { createdAt: "desc" },
-    });
+      ["api-reading-get", diffKey, searchKey],
+      { revalidate: CACHE_REVALIDATE_SECONDS },
+    )();
 
     return NextResponse.json(targets);
   } catch (error) {

@@ -17,13 +17,13 @@ export default function WebNearbyPlayers({ players }: WebNearbyPlayersProps) {
     <div className="rounded-2xl border-3 border-[#E8920A] bg-transparent p-5 dark:border-[#84d8ff]/40">
       <div className="mb-4 flex items-center justify-between border-b border-[#ead9bb] pb-3 dark:border-[#37464f]">
         <p className="text-xs uppercase tracking-wide text-[#7a5930] dark:text-[#94a3b8]">
-          Ойролцоох тоглогчид
+          Сурагчид
         </p>
         <p className="text-xs text-[#7a5930] dark:text-[#94a3b8]">Ranks 1-5</p>
       </div>
 
       <p className="mb-3 text-sm font-semibold text-[#3b2f2f] dark:text-[#d8d2c4]">
-        Таны эргэн тойронд
+        Та аль түвшинд байна?
       </p>
 
       <div className="flex flex-col gap-2">

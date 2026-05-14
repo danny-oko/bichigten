@@ -1,4 +1,6 @@
 import prisma from "@/lib/prisma";
+import { CACHE_REVALIDATE_SECONDS } from "@/lib/server/cache";
+import { unstable_cache } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
 const READING_DIFFICULTIES = ["EASY", "MEDIUM", "HARD"] as const;
@@ -105,14 +107,19 @@ const parsePatchBody = (body: PatchBody) => {
 export const GET = async (_req: NextRequest, context: ReadingRouteContext) => {
   try {
     const { readingId } = await context.params;
-    const target = await prisma.speechTarget.findUnique({
-      where: { id: readingId },
-      include: {
-        _count: {
-          select: { attempts: true },
-        },
-      },
-    });
+    const target = await unstable_cache(
+      async () =>
+        prisma.speechTarget.findUnique({
+          where: { id: readingId },
+          include: {
+            _count: {
+              select: { attempts: true },
+            },
+          },
+        }),
+      ["api-reading-readingId-get", readingId],
+      { revalidate: CACHE_REVALIDATE_SECONDS },
+    )();
 
     if (!target) {
       return NextResponse.json(

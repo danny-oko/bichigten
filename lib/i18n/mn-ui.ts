@@ -15,7 +15,7 @@ export const mnUi = {
   googleSignIn: "Google-ээр нэвтрэх",
   signIn: "Нэвтрэх",
   signingIn: "Нэвтэрж байна…",
-  continueLearning: "Сургалтыг үргэлжлүүлэх",
+  continueLearning: "Хичээл үргэлжлүүлэх",
   backToLessons: "Хичээл рүү буцах",
   refillFree: "Үнэгүй дахин нөхөх",
   saveProfile: "Профайл хадгалах",

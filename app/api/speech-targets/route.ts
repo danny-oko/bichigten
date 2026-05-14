@@ -1,10 +1,18 @@
-import prisma from "@/lib/prisma";
+import { unstable_cache } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
+import prisma from "@/lib/prisma";
+import { CACHE_REVALIDATE_SECONDS } from "@/lib/server/cache";
+
 export const GET = async () => {
-  const targets = await prisma.speechTarget.findMany({
-    orderBy: { createdAt: "desc" },
-  });
+  const targets = await unstable_cache(
+    async () =>
+      prisma.speechTarget.findMany({
+        orderBy: { createdAt: "desc" },
+      }),
+    ["api-speech-targets-get"],
+    { revalidate: CACHE_REVALIDATE_SECONDS },
+  )();
 
   return NextResponse.json(targets);
 };

@@ -1,18 +1,24 @@
 import prisma from "@/lib/prisma";
+import { CACHE_REVALIDATE_SECONDS } from "@/lib/server/cache";
 import { Prisma } from "@prisma/client";
+import { unstable_cache } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
-// GET /api/lessons/:id
 export const GET = async (
   _: NextRequest,
   { params }: { params: Promise<{ id: string }> },
 ) => {
   const { id } = await params;
 
-  const lesson = await prisma.lesson.findUnique({
-    where: { id },
-    include: { content: true, tasks: true, userProgress: true, level: true },
-  });
+  const lesson = await unstable_cache(
+    async () =>
+      prisma.lesson.findUnique({
+        where: { id },
+        include: { content: true, tasks: true, userProgress: true, level: true },
+      }),
+    ["api-lessons-id-get", id],
+    { revalidate: CACHE_REVALIDATE_SECONDS },
+  )();
 
   if (!lesson) {
     return NextResponse.json({ message: "Lesson not found" }, { status: 404 });
@@ -21,7 +27,6 @@ export const GET = async (
   return NextResponse.json(lesson);
 };
 
-// PATCH /api/lessons/:id
 export const PATCH = async (
   req: NextRequest,
   { params }: { params: Promise<{ id: string }> },
@@ -75,7 +80,6 @@ export const PATCH = async (
   }
 };
 
-// DELETE /api/lessons/:id
 export const DELETE = async (
   _: NextRequest,
   { params }: { params: Promise<{ id: string }> },

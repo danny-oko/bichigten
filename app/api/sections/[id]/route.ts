@@ -1,29 +1,35 @@
-import prisma from "@/lib/prisma";
+import { unstable_cache } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
-// GET /api/sections/:id
+import prisma from "@/lib/prisma";
+import { CACHE_REVALIDATE_SECONDS } from "@/lib/server/cache";
+
 export const GET = async (
   _: NextRequest,
-  { params }: { params: Promise<{ id: string }> }, // Define as Promise
+  { params }: { params: Promise<{ id: string }> },
 ) => {
-  const { id } = await params; // Unwrapping the promise
+  const { id } = await params;
 
-  const section = await prisma.section.findUnique({
-    where: { id },
-    include: { lessons: true },
-  });
+  const section = await unstable_cache(
+    async () =>
+      prisma.section.findUnique({
+        where: { id },
+        include: { lessons: true },
+      }),
+    ["api-sections-id-get", id],
+    { revalidate: CACHE_REVALIDATE_SECONDS },
+  )();
 
   if (!section)
     return NextResponse.json({ message: "Not found" }, { status: 404 });
   return NextResponse.json(section);
 };
 
-// PATCH /api/sections/:id
 export const PATCH = async (
   req: NextRequest,
-  { params }: { params: Promise<{ id: string }> }, // Define as Promise
+  { params }: { params: Promise<{ id: string }> },
 ) => {
-  const { id } = await params; // Unwrapping the promise
+  const { id } = await params;
   const body = await req.json();
 
   try {
@@ -40,12 +46,11 @@ export const PATCH = async (
   }
 };
 
-// DELETE /api/sections/:id
 export const DELETE = async (
   _: NextRequest,
-  { params }: { params: Promise<{ id: string }> }, // Define as Promise
+  { params }: { params: Promise<{ id: string }> },
 ) => {
-  const { id } = await params; // Unwrapping the promise
+  const { id } = await params;
 
   try {
     await prisma.section.delete({ where: { id } });

@@ -1,21 +1,9 @@
-import prisma from "@/lib/prisma";
+import { fetchLeaderboardTop100Cached } from "@/lib/server/leaderboard-data";
 import { getRankNameFromXp } from "@/lib/utils/getRankNameFromXp";
 import { NextResponse } from "next/server";
 
-// GET /api/leaderboard
 export const GET = async () => {
-  const users = await prisma.user.findMany({
-    orderBy: {
-      totalXp: "desc",
-    },
-    select: {
-      id: true,
-      name: true,
-      userName: true,
-      totalXp: true,
-      avatarUrl: true,
-    },
-  });
+  const users = await fetchLeaderboardTop100Cached();
 
   const data = users.map((user) => {
     const title = getRankNameFromXp(user.totalXp);

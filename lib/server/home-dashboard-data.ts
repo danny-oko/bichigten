@@ -1,16 +1,13 @@
 import { cache } from "react";
+import { unstable_cache } from "next/cache";
 
 import prisma from "@/lib/prisma";
+import { CACHE_REVALIDATE_SECONDS } from "@/lib/server/cache";
 import { buildLast7StreakDots } from "@/lib/server/build-profile-user";
 import { calculateDailyStreak, toUtcDateOnly } from "@/lib/server/daily-streak";
 import { ensureUser } from "@/lib/server/ensure-user";
 
-export const loadHomeProgressSidebar = cache(async (userId: string) => {
-  /** Run before parallel reads: `ensureUser` uses DB writes + retries; bundling it in
-   *  `Promise.all` with many siblings can exhaust the pool and hit "Unable to start a
-   *  transaction in the given time" (interactive transaction wait). */
-  const ensuredUser = await ensureUser({ id: userId });
-
+async function loadHomeProgressSidebarQueries(userId: string) {
   const [
     completionRows,
     distinctLessons,
@@ -36,6 +33,30 @@ export const loadHomeProgressSidebar = cache(async (userId: string) => {
       select: { id: true, title: true },
     }),
   ]);
+
+  return {
+    completionRows,
+    distinctLessons,
+    totalLessons,
+    inProgressLesson,
+    firstLesson,
+  };
+}
+
+export const loadHomeProgressSidebar = cache(async (userId: string) => {
+  const ensuredUser = await ensureUser({ id: userId });
+
+  const {
+    completionRows,
+    distinctLessons,
+    totalLessons,
+    inProgressLesson,
+    firstLesson,
+  } = await unstable_cache(
+    () => loadHomeProgressSidebarQueries(userId),
+    ["loadHomeProgressSidebar", userId],
+    { revalidate: CACHE_REVALIDATE_SECONDS },
+  )();
 
   const completedAtDates = completionRows
     .map((r) => r.completedAt)
@@ -63,61 +84,5 @@ export const loadHomeProgressSidebar = cache(async (userId: string) => {
     totalLessons,
     nextLessonHref,
     nextLessonTitle,
-  };
-});
-
-export const loadHomeSectionHeader = cache(async (userId?: string | null) => {
-  const sections = await prisma.section.findMany({
-    orderBy: { order: "asc" },
-    select: {
-      id: true,
-      title: true,
-      order: true,
-      lessons: {
-        orderBy: { order: "asc" },
-        select: {
-          id: true,
-          order: true,
-        },
-      },
-    },
-  });
-
-  const orderedLessons = sections.flatMap((section) =>
-    section.lessons.map((lesson) => ({ lesson, section })),
-  );
-  const firstLesson = orderedLessons[0];
-
-  if (!firstLesson) {
-    const firstSection = sections[0];
-
-    return {
-      sectionLabel: firstSection ? `Section ${firstSection.order}` : "Section 1",
-      title: firstSection?.title ?? "Монгол бичгийн үндэс",
-    };
-  }
-
-  if (!userId) {
-    return {
-      sectionLabel: `Section ${firstLesson.section.order}, Unit ${firstLesson.lesson.order}`,
-      title: firstLesson.section.title,
-    };
-  }
-
-  const completedProgress = await prisma.userLessonProgress.findMany({
-    where: { userId, status: "COMPLETED" },
-    select: { lessonId: true },
-  });
-  const completedLessonIds = new Set(
-    completedProgress.map((progress) => progress.lessonId),
-  );
-  const currentLesson =
-    orderedLessons.find(({ lesson }) => !completedLessonIds.has(lesson.id)) ??
-    orderedLessons[orderedLessons.length - 1] ??
-    firstLesson;
-
-  return {
-    sectionLabel: `Section ${currentLesson.section.order}, Unit ${currentLesson.lesson.order}`,
-    title: currentLesson.section.title,
   };
 });

@@ -1,10 +1,20 @@
-import prisma from "@/lib/prisma";
+import { unstable_cache } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 
-export const GET = async () => {
-  const contents = await prisma.lessonContent.findMany({
-    orderBy: { order: "asc" },
-  });
+import prisma from "@/lib/prisma";
+import { CACHE_REVALIDATE_SECONDS } from "@/lib/server/cache";
+
+export const GET = async (req: NextRequest) => {
+  const lessonId = req.nextUrl.searchParams.get("lessonId");
+  const contents = await unstable_cache(
+    async () =>
+      prisma.lessonContent.findMany({
+        where: lessonId ? { lessonId } : undefined,
+        orderBy: { order: "asc" },
+      }),
+    ["api-lesson-contents-get", lessonId ?? ""],
+    { revalidate: CACHE_REVALIDATE_SECONDS },
+  )();
   return NextResponse.json(contents);
 };
 
