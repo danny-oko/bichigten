@@ -19,6 +19,23 @@ import {
 import { RoadPath } from "./home-road-path";
 import { HomeSectionDivider } from "./home-section-divider";
 
+function getScrollRoot(start: HTMLElement | null): Window | HTMLElement {
+  if (!start) return window;
+  let el: HTMLElement | null = start;
+  while (el) {
+    const { overflowY } = getComputedStyle(el);
+    if (
+      overflowY === "auto" ||
+      overflowY === "scroll" ||
+      overflowY === "overlay"
+    ) {
+      return el;
+    }
+    el = el.parentElement;
+  }
+  return window;
+}
+
 function HomeSectionBreak({
   sectionIndex,
   title,
@@ -124,12 +141,17 @@ export const HomePath = () => {
     };
 
     updateActiveSection();
-    window.addEventListener("scroll", updateActiveSection, { passive: true });
+
+    const scrollRoot = getScrollRoot(
+      roadRef.current ?? dividerRef.current,
+    );
+    const scrollOptions = { passive: true } as const;
+    scrollRoot.addEventListener("scroll", updateActiveSection, scrollOptions);
     window.addEventListener("resize", updateActiveSection);
 
     return () => {
       cancelAnimationFrame(frame);
-      window.removeEventListener("scroll", updateActiveSection);
+      scrollRoot.removeEventListener("scroll", updateActiveSection);
       window.removeEventListener("resize", updateActiveSection);
     };
   }, [lessons, sections]);
