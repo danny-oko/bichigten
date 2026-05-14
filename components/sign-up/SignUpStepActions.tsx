@@ -43,7 +43,7 @@ export function SignUpStepActions({
 }: SignUpStepActionsProps) {
   if (step === 1) {
     return (
-      <div className="flex justify-center pt-1">
+      <div className="flex justify-center">
         <Button
           type="button"
           onClick={onContinueFromProfile}

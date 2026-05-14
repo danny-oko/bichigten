@@ -20,7 +20,7 @@ export function NameSignUp({
   onChangeAge,
 }: NameSignUpProps) {
   return (
-    <div className="flex flex-col gap-3 sm:gap-4">
+    <div className="flex flex-col gap-2.5 sm:gap-3">
       <Field>
         <FieldLabel
           htmlFor="name"

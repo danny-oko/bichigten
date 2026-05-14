@@ -13,7 +13,6 @@ import { getClerkErrorMessage } from "@/lib/clerk/error-message";
 import { EmailVerificationBlock } from "@/components/sign-up/EmailVerificationBlock";
 import { NameSignUp } from "@/components/sign-up/NameSignUp";
 import { PasswordSignUp } from "@/components/sign-up/PasswordSignUp";
-import { SignUpProgress } from "@/components/sign-up/SignUpProgress";
 import { SignUpStepActions } from "@/components/sign-up/SignUpStepActions";
 import { mnSignUp, mnValidation } from "@/lib/i18n/mn-copy";
 import { mnUi } from "@/lib/i18n/mn-ui";
@@ -169,13 +168,8 @@ export default function SignUpPage() {
   return (
     <AuthShell>
       <AuthHeader />
-      <SignUpProgress step={step} />
-      <div
-        className="h-px w-full bg-linear-to-r from-transparent via-amber-200 to-transparent"
-        aria-hidden
-      />
 
-      <FieldGroup className="gap-5 sm:gap-6">
+      <FieldGroup className="gap-3 sm:gap-4">
         <div
           key={step}
           className="animate-in fade-in slide-in-from-bottom-2 duration-300"

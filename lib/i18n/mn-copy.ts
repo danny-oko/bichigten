@@ -27,9 +27,6 @@ export const mnLabels = {
 } as const;
 
 export const mnAuth = {
-  appTitle: "Мазаалай Сургалт",
-  bearAlt: "Мазаалай лого",
-  tagline: "Хэл бичиг бол үндэсний дархлаа юм.",
   emailPlaceholder: "name@example.com",
   passwordPlaceholder: "••••••••",
   signIn2faBeforeClientTrust:
@@ -54,9 +51,6 @@ export const mnAuth = {
 } as const;
 
 export const mnSignUp = {
-  progressAria: "Бүртгэлийн явц",
-  stepYou: "Та",
-  stepPassword: "Нууц",
   emailVerifySent:
     "Таны и-мэйлд баталгаажуулах код илгээлээ. Үргэлжлүүлэхийн тулд оруулна уу.",
   signUpIncomplete:
@@ -70,5 +64,4 @@ export const mnSignUp = {
     "Ирээгүй юу? Спамыг шалгана уу. Туршилтын и-мэйлд код ",
   emailVerifyHintSuffix: " кодыг ашиглана уу.",
   codePlaceholder: "6 оронтой код",
-  agePlaceholder: "нас",
 } as const;

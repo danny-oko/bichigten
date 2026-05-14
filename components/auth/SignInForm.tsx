@@ -83,7 +83,7 @@ export function SignInForm({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form onSubmit={handleSubmit} className="space-y-3">
       <FieldGroup className="gap-3 sm:gap-4">
         <div className="flex justify-center">
           <Button
