@@ -2,13 +2,11 @@ import "@fontsource/plus-jakarta-sans";
 
 import type { StreakDayDot } from "@/app/(dashboard)/profile/common/types";
 import { buildLast7StreakDots } from "@/lib/server/build-profile-user";
-
 import { StreakNavHover } from "./StreakNavHover";
 
 type HeaderProps = {
   heartsRemaining?: number;
   streak: number;
-  /** Last 7 UTC days for streak popover; defaults to empty week if omitted. */
   streakWeekDays?: StreakDayDot[];
   totalXp: number;
   fixedOnDesktop?: boolean;
