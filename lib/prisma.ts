@@ -28,7 +28,7 @@ function prismaClientFingerprint(): string {
 }
 
 function createPrismaClient(): PrismaClient {
-  return new PrismaClient().$extends(withAccelerate()) as unknown as PrismaClient;
+  return new PrismaClient({ accelerateUrl: process.env.DATABASE_URL }).$extends(withAccelerate()) as unknown as PrismaClient;
 }
 
 function getPrismaClient(): PrismaClient {
