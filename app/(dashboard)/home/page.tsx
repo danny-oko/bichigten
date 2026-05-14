@@ -4,7 +4,7 @@ import { buildLast7StreakDots } from "@/lib/server/build-profile-user";
 import { calculateDailyStreak, toUtcDateOnly } from "@/lib/server/daily-streak";
 import { ensureUser } from "@/lib/server/ensure-user";
 import { MainLayout } from "@/components/layout/MainLayout";
-import { auth } from "@clerk/nextjs/server";
+import { auth, currentUser } from "@clerk/nextjs/server";
 import WebNearbyPlayers from "../leaderboard/_components/SocialPeersList";
 import LessonProgressCard from "./_components/LessonProgressCard";
 import { HomePath } from "./_components/home-page-client";
@@ -31,15 +31,15 @@ export default async function HomeSection() {
   }[] = [];
 
   if (userId) {
-    const ensuredUser = await ensureUser({ id: userId });
-
     const [
+      clerkUser,
       completedLessons,
       totalLessons,
       inProgressLesson,
       firstLesson,
       topPlayers,
     ] = await Promise.all([
+      currentUser(),
       prisma.userLessonProgress.findMany({
         where: { userId, status: "COMPLETED", completedAt: { not: null } },
         select: { completedAt: true, lessonId: true },
@@ -65,6 +65,21 @@ export default async function HomeSection() {
         },
       }),
     ]);
+
+    const primaryEmail =
+      clerkUser?.emailAddresses?.find(
+        (e) => e.id === clerkUser.primaryEmailAddressId,
+      )?.emailAddress ?? clerkUser?.emailAddresses?.[0]?.emailAddress;
+
+    const ensuredUser = await ensureUser({
+      id: userId,
+      email: primaryEmail,
+      username: clerkUser?.username,
+      name:
+        [clerkUser?.firstName, clerkUser?.lastName].filter(Boolean).join(" ") ||
+        undefined,
+      avatarUrl: clerkUser?.imageUrl,
+    });
 
     xp = ensuredUser.totalXp ?? 0;
     heartsRemaining = ensuredUser.heartsRemaining ?? 5;

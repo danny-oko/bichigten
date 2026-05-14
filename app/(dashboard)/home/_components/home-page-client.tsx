@@ -7,13 +7,25 @@ const montserrat = Montserrat({
   weight: ["400", "500", "600", "700"],
 });
 
-import LoadingScreen from "@/app/_components/loading-screen";
 import Mascot from "./home-animation";
 import { LessonCards, ROW, useLessons } from "./home-lesson-cards";
 import { RoadPath } from "./home-road-path";
 
 export const HomePath = () => {
-  const { lessons, completedUpTo } = useLessons();
+  const { lessons, completedUpTo, loading } = useLessons();
+
+  if (loading) {
+    return (
+      <div
+        className={`flex w-full justify-center px-3 py-8 sm:px-4 sm:py-10 md:px-6 ${montserrat.className}`}
+      >
+        <div
+          className="relative w-full max-w-[340px] rounded-3xl bg-[#e8e2d4]/80 animate-pulse"
+          style={{ height: 360 }}
+        />
+      </div>
+    );
+  }
 
   const totalH = lessons.length * ROW + 80;
 

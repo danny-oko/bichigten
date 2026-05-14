@@ -1,5 +1,6 @@
 /** Mongolian UI strings for buttons and common actions */
 export const mnUi = {
+  preparing: "Бэлтгэж байна…",
   continue: "Үргэлжлүүлэх",
   back: "Буцах",
   next: "Дараах",

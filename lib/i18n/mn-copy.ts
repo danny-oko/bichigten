@@ -6,9 +6,10 @@ export const mnValidation = {
     "Зөвхөн үсэг, зай, апостроф (') болон зураас (-) ашиглана уу.",
   usernameRequired: "Хэрэглэгчийн нэрээ оруулна уу.",
   usernameFormat:
-    "3–20 тэмдэгт, зөвхөн латин үсэг, тоо, доогуур зураас (_) ашиглана уу.",
+    "4–64 тэмдэгт, зөвхөн латин үсэг, тоо, доогуур зураас (_) ашиглана уу.",
   emailInvalid: "Зөв и-мэйл хаяг оруулна уу.",
   passwordMin: "Нууц үг хамгийн багадаа 8 тэмдэгт байна.",
+  passwordMax: "Нууц үг хамгийн ихдээ 10 тэмдэгт байна.",
   passwordsMismatch: "Нууц үг таарахгүй байна.",
   ageInvalid: "Насаа зөв оруулна уу.",
   signInPasswordRequired: "Нууц үгээ оруулна уу.",
@@ -54,6 +55,7 @@ export const mnAuth = {
 } as const;
 
 export const mnSignUp = {
+  formTitle: "Бүртгэл үүсгэх",
   progressAria: "Бүртгэлийн явц",
   stepYou: "Та",
   stepPassword: "Нууц",

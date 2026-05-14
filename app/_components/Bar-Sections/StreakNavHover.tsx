@@ -31,11 +31,9 @@ function getPointerCoarseServerSnapshot() {
 function StreakCardBody({
   streak,
   streakWeekDays,
-  isStreakLost,
 }: {
   streak: number;
   streakWeekDays: StreakDayDot[];
-  isStreakLost: boolean;
 }) {
   return (
     <div className="p-4 sm:p-5">
@@ -49,14 +47,8 @@ function StreakCardBody({
             strokeWidth={0.6}
           />
           {streak > 0 ? (
-            <span
-              className={
-                isStreakLost
-                  ? "relative z-[1] text-2xl font-black tracking-tight text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)]"
-                  : "relative z-[1] text-2xl font-black tracking-tight text-white drop-shadow-[0_1px_3px_rgba(89,52,0,0.45)]"
-              }
-            >
-              {streak}
+            <span className="relative z-[1] text-2xl font-black tabular-nums tracking-tight text-white drop-shadow-[0_1px_3px_rgba(89,52,0,0.45)]">
+              {streak.toLocaleString()}
             </span>
           ) : null}
         </div>
@@ -129,9 +121,14 @@ function StreakTriggerFace({
           height={20}
         />
       )}
-      {streak > 0 ? (
-        <span className="text-md font-black sm:text-lg">{streak}</span>
-      ) : null}
+      <span
+        className={[
+          "text-md font-black tabular-nums sm:text-lg",
+          isStreakLost ? "text-slate-500" : "text-[#0F5238]",
+        ].join(" ")}
+      >
+        {streak.toLocaleString()}
+      </span>
     </span>
   );
 }
@@ -174,7 +171,6 @@ export function StreakNavHover({
           <StreakCardBody
             streak={streak}
             streakWeekDays={streakWeekDays}
-            isStreakLost={isStreakLost}
           />
         </DialogContent>
       </Dialog>
@@ -205,7 +201,6 @@ export function StreakNavHover({
           <StreakCardBody
             streak={streak}
             streakWeekDays={streakWeekDays}
-            isStreakLost={isStreakLost}
           />
         </HoverCard.Content>
       </HoverCard.Portal>

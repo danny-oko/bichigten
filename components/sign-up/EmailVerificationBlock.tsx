@@ -1,13 +1,24 @@
-import { Button } from "@/components/ui/button";
+import { FieldError } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { mnLabels, mnSignUp } from "@/lib/i18n/mn-copy";
 import { mnUi } from "@/lib/i18n/mn-ui";
+import { cn } from "@/lib/utils";
+
+import {
+  signUpFocusRing,
+  signUpInputClass,
+  signUpLabelClass,
+  signUpTextButtonClass,
+  signUpVerificationPanel,
+} from "./sign-up-classes";
 
 type EmailVerificationBlockProps = {
   verificationCode: string;
   verifyInfo: string | null;
   onChangeCode: (value: string) => void;
   onResendCode: () => void;
+  /** Clerk / missing-code messages shown under the code field */
+  error?: string | null;
 };
 
 export function EmailVerificationBlock({
@@ -15,42 +26,45 @@ export function EmailVerificationBlock({
   verifyInfo,
   onChangeCode,
   onResendCode,
+  error,
 }: EmailVerificationBlockProps) {
   return (
-    <div className="space-y-3 rounded-2xl border border-amber-100 bg-amber-50/40 p-4 sm:p-5">
-      <label
-        htmlFor="verificationCode"
-        className="block text-sm font-semibold tracking-wide text-[#E8920A]"
-      >
+    <div className={signUpVerificationPanel}>
+      <label htmlFor="verificationCode" className={cn("block", signUpLabelClass)}>
         {mnLabels.verificationCode}
       </label>
       <Input
         id="verificationCode"
         value={verificationCode}
         onChange={(e) => onChangeCode(e.target.value)}
-        className="h-11 rounded-2xl border-amber-300/80 bg-[#F8F4E3] text-sm transition-shadow focus-visible:border-amber-500 focus-visible:ring-2 focus-visible:ring-amber-400/35 sm:h-12 sm:text-base"
+        className={signUpInputClass}
         placeholder={mnSignUp.codePlaceholder}
         inputMode="numeric"
         autoComplete="one-time-code"
+        aria-invalid={error ? true : undefined}
       />
+      {error ? (
+        <FieldError className="leading-snug text-destructive">{error}</FieldError>
+      ) : null}
       <p className="text-xs leading-relaxed text-amber-900/70 sm:text-sm">
         {mnSignUp.emailVerifyHint}
-        <code className="rounded bg-amber-100 px-1 py-0.5 text-amber-950">424242</code>
+        <code className="rounded-md bg-amber-100/80 px-1 py-0.5 text-amber-950">
+          424242
+        </code>
         {mnSignUp.emailVerifyHintSuffix}
       </p>
-      <Button
+      <button
         type="button"
-        variant="outline"
         onClick={onResendCode}
-        className="w-full rounded-xl border-amber-300 text-sm sm:w-auto"
+        className={cn(signUpTextButtonClass, signUpFocusRing)}
       >
         {mnUi.resendCode}
-      </Button>
-      {verifyInfo && (
-        <p className="rounded-xl bg-emerald-50 px-3 py-2 text-xs text-emerald-800 sm:text-sm">
+      </button>
+      {verifyInfo ? (
+        <p className="rounded-xl bg-emerald-50/90 px-3 py-2.5 text-xs leading-snug text-emerald-900 sm:text-sm">
           {verifyInfo}
         </p>
-      )}
+      ) : null}
     </div>
   );
 }
