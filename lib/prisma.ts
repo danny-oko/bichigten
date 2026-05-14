@@ -1,32 +1,14 @@
 import { existsSync, statSync } from "node:fs";
 import path from "node:path";
 
-import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "@prisma/client";
+import { withAccelerate } from "@prisma/extension-accelerate";
 
 const globalForPrisma = globalThis as unknown as {
   prisma?: PrismaClient;
   /** Bust stale PrismaClient in dev after `prisma generate` without restarting the server. */
   prismaDevFingerprint?: string;
 };
-
-/**
- * `pg-connection-string` emits a deprecation warning when `sslmode` resolves to
- * `prefer` | `require` | `verify-ca`. Always set `verify-full` explicitly on the
- * Accelerate URL so `pg` parses a single unambiguous mode (see warning text).
- */
-function accelerateUrlWithExplicitSsl(
-  raw: string | undefined,
-): string | undefined {
-  if (!raw) return raw;
-  try {
-    const url = new URL(raw);
-    url.searchParams.set("sslmode", "verify-full");
-    return url.toString();
-  } catch {
-    return raw;
-  }
-}
 
 function prismaClientFingerprint(): string {
   if (process.env.NODE_ENV === "production") return "prod";
@@ -45,14 +27,14 @@ function prismaClientFingerprint(): string {
   }
 }
 
-const adapter = new PrismaPg({
-  connectionString: accelerateUrlWithExplicitSsl(process.env.DATABASE_URL),
-});
+function createPrismaClient(): PrismaClient {
+  return new PrismaClient().$extends(withAccelerate()) as unknown as PrismaClient;
+}
 
 function getPrismaClient(): PrismaClient {
   if (process.env.NODE_ENV === "production") {
     if (!globalForPrisma.prisma) {
-      globalForPrisma.prisma = new PrismaClient({ adapter });
+      globalForPrisma.prisma = createPrismaClient();
     }
     return globalForPrisma.prisma;
   }
@@ -69,7 +51,7 @@ function getPrismaClient(): PrismaClient {
   }
 
   if (!globalForPrisma.prisma) {
-    globalForPrisma.prisma = new PrismaClient({ adapter });
+    globalForPrisma.prisma = createPrismaClient();
     globalForPrisma.prismaDevFingerprint = fp;
   }
 
