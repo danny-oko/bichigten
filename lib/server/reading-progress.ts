@@ -9,15 +9,9 @@ const attemptSummarySelect = {
   id: true,
   createdAt: true,
   accuracy: true,
-  coverage: true,
   finalScore: true,
-  mistakes: true,
-  wordsRead: true,
-  charactersRead: true,
-  wpm: true,
   isPassed: true,
   xpEarned: true,
-  durationSec: true,
 } satisfies Prisma.SpeechAttemptSelect;
 
 export type SubmitSpeechAttemptInput = {
@@ -213,7 +207,6 @@ export const getReadingCardsForUser = async ({
     where.OR = [
       { title: { contains: search, mode: "insensitive" } },
       { description: { contains: search, mode: "insensitive" } },
-      { cyrillicText: { contains: search, mode: "insensitive" } },
     ];
   }
 
@@ -221,18 +214,12 @@ export const getReadingCardsForUser = async ({
     where,
     select: {
       id: true,
-      createdAt: true,
-      updatedAt: true,
-      lessonId: true,
       title: true,
       description: true,
       difficulty: true,
       requiredAccuracy: true,
       xpReward: true,
       wordsCount: true,
-      cyrillicText: true,
-      traditionalText: true,
-      _count: { select: { attempts: true } },
     },
     orderBy: { createdAt: "desc" },
   });
@@ -249,7 +236,7 @@ export const getReadingCardsForUser = async ({
   }
 
   const targetIds = targets.map((target) => target.id);
-  const [latestAttempts, bestAttempts, progressRows] = await Promise.all([
+  const [latestAttempts, bestAttempts, attemptProgressRows] = await Promise.all([
     prisma.speechAttempt.findMany({
       where: { userId, targetId: { in: targetIds } },
       select: { targetId: true, ...attemptSummarySelect },
@@ -267,32 +254,43 @@ export const getReadingCardsForUser = async ({
         { createdAt: "desc" },
       ],
     }),
-    prisma.userSpeechTargetProgress.findMany({
+    prisma.speechAttempt.groupBy({
+      by: ["targetId", "isPassed"],
       where: { userId, targetId: { in: targetIds } },
-      select: { targetId: true, isPassed: true, xpEarned: true },
+      _sum: { xpEarned: true },
     }),
   ]);
 
-  const progressByTargetId = new Map(
-    progressRows.map((progress) => [progress.targetId, progress]),
-  );
   const latestAttemptByTargetId = new Map(
     latestAttempts.map((attempt) => [attempt.targetId, attempt]),
   );
   const bestAttemptByTargetId = new Map(
     bestAttempts.map((attempt) => [attempt.targetId, attempt]),
   );
+  const xpEarnedByTargetId = new Map<string, number>();
+  const passedTargetIds = new Set<string>();
+
+  for (const row of attemptProgressRows) {
+    xpEarnedByTargetId.set(
+      row.targetId,
+      (xpEarnedByTargetId.get(row.targetId) ?? 0) + (row._sum.xpEarned ?? 0),
+    );
+
+    if (row.isPassed) {
+      passedTargetIds.add(row.targetId);
+    }
+  }
 
   return targets.map((target) => {
-    const progress = progressByTargetId.get(target.id);
+    const isPassed = passedTargetIds.has(target.id);
 
     return {
       ...target,
       latestAttempt: latestAttemptByTargetId.get(target.id) ?? null,
       bestAttempt: bestAttemptByTargetId.get(target.id) ?? null,
-      completed: progress?.isPassed ?? false,
-      isPassed: progress?.isPassed ?? false,
-      xpEarned: progress?.xpEarned ?? 0,
+      completed: isPassed,
+      isPassed,
+      xpEarned: xpEarnedByTargetId.get(target.id) ?? 0,
     };
   });
 };
