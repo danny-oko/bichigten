@@ -20,27 +20,36 @@ type HeartRefillRow = {
  * matching the DB (avoids TS/runtime drift when `prisma generate` is stale).
  */
 export async function ensureHeartsRefilledIfDue(userId: string): Promise<void> {
-  const rows = await prisma.$queryRaw<HeartRefillRow[]>`
-    SELECT "heartsRemaining", "heartsDepletedAt"
-    FROM "users_table"
-    WHERE id = ${userId}
-    LIMIT 1
-  `;
-  const user = rows[0];
-  if (!user || user.heartsRemaining !== 0) return;
+  try {
+    const rows = await prisma.$queryRaw<HeartRefillRow[]>`
+      SELECT "heartsRemaining", "heartsDepletedAt"
+      FROM "users_table"
+      WHERE id = ${userId}
+      LIMIT 1
+    `;
+    const user = rows[0];
+    if (!user || user.heartsRemaining !== 0) return;
 
-  const depletedAt = user.heartsDepletedAt;
-  const due =
-    !depletedAt || Date.now() - depletedAt.getTime() >= REFILL_AFTER_MS;
+    const depletedAt = user.heartsDepletedAt;
+    const due =
+      !depletedAt || Date.now() - depletedAt.getTime() >= REFILL_AFTER_MS;
 
-  if (!due) return;
+    if (!due) return;
 
-  await prisma.$executeRaw`
-    UPDATE "users_table"
-    SET "heartsRemaining" = ${MAX_USER_HEARTS}, "heartsDepletedAt" = NULL
-    WHERE id = ${userId}
-      AND "heartsRemaining" = 0
-  `;
+    await prisma.$executeRaw`
+      UPDATE "users_table"
+      SET "heartsRemaining" = ${MAX_USER_HEARTS}, "heartsDepletedAt" = NULL
+      WHERE id = ${userId}
+        AND "heartsRemaining" = 0
+    `;
 
-  invalidateAfterUserRowMutation(userId);
+    invalidateAfterUserRowMutation(userId);
+  } catch (e) {
+    if (process.env.NODE_ENV === "development") {
+      console.warn(
+        "[ensureHeartsRefilledIfDue] skipped (database unavailable):",
+        e,
+      );
+    }
+  }
 }
