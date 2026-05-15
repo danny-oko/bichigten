@@ -42,14 +42,14 @@ const ReadingResultPanel = ({
   return (
     <aside className="flex w-full flex-col gap-4">
       {error && (
-        <section className="rounded-2xl border-3 border-red-300 bg-[#fff8ec] p-4 text-sm font-medium text-red-700 dark:border-red-500/50 dark:text-red-300">
+        <section className="rounded-2xl border-3 border-red-300 bg-[#fff8ec] p-4 text-sm font-medium text-red-700 dark:border-red-500/50 dark:bg-red-950/30 dark:text-red-300">
           {error}
         </section>
       )}
 
       {recordingUrl && (
-        <section className="rounded-2xl border-3 border-[#E8920A] bg-[#fff8ec] p-4 shadow-[0_10px_28px_rgba(232,146,10,0.1)] dark:border-[#84d8ff]/40">
-          <p className="mb-3 text-sm font-semibold text-stone-800">
+        <section className="rounded-2xl border-3 border-[#E8920A] bg-[#fff8ec] p-4 shadow-[0_10px_28px_rgba(232,146,10,0.1)] dark:border-[#84d8ff]/40 dark:bg-[#1e293b]/70 dark:shadow-[0_10px_28px_rgba(0,0,0,0.35)]">
+          <p className="mb-3 text-sm font-semibold text-stone-800 dark:text-[#e8e4dc]">
             Recorded audio
           </p>
           <audio
@@ -62,11 +62,11 @@ const ReadingResultPanel = ({
       )}
 
       {transcript && (
-        <section className="rounded-2xl border-3 border-[#E8920A] bg-[#fff8ec] p-4 shadow-[0_8px_24px_rgba(232,146,10,0.08)] md:p-5 dark:border-[#84d8ff]/40">
-          <h2 className="text-base font-semibold text-stone-950">
+        <section className="rounded-2xl border-3 border-[#E8920A] bg-[#fff8ec] p-4 shadow-[0_8px_24px_rgba(232,146,10,0.08)] md:p-5 dark:border-[#84d8ff]/40 dark:bg-[#1e293b]/70 dark:shadow-[0_8px_24px_rgba(0,0,0,0.35)]">
+          <h2 className="text-base font-semibold text-stone-950 dark:text-[#f0ebe3]">
             Transcript
           </h2>
-          <p className="mt-3 whitespace-pre-wrap leading-7 text-stone-700">
+          <p className="mt-3 whitespace-pre-wrap leading-7 text-stone-700 dark:text-[#b8b0a4]">
             {transcript}
           </p>
         </section>
@@ -162,8 +162,8 @@ const ReadingTestPage = () => {
 
   if (isLoading) {
     return (
-      <main className="min-h-screen w-full bg-[#fffaf2]/70 px-4 pt-5 pb-[calc(7rem+env(safe-area-inset-bottom))] text-stone-900 md:pb-8 lg:px-10">
-        <section className="rounded-2xl border-3 border-[#E8920A] bg-[#fff8ec] p-4 text-sm font-semibold text-stone-600 shadow-[0_8px_24px_rgba(232,146,10,0.08)] md:p-6 dark:border-[#84d8ff]/40">
+      <main className="min-h-screen w-full bg-[#fffaf2]/70 px-4 pt-5 pb-[calc(7rem+env(safe-area-inset-bottom))] text-stone-900 md:pb-8 lg:px-10 dark:bg-[#0f1419] dark:text-[#e8e4dc]">
+        <section className="rounded-2xl border-3 border-[#E8920A] bg-[#fff8ec] p-4 text-sm font-semibold text-stone-600 shadow-[0_8px_24px_rgba(232,146,10,0.08)] md:p-6 dark:border-[#84d8ff]/40 dark:bg-[#1e293b]/70 dark:text-[#b8b0a4] dark:shadow-[0_8px_24px_rgba(0,0,0,0.35)]">
           Уншлагыг ачаалж байна...
         </section>
       </main>
@@ -172,14 +172,14 @@ const ReadingTestPage = () => {
 
   if (!reading || loadError) {
     return (
-      <main className="min-h-screen w-full bg-[#fffaf2]/70 px-4 pt-5 pb-[calc(7rem+env(safe-area-inset-bottom))] text-stone-900 md:pb-8 lg:px-10">
-        <div className="rounded-2xl border-3 border-[#E8920A] bg-[#fff8ec] p-4 shadow-[0_8px_24px_rgba(232,146,10,0.08)] md:p-6 dark:border-[#84d8ff]/40">
-          <h1 className="text-2xl font-semibold text-stone-950">
+      <main className="min-h-screen w-full bg-[#fffaf2]/70 px-4 pt-5 pb-[calc(7rem+env(safe-area-inset-bottom))] text-stone-900 md:pb-8 lg:px-10 dark:bg-[#0f1419] dark:text-[#e8e4dc]">
+        <div className="rounded-2xl border-3 border-[#E8920A] bg-[#fff8ec] p-4 shadow-[0_8px_24px_rgba(232,146,10,0.08)] md:p-6 dark:border-[#84d8ff]/40 dark:bg-[#1e293b]/70 dark:shadow-[0_8px_24px_rgba(0,0,0,0.35)]">
+          <h1 className="text-2xl font-semibold text-stone-950 dark:text-[#f0ebe3]">
             {loadError ?? "Уншлага олдсонгүй"}
           </h1>
           <Link
             href="/reading"
-            className="mt-4 inline-flex rounded-full bg-amber-600 px-5 py-2.5 text-sm font-semibold text-white"
+            className="mt-4 inline-flex rounded-full bg-amber-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-amber-700 dark:bg-[#0ea5e9] dark:hover:bg-sky-400"
           >
             Буцах
           </Link>
@@ -189,17 +189,17 @@ const ReadingTestPage = () => {
   }
 
   return (
-    <main className="min-h-screen w-full overflow-x-hidden bg-[#fffaf2]/70 px-4 pt-5 pb-[calc(6rem+env(safe-area-inset-bottom))] text-stone-900 md:pb-8 lg:px-10">
+    <main className="min-h-screen w-full overflow-x-hidden bg-[#fffaf2]/70 px-4 pt-5 pb-[calc(6rem+env(safe-area-inset-bottom))] text-stone-900 md:pb-8 lg:px-10 dark:bg-[#0f1419] dark:text-[#e8e4dc]">
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-3 md:gap-5">
         <header className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
           <div>
             <Link
               href="/reading"
-              className="text-sm font-semibold text-amber-700 transition hover:text-amber-900"
+              className="text-sm font-semibold text-amber-700 transition hover:text-amber-900 dark:text-[#fcd34d] dark:hover:text-[#fde68a]"
             >
               Буцах
             </Link>
-            <h1 className="mt-2 hidden text-2xl font-semibold tracking-tight text-stone-950 sm:block sm:text-3xl lg:text-4xl">
+            <h1 className="mt-2 hidden text-2xl font-semibold tracking-tight text-stone-950 sm:block sm:text-3xl lg:text-4xl dark:text-[#f0ebe3]">
               {reading.title}
             </h1>
           </div>

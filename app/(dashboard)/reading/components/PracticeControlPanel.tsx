@@ -44,11 +44,13 @@ const getButtonText = (status: ReadingStatus) => {
 };
 
 const StatCard = ({ label, value }: { label: string; value: string }) => (
-  <div className="rounded-2xl border-2 border-[#E8920A]/25 bg-[#fffaf2] p-4">
-    <p className="text-xs font-semibold uppercase tracking-wide text-amber-700">
+  <div className="rounded-2xl border-2 border-[#E8920A]/25 bg-[#fffaf2] p-4 dark:border-[#475569]/60 dark:bg-[#0f172a]/50">
+    <p className="text-xs font-semibold uppercase tracking-wide text-amber-700 dark:text-[#fcd34d]">
       {label}
     </p>
-    <p className="mt-1 text-lg font-semibold text-stone-950">{value}</p>
+    <p className="mt-1 text-lg font-semibold text-stone-950 dark:text-[#f0ebe3]">
+      {value}
+    </p>
   </div>
 );
 
@@ -70,14 +72,16 @@ export const PracticeControlPanel = ({
 
   return (
     <section
-      className={`w-full rounded-2xl border-3 border-[#E8920A] bg-[#fff8ec] p-4 shadow-[0_14px_36px_rgba(232,146,10,0.12)] md:p-5 dark:border-[#84d8ff]/40 ${className ?? ""}`}
+      className={`w-full rounded-2xl border-3 border-[#E8920A] bg-[#fff8ec] p-4 shadow-[0_14px_36px_rgba(232,146,10,0.12)] md:p-5 dark:border-[#84d8ff]/40 dark:bg-[#1e293b]/70 dark:shadow-[0_14px_36px_rgba(0,0,0,0.35)] ${className ?? ""}`}
     >
-      <div className="rounded-2xl border-2 border-[#E8920A]/20 bg-[#fffaf2] p-4 md:p-5">
-        <p className="text-sm font-semibold text-amber-800">Уншлагын дасгал</p>
-        <h2 className="mt-1.5 text-xl font-semibold text-stone-950 md:mt-2 md:text-2xl">
+      <div className="rounded-2xl border-2 border-[#E8920A]/20 bg-[#fffaf2] p-4 md:p-5 dark:border-[#475569]/60 dark:bg-[#0f172a]/50">
+        <p className="text-sm font-semibold text-amber-800 dark:text-[#fcd34d]">
+          Уншлагын дасгал
+        </p>
+        <h2 className="mt-1.5 text-xl font-semibold text-stone-950 md:mt-2 md:text-2xl dark:text-[#f0ebe3]">
           {getPanelTitle(status)}
         </h2>
-        <p className="mt-2 text-sm leading-5 text-stone-600 md:min-h-10 md:leading-6">
+        <p className="mt-2 text-sm leading-5 text-stone-600 md:min-h-10 md:leading-6 dark:text-[#b8b0a4]">
           {status === "idle" || status === "error"
             ? "Эхлэх дарсны дараа эх тодорч, 60 секундийн тоолуур эхэлнэ."
             : status === "done"
@@ -88,18 +92,18 @@ export const PracticeControlPanel = ({
 
       <div className="mt-5 flex justify-center md:mt-6">
         <div
-          className="grid size-36 place-items-center rounded-full p-2.5 shadow-inner transition-all duration-700 ease-out md:size-44 md:p-3"
+          className="grid size-36 place-items-center rounded-full p-2.5 shadow-inner transition-all duration-700 ease-out [--ring-fill:#E8920A] [--ring-track:#F8E5C4] dark:shadow-[inset_0_2px_20px_rgba(0,0,0,0.35)] dark:[--ring-fill:#38bdf8] dark:[--ring-track:#1e293b] md:size-44 md:p-3"
           style={{
-            background: `conic-gradient(#E8920A ${progress}%, #F8E5C4 ${progress}% 100%)`,
+            background: `conic-gradient(var(--ring-fill) ${progress}%, var(--ring-track) ${progress}% 100%)`,
           }}
           aria-label={`${secondsLeft} seconds left`}
         >
-          <div className="grid size-full place-items-center rounded-full border-2 border-[#E8920A]/20 bg-[#fffaf2]">
+          <div className="grid size-full place-items-center rounded-full border-2 border-[#E8920A]/20 bg-[#fffaf2] dark:border-[#475569]/60 dark:bg-[#0f172a]/80">
             <div className="text-center">
-              <p className="text-5xl font-semibold tabular-nums text-stone-950 md:text-6xl">
+              <p className="text-5xl font-semibold tabular-nums text-stone-950 md:text-6xl dark:text-[#f0ebe3]">
                 {secondsLeft}
               </p>
-              <p className="mt-1 text-sm font-semibold text-amber-800">
+              <p className="mt-1 text-sm font-semibold text-amber-800 dark:text-[#fcd34d]">
                 секунд
               </p>
             </div>
@@ -112,7 +116,7 @@ export const PracticeControlPanel = ({
           type="button"
           onClick={onStart}
           disabled={!canStart}
-          className="h-12 w-full rounded-full bg-amber-600 px-6 text-base font-semibold text-white shadow-[0_10px_24px_rgba(217,119,6,0.22)] transition hover:bg-amber-700 disabled:cursor-not-allowed disabled:bg-stone-300 disabled:text-stone-500 disabled:shadow-none"
+          className="h-12 w-full rounded-full bg-amber-600 px-6 text-base font-semibold text-white shadow-[0_10px_24px_rgba(217,119,6,0.22)] transition hover:bg-amber-700 disabled:cursor-not-allowed disabled:bg-stone-300 disabled:text-stone-500 disabled:shadow-none dark:bg-[#0ea5e9] dark:shadow-[0_10px_24px_rgba(14,165,233,0.25)] dark:hover:bg-sky-400 dark:disabled:bg-slate-700 dark:disabled:text-slate-400"
         >
           {getButtonText(status)}
         </Button>
@@ -122,7 +126,7 @@ export const PracticeControlPanel = ({
             type="button"
             onClick={onStop}
             variant="outline"
-            className="h-11 w-full rounded-full border-2 border-stone-300 bg-transparent text-sm font-semibold text-stone-800 transition hover:border-[#E8920A] hover:text-amber-800 dark:border-[#475569] dark:text-[#e8e4dc]"
+            className="h-11 w-full rounded-full border-2 border-stone-300 bg-transparent text-sm font-semibold text-stone-800 transition hover:border-[#E8920A] hover:text-amber-800 dark:border-[#475569] dark:text-[#e8e4dc] dark:hover:border-[#84d8ff] dark:hover:text-[#e0f2fe]"
           >
             Болчихлоо!
           </Button>

@@ -9,8 +9,10 @@ export const TECH_STACK_GROUPS: {
     id: "engine",
     labels: [
       "Next.js",
+      "Clerk",
       "Tailwind CSS",
       "Next API",
+      "Zod",
       "Prisma",
       "PostgreSQL",
       "TS",

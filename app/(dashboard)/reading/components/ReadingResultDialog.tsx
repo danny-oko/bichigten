@@ -24,9 +24,13 @@ type ReadingResultDialogProps = {
 };
 
 const StatCard = ({ label, value }: { label: string; value: string }) => (
-  <div className="rounded-xl border-3 border-amber-200/80 bg-transparent p-3 dark:border-[#84d8ff]/30">
-    <p className="text-xs font-semibold text-amber-800">{label}</p>
-    <p className="mt-1 text-xl font-semibold text-stone-950">{value}</p>
+  <div className="rounded-xl border-3 border-amber-200/80 bg-transparent p-3 dark:border-[#84d8ff]/30 dark:bg-[#0f172a]/40">
+    <p className="text-xs font-semibold text-amber-800 dark:text-[#fcd34d]">
+      {label}
+    </p>
+    <p className="mt-1 text-xl font-semibold text-stone-950 dark:text-[#f0ebe3]">
+      {value}
+    </p>
   </div>
 );
 
@@ -50,7 +54,7 @@ export const ReadingResultDialog = ({
 
   return (
     <Dialog open={open} onOpenChange={(nextOpen) => !nextOpen && onClose()}>
-      <DialogContent className="max-h-[90vh] overflow-auto border-3 border-[#E8920A] bg-[#fffaf0] text-stone-900 shadow-[0_18px_60px_rgba(232,146,10,0.18)] sm:max-w-xl dark:border-[#84d8ff]/50">
+      <DialogContent className="max-h-[90vh] overflow-auto border-3 border-[#E8920A] bg-[#fffaf0] text-stone-900 shadow-[0_18px_60px_rgba(232,146,10,0.18)] sm:max-w-xl dark:border-[#84d8ff]/50 dark:bg-[#1e293b] dark:text-[#e8e4dc] dark:shadow-[0_18px_60px_rgba(0,0,0,0.45)]">
         <DialogHeader>
           <div className="mx-auto h-28 w-28">
             {congratsAnimation ? (
@@ -61,15 +65,15 @@ export const ReadingResultDialog = ({
                 className="h-full w-full"
               />
             ) : (
-              <div className="flex h-full w-full items-center justify-center rounded-full border-3 border-amber-300 text-4xl font-semibold text-amber-600">
+              <div className="flex h-full w-full items-center justify-center rounded-full border-3 border-amber-300 text-4xl font-semibold text-amber-600 dark:border-[#84d8ff]/50 dark:text-sky-300">
                 +
               </div>
             )}
           </div>
-          <DialogTitle className="text-center text-2xl text-stone-950">
+          <DialogTitle className="text-center text-2xl text-stone-950 dark:text-[#f0ebe3]">
             {title}
           </DialogTitle>
-          <DialogDescription className="text-center text-sm font-medium text-stone-600">
+          <DialogDescription className="text-center text-sm font-medium text-stone-600 dark:text-[#b8b0a4]">
             {description}
           </DialogDescription>
         </DialogHeader>
@@ -85,8 +89,8 @@ export const ReadingResultDialog = ({
         <div
           className={`rounded-xl border-3 p-4 text-sm font-semibold ${
             isPassed
-              ? "border-emerald-300 bg-emerald-50 text-emerald-700"
-              : "border-orange-300 bg-orange-50 text-orange-800"
+              ? "border-emerald-300 bg-emerald-50 text-emerald-700 dark:border-emerald-500/50 dark:bg-emerald-950/45 dark:text-emerald-200"
+              : "border-orange-300 bg-orange-50 text-orange-800 dark:border-orange-500/45 dark:bg-orange-950/40 dark:text-orange-200"
           }`}
         >
           {statusText} · шаардлага {passThreshold}%
@@ -96,7 +100,7 @@ export const ReadingResultDialog = ({
           <Button
             type="button"
             onClick={onClose}
-            className="rounded-full bg-amber-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-amber-700"
+            className="rounded-full bg-amber-600 px-6 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-amber-700 dark:bg-[#0ea5e9] dark:hover:bg-sky-400"
           >
             Хаах
           </Button>
