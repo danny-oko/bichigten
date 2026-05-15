@@ -69,7 +69,7 @@ export const mnProfile = {
     // "● 4 дэх 7хоног: Wrapping up . Everyone's focused determined .... :D",
   ] as const,
   helpAccordionTechTitle: "Tech stack",
-  helpTechStackIntro: "Next.js App Router, Tailwind CSS дээр суурилсан",
+  // helpTechStackIntro: "Next.js App Router, Tailwind CSS дээр суурилсан",
   helpTechGroupEngine: "Engine",
   helpTechGroupAi: "AI & Logic",
   helpTechGroupManagement: "Management & Designing",
