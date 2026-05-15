@@ -1,8 +1,12 @@
+import { Link2 } from "lucide-react";
+
 import { mnUi } from "@/lib/i18n/mn-ui";
-import { Button } from "@/components/ui/button";
+import { Button, buttonVariants } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 import IncorrectBear from "./lesson-incorrect-animation";
+import { TaskType } from "./lesson-types";
+import { MatchRenderData } from "./use-lesson-game";
 
 interface LessonCheckButtonProps {
   disabled: boolean;
@@ -12,10 +16,17 @@ interface LessonCheckButtonProps {
   correctAnswer?: string;
   onContinue?: () => void;
   isTeaching?: boolean;
+  taskType?: TaskType;
+  matchData?: MatchRenderData | null;
 }
 
 function isImageUrl(value: string): boolean {
   return /^https?:\/\/.+\.(png|jpe?g|webp|gif|svg)(\?.*)?$/i.test(value.trim());
+}
+
+/** Latin, URLs, etc. stay horizontal (Balsamiq); traditional Mongolian letters use vertical `mongol-script`. */
+function isMongolianScriptText(value: string): boolean {
+  return /\p{Script=Mong}/u.test(value);
 }
 
 const barShell =
@@ -27,6 +38,48 @@ const inner = "mx-auto flex w-full max-w-5xl flex-col gap-4 sm:gap-5";
 const lessonSortBtn =
   "w-full rounded-2xl py-3.5 font-black uppercase tracking-widest sm:w-[300px]";
 
+const matchBadgeBase =
+  "flex h-10 min-w-10 shrink-0 items-center justify-center rounded-full border-2 border-[#E8920A] bg-[#E8920A] text-sm font-black text-white shadow-none dark:border-[#84d8ff]/50 dark:bg-[#84d8ff]/25 dark:text-white";
+
+function MatchCorrectPairsBadges({ matchData }: { matchData: MatchRenderData }) {
+  const leftIndexById = new Map(
+    matchData.leftSide.map((item, index) => [item.id, index]),
+  );
+  const rightLetterById = new Map(
+    matchData.rightSide.map((item, index) => [
+      item.id,
+      String.fromCharCode(65 + index),
+    ]),
+  );
+
+  return (
+    <ul
+      className="flex flex-wrap items-center justify-center gap-2 sm:justify-start"
+      aria-label="Correct pairs"
+    >
+      {matchData.pairs.map((pair, i) => {
+        const leftIdx = leftIndexById.get(pair.left);
+        const letter = rightLetterById.get(pair.right) ?? "?";
+        const num =
+          typeof leftIdx === "number" ? String(leftIdx + 1) : "?";
+        return (
+          <li
+            key={`${pair.left}-${pair.right}-${i}`}
+            className="flex items-center gap-1.5 rounded-full border border-[#E8920A]/50 bg-[#FAD99B]/40 px-2 py-1 dark:border-[#84d8ff]/25 dark:bg-[#253035]/60"
+          >
+            <span className={matchBadgeBase}>{num}</span>
+            <Link2
+              className="h-4 w-4 shrink-0 text-[#523403]/70 dark:text-[#94a3b8]"
+              aria-hidden
+            />
+            <span className={matchBadgeBase}>{letter}</span>
+          </li>
+        );
+      })}
+    </ul>
+  );
+}
+
 export function LessonCheckButton({
   disabled,
   onClick,
@@ -35,64 +88,103 @@ export function LessonCheckButton({
   correctAnswer,
   onContinue,
   isTeaching,
+  taskType,
+  matchData,
 }: LessonCheckButtonProps) {
-  const shouldRenderCorrectAnswerAsImage = !!(
-    correctAnswer && isImageUrl(correctAnswer)
-  );
+  const showMatchCorrectBadges =
+    taskType === "MATCH" &&
+    !!matchData &&
+    matchData.pairs.length > 0;
 
-  if (skipped && correctAnswer) {
+  const showSkippedAnswerPanel =
+    skipped &&
+    (showMatchCorrectBadges || !!correctAnswer?.trim());
+
+  const shouldRenderCorrectAnswerAsImage = !!(
+    correctAnswer &&
+    isImageUrl(correctAnswer) &&
+    !showMatchCorrectBadges
+  );
+  const correctAnswerUsesMongolianScript =
+    !!correctAnswer &&
+    isMongolianScriptText(correctAnswer) &&
+    !showMatchCorrectBadges;
+
+  if (showSkippedAnswerPanel) {
     return (
-      <div className="relative w-full overflow-hidden border-t-4 border-[#FF4B4B] bg-[#FAD99A] px-4 py-8 sm:px-8 sm:py-10 dark:border-[#FF4B4B] dark:bg-[#3d2f0a]">
+      <div className="relative w-full overflow-hidden border-t-2 border-[#E8920A] bg-[#FAD99B] px-4 py-4 sm:px-6 sm:py-5 dark:border-[#84d8ff]/35 dark:bg-[#1a2429]">
         <div
-          className="pointer-events-none absolute -bottom-2 right-0 -z-10 hidden aspect-square w-[120px] sm:block sm:w-[180px] md:w-[200px] lg:bottom-0 lg:w-[220px] xl:w-[300px]"
+          className="pointer-events-none absolute -bottom-2 -right-2 -z-10 opacity-75 sm:opacity-90"
           aria-hidden
         >
-          <IncorrectBear />
+          <div className="hidden w-[88px] sm:block sm:w-[120px] md:w-[140px]">
+            <IncorrectBear />
+          </div>
         </div>
 
-        <div className="relative z-10 mx-auto flex w-full max-w-5xl flex-col items-stretch gap-4 sm:flex-row sm:items-center sm:justify-center sm:gap-8">
-          <div
-            className={cn(
-              "flex w-full min-w-0 flex-1 gap-0.5",
-              shouldRenderCorrectAnswerAsImage
-                ? "flex-col sm:flex-row sm:items-end sm:gap-10"
-                : "flex-col",
-            )}
-          >
-            <span className="text-xs font-black uppercase tracking-widest text-[#FF4B4B] dark:text-[#fecaca]">
+        <div className="relative z-10 mx-auto flex w-full max-w-5xl flex-col gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
+          <div className="flex min-w-0 flex-1 flex-col gap-2">
+            <div
+              className={cn(
+                buttonVariants({ variant: "outline", size: "xs" }),
+                "w-fit border-[#E8920A] bg-[#fff8ec]/90 px-2.5 py-1 text-[10px] font-black uppercase tracking-widest text-[#523403] dark:border-[#84d8ff]/40 dark:bg-[#253035] dark:text-[#e8e4dc]",
+              )}
+            >
               Correct answer
-            </span>
-            {shouldRenderCorrectAnswerAsImage ? (
-              <img
-                src={correctAnswer}
-                alt="Correct answer"
-                width={80}
-                height={80}
-                className="h-20 w-20 shrink-0 rounded-lg border border-[#F59E0B] object-cover dark:border-[#fbbf24]/60"
-              />
-            ) : (
-              <span className="text-lg font-black text-black dark:text-[#fef3c7] sm:text-xl">
-                {correctAnswer}
-              </span>
-            )}
+            </div>
+
+            <div
+              className={cn(
+                "rounded-2xl bg-[#fff8ec] dark:bg-[#253035]/90",
+                showMatchCorrectBadges || shouldRenderCorrectAnswerAsImage
+                  ? "flex flex-col items-center gap-2 p-3 sm:p-4"
+                  : "px-2 py-2 sm:px-3 sm:py-3",
+              )}
+            >
+              {showMatchCorrectBadges && matchData ? (
+                <MatchCorrectPairsBadges matchData={matchData} />
+              ) : shouldRenderCorrectAnswerAsImage ? (
+                <img
+                  src={correctAnswer}
+                  alt="Correct answer"
+                  width={96}
+                  height={96}
+                  className="h-24 w-24 shrink-0 rounded-lg object-cover sm:h-28 sm:w-28"
+                />
+              ) : (
+                <p
+                  className={cn(
+                    "wrap-break-word text-center font-semibold leading-snug text-[#1a1206] dark:text-[#fef3c7]",
+                    "min-h-0 sm:text-left",
+                    correctAnswerUsesMongolianScript
+                      ? "mongol-script text-[60px] leading-tight"
+                      : "font-balsamiq text-xl sm:text-2xl",
+                  )}
+                >
+                  {correctAnswer}
+                </p>
+              )}
+            </div>
           </div>
 
-          <Button
-            type="button"
-            variant="sortbutton"
-            size="sort"
-            aria-pressed
-            onClick={onContinue}
-            className={cn(
-              lessonSortBtn,
-              "border-[#FF4B4B] bg-[#FF4B4B] text-white shadow-[0_4px_0_#991B1B] hover:brightness-105 active:scale-95",
-              "aria-pressed:border-[#FF4B4B] aria-pressed:bg-[#FF4B4B] aria-pressed:text-white aria-pressed:shadow-[0_4px_0_#991B1B]",
-              "dark:border-red-500 dark:bg-red-500 dark:shadow-[0_4px_0_#7f1d1d]",
-              "dark:aria-pressed:border-red-500 dark:aria-pressed:bg-red-500 dark:aria-pressed:shadow-[0_4px_0_#7f1d1d]",
-            )}
-          >
-            {mnUi.continue}
-          </Button>
+          <div className="flex shrink-0 flex-col justify-center sm:max-w-[min(100%,300px)]">
+            <Button
+              type="button"
+              variant="sortbutton"
+              size="sort"
+              aria-pressed
+              onClick={onContinue}
+              className={cn(
+                lessonSortBtn,
+                "border-[#523403] bg-[#E8920A] text-[#1a1206] shadow-[0_4px_0_#523403] hover:brightness-105 active:translate-y-px active:shadow-[0_2px_0_#523403]",
+                "aria-pressed:border-[#523403] aria-pressed:bg-[#E8920A] aria-pressed:text-[#1a1206] aria-pressed:shadow-[0_4px_0_#523403]",
+                "dark:border-[#84d8ff] dark:bg-[#84d8ff]/20 dark:text-white dark:shadow-[0_4px_0_#1e3a47]",
+                "dark:aria-pressed:border-[#84d8ff] dark:aria-pressed:bg-[#84d8ff]/25 dark:aria-pressed:text-white dark:aria-pressed:shadow-[0_4px_0_#1e3a47]",
+              )}
+            >
+              {mnUi.continue}
+            </Button>
+          </div>
         </div>
       </div>
     );

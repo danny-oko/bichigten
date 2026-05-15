@@ -1,4 +1,8 @@
 import { useEffect, useRef, useState } from "react";
+
+import { Button, buttonVariants } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+
 import { TaskType } from "./lesson-types";
 import { LessonChoice, MatchRenderData } from "./use-lesson-game";
 
@@ -18,6 +22,90 @@ interface MatchButton {
   id: string;
   text: string;
   side: MatchSide;
+}
+
+function isImageUrl(value: string): boolean {
+  return /^https?:\/\/.+\.(png|jpe?g|webp|gif|svg)(\?.*)?$/i.test(value.trim());
+}
+
+function isMongolianScriptText(value: string): boolean {
+  return /\p{Script=Mong}/u.test(value);
+}
+
+function MatchButtonFace({ text }: { text: string }) {
+  const trimmed = text.trim();
+  if (trimmed && isImageUrl(trimmed)) {
+    return (
+      <span className="flex min-w-0 flex-1 justify-center">
+        <img
+          src={trimmed}
+          alt="Match option"
+          className="max-h-20 w-auto max-w-full rounded-md object-contain sm:max-h-24"
+        />
+      </span>
+    );
+  }
+  if (isMongolianScriptText(trimmed)) {
+    return (
+      <span className="flex min-w-0 flex-1 items-center justify-center">
+        <span
+          className={cn(
+            "mongol-script inline-block max-w-full min-w-0 whitespace-normal wrap-break-word text-pretty text-center font-semibold",
+            "text-[60px] leading-tight",
+          )}
+        >
+          {text}
+        </span>
+      </span>
+    );
+  }
+  return (
+    <span className="min-w-0 flex-1 wrap-break-word text-pretty text-left font-balsamiq text-base font-bold sm:text-lg">
+      {text}
+    </span>
+  );
+}
+
+function McChoiceFace({ choice }: { choice: LessonChoice }) {
+  const url = choice.url?.trim();
+  const primary = url && url.length > 0 ? url : choice.label;
+
+  if (url && isImageUrl(url)) {
+    return (
+      <span className="flex w-full flex-col items-center gap-2">
+        <img
+          src={url}
+          alt={choice.label || "Choice"}
+          className="max-h-40 w-full max-w-[260px] rounded-lg object-contain sm:max-h-48 sm:max-w-[300px]"
+        />
+      </span>
+    );
+  }
+
+  if (url) {
+    return (
+      <span className="flex w-full min-w-0 items-center justify-center">
+        <span
+          className={cn(
+            "mongol-script inline-block max-w-full min-w-0 whitespace-normal wrap-break-word text-pretty text-center font-semibold leading-snug",
+            "text-[60px] leading-tight",
+          )}
+        >
+          {primary}
+        </span>
+      </span>
+    );
+  }
+
+  return (
+    <span
+      className={cn(
+        "font-balsamiq block w-full min-w-0 whitespace-normal wrap-break-word text-pretty text-center text-base font-black sm:text-lg md:text-xl",
+      )}
+    >
+      {choice.label}
+    </span>
+  );
 }
 
 export function LessonChoiceGrid({
@@ -132,33 +220,6 @@ export function LessonChoiceGrid({
   }
 
   if (taskType === "MATCH" && matchData) {
-    const styleMap: Record<
-      string,
-      { border: string; color: string; shadow: string }
-    > = {
-      active: {
-        border: "#523403",
-        color: "#523403",
-        shadow: "0 4px 10px #523403",
-      },
-      correct: {
-        border: "#22C55E",
-        color: "#22C55E",
-        shadow: "0 4px 0 #15803D",
-      },
-      wrong: { border: "#EF4444", color: "#EF4444", shadow: "0 4px 0 #991B1B" },
-      dismissed: {
-        border: "#374151",
-        color: "#6B7280",
-        shadow: "none",
-      },
-      default: {
-        border: "#E8930A",
-        color: "#000000",
-        shadow: "0 4px 0 #E8930A",
-      },
-    };
-
     const leftButtons = matchData.leftSide.map((item) => ({
       id: item.id,
       text: item.text,
@@ -192,82 +253,102 @@ export function LessonChoiceGrid({
         `}</style>
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div className="space-y-3">
-            <p className="text-xs font-black uppercase tracking-widest text-[#6B7280]">
+            <p className="text-xs font-black uppercase tracking-widest text-muted-foreground">
               Left Side
             </p>
             {leftButtons.map((btn, index) => {
               const state = getButtonState(btn);
-              const s = styleMap[state] ?? styleMap.default;
               return (
-                <button
+                <Button
                   key={`left-${btn.id}`}
-                  onClick={() => handleButtonClick(btn)}
+                  type="button"
+                  variant="sortbutton"
+                  size="sort"
                   disabled={state === "dismissed"}
-                  className={`w-full rounded-2xl border-2 px-4 py-3 text-left text-sm font-bold transition-all ${
-                    state === "wrong" ? "anim-shake" : ""
-                  } ${state === "correct" ? "anim-pop" : ""} ${
-                    state === "dismissed"
-                      ? "opacity-40 cursor-default translate-y-1"
-                      : ""
-                  }`}
-                  style={{
-                    background: "#FAD99B",
-                    borderColor: s.border,
-                    color: s.color,
-                    boxShadow: s.shadow,
-                  }}
+                  aria-pressed={state === "active"}
+                  onClick={() => handleButtonClick(btn)}
+                  className={cn(
+                    "h-auto w-full min-w-0 shrink justify-start whitespace-normal rounded-2xl border-2 bg-[#FAD99B] py-3 text-left text-sm font-bold text-foreground shadow-none transition-all hover:translate-y-0 dark:bg-[#FAD99B]/90",
+                    state === "wrong" &&
+                      "anim-shake border-destructive text-destructive shadow-none",
+                    state === "correct" &&
+                      "anim-pop border-emerald-600 text-emerald-800 shadow-none",
+                    state === "dismissed" &&
+                      "translate-y-px cursor-default opacity-40 shadow-none",
+                    state === "active" &&
+                      "border-[#523403] text-[#523403] shadow-none",
+                    state === "default" && "border-[#E8920A]",
+                  )}
                 >
-                  <div className="flex items-center gap-3">
+                  <div className="flex w-full min-w-0 items-center gap-3">
                     <span
-                      className="inline-flex h-6 min-w-6 shrink-0 items-center justify-center rounded-full px-2 text-xs font-black text-white"
-                      style={{ backgroundColor: s.border }}
+                      className={cn(
+                        buttonVariants({ variant: "default", size: "icon-xs" }),
+                        "shrink-0 rounded-full text-xs font-black text-primary-foreground",
+                        state === "wrong" && "bg-destructive",
+                        state === "correct" && "bg-emerald-600",
+                        state === "dismissed" &&
+                          "bg-muted text-muted-foreground",
+                        state === "active" && "bg-[#523403]",
+                        state === "default" && "bg-[#E8920A]",
+                      )}
                     >
                       {index + 1}
                     </span>
-                    <span className="flex-1">{btn.text}</span>
+                    <MatchButtonFace text={btn.text} />
                   </div>
-                </button>
+                </Button>
               );
             })}
           </div>
 
           <div className="space-y-3">
-            <p className="text-xs font-black uppercase tracking-widest text-[#6B7280]">
+            <p className="text-xs font-black uppercase tracking-widest text-muted-foreground">
               Right Side
             </p>
             {rightButtons.map((btn, index) => {
               const state = getButtonState(btn);
-              const s = styleMap[state] ?? styleMap.default;
               const badge = String.fromCharCode(65 + index);
               return (
-                <button
+                <Button
                   key={`right-${btn.id}`}
-                  onClick={() => handleButtonClick(btn)}
+                  type="button"
+                  variant="sortbutton"
+                  size="sort"
                   disabled={state === "dismissed"}
-                  className={`w-full rounded-2xl border-2 px-4 py-3 text-left text-sm font-bold transition-all ${
-                    state === "wrong" ? "anim-shake" : ""
-                  } ${state === "correct" ? "anim-pop" : ""} ${
-                    state === "dismissed"
-                      ? "opacity-40 cursor-default translate-y-1"
-                      : ""
-                  }`}
-                  style={{
-                    background: "#FAD99B",
-                    borderColor: s.border,
-                    color: s.color,
-                    boxShadow: s.shadow,
-                  }}
+                  aria-pressed={state === "active"}
+                  onClick={() => handleButtonClick(btn)}
+                  className={cn(
+                    "h-auto w-full min-w-0 shrink justify-start whitespace-normal rounded-2xl border-2 bg-[#FAD99B] py-3 text-left text-sm font-bold text-foreground shadow-none transition-all hover:translate-y-0 dark:bg-[#FAD99B]/90",
+                    state === "wrong" &&
+                      "anim-shake border-destructive text-destructive shadow-none",
+                    state === "correct" &&
+                      "anim-pop border-emerald-600 text-emerald-800 shadow-none",
+                    state === "dismissed" &&
+                      "translate-y-px cursor-default opacity-40 shadow-none",
+                    state === "active" &&
+                      "border-[#523403] text-[#523403] shadow-none",
+                    state === "default" && "border-[#E8920A]",
+                  )}
                 >
-                  <div className="flex items-center gap-3">
+                  <div className="flex w-full min-w-0 items-center gap-3">
                     <span
-                      className="inline-flex h-6 min-w-6 shrink-0 items-center justify-center rounded-full px-2 text-xs font-black text-white"
-                      style={{ backgroundColor: s.border }}
+                      className={cn(
+                        buttonVariants({ variant: "default", size: "icon-xs" }),
+                        "shrink-0 rounded-full text-xs font-black text-primary-foreground",
+                        state === "wrong" && "bg-destructive",
+                        state === "correct" && "bg-emerald-600",
+                        state === "dismissed" &&
+                          "bg-muted text-muted-foreground",
+                        state === "active" && "bg-[#523403]",
+                        state === "default" && "bg-[#E8920A]",
+                      )}
                     >
                       {badge}
                     </span>
-                    <span>{btn.text}</span>
+                    <MatchButtonFace text={btn.text} />
                   </div>
-                </button>
+                </Button>
               );
             })}
           </div>
@@ -280,24 +361,21 @@ export function LessonChoiceGrid({
     <div className="flex flex-col gap-3">
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {choices.map((choice, index) => (
-          <button
+          <Button
             key={`${choice.value}-${index}`}
+            type="button"
+            variant="sortbutton"
+            size="sort"
+            aria-pressed={selected === choice.value}
             onClick={() => onSelect(choice.value)}
-            className="flex flex-col items-center justify-center rounded-2xl border-2 p-5 transition-all duration-100 active:scale-95"
-            style={{
-              background: "#FAD99B",
-              borderColor: selected === choice.value ? "#523403" : "#E8920A",
-              boxShadow:
-                selected === choice.value
-                  ? "0 4px 10px #523403"
-                  : "0 4px 0 #E8920A",
-              color: selected === choice.value ? "#8A5706" : "#000000",
-            }}
+            className={cn(
+              "h-auto min-h-20 w-full min-w-0 shrink flex-col gap-1.5 whitespace-normal rounded-2xl border-2 border-[#E8920A] bg-[#FAD99B] px-2.5 py-3 font-black text-foreground shadow-none hover:translate-y-0 sm:min-h-24 sm:px-3 sm:py-3.5 dark:bg-[#FAD99B]/90",
+              selected === choice.value &&
+                "border-[#523403] text-[#8A5706] shadow-none dark:text-[#8A5706]",
+            )}
           >
-            <span className="text-md sm:text-lg font-black">
-              {choice.label}
-            </span>
-          </button>
+            <McChoiceFace choice={choice} />
+          </Button>
         ))}
       </div>
     </div>
