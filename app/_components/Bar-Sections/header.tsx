@@ -26,8 +26,7 @@ export const Header = ({
   const isOutOfHearts = safeHeartsRemaining === 0;
 
   const statText = "text-sm font-black tabular-nums sm:text-base lg:text-lg";
-  const statIcon =
-    "h-7 w-7 shrink-0 object-contain sm:h-[30px] sm:w-[30px]";
+  const statIcon = "h-7 w-7 shrink-0 object-contain sm:h-[30px] sm:w-[30px]";
 
   return (
     <div
@@ -70,9 +69,10 @@ export const Header = ({
               />
             )}
             <span
-              className={[statText, isOutOfHearts ? "text-slate-500" : "text-red-500"].join(
-                " ",
-              )}
+              className={[
+                statText,
+                isOutOfHearts ? "text-slate-500" : "text-red-500",
+              ].join(" ")}
             >
               {safeHeartsRemaining}
             </span>

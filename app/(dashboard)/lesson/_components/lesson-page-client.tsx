@@ -73,7 +73,7 @@ export function LessonPageClient({
     checkTaskAnswer(false);
     if (
       currentTask?.type !== "MATCH" &&
-      selected !== currentTask?.correctAnswer
+      (selected ?? "").trim() !== (currentTask?.correctAnswer ?? "").trim()
     ) {
       setSkipped(true);
     }
@@ -130,6 +130,8 @@ export function LessonPageClient({
           }}
           skipped={skipped}
           correctAnswer={currentTask?.correctAnswer}
+          taskType={currentTask?.type}
+          matchData={matchData}
           onContinue={handleContinueAfterSkip}
         />
       </div>

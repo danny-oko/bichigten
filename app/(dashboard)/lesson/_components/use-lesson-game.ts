@@ -28,6 +28,7 @@ interface State {
 export interface LessonChoice {
   value: string;
   label: string;
+  url?: string | null;
 }
 
 export interface MatchRenderItem {
@@ -42,13 +43,17 @@ export interface MatchRenderData {
 }
 
 function sanitizeChoices(
-  items: Array<{ value: unknown; label?: unknown }>,
+  items: Array<{ value: unknown; label?: unknown; url?: unknown }>,
 ): LessonChoice[] {
   return items
     .map((item) => {
       const value = toText(item.value);
       const label = toText(item.label ?? item.value);
-      return { value, label };
+      const base: LessonChoice = { value, label };
+      const u = item.url;
+      if (typeof u === "string" && u.trim()) return { ...base, url: u.trim() };
+      if (u === null) return { ...base, url: null };
+      return base;
     })
     .filter((item) => item.value);
 }
@@ -95,9 +100,31 @@ function toText(value: unknown): string {
   return "";
 }
 
+/** Submission value must match `correctAnswer`; authors often store URL as answer while label is separate. */
+function mcRowValueForAnswer(
+  text: string,
+  record: Record<string, unknown>,
+  url: string | null | undefined,
+  correctAnswer?: string,
+): string {
+  const explicitValue =
+    typeof record.value === "string" && record.value.trim()
+      ? record.value.trim()
+      : "";
+  const aliases: string[] = [];
+  if (text) aliases.push(text);
+  if (explicitValue && explicitValue !== text) aliases.push(explicitValue);
+  if (typeof url === "string" && url && !aliases.includes(url)) aliases.push(url);
+
+  const key = correctAnswer?.trim();
+  if (key && aliases.includes(key)) return key;
+  return text || explicitValue || (typeof url === "string" ? url : "");
+}
+
 function extractMcChoices(
   value: unknown,
-): Array<{ value: unknown; label?: unknown }> {
+  correctAnswer?: string,
+): Array<{ value: unknown; label?: unknown; url?: unknown }> {
   if (!value || typeof value !== "object") return [];
   const rawChoices = (value as { choices?: unknown }).choices;
 
@@ -108,7 +135,18 @@ function extractMcChoices(
       const text = toText(
         record.text ?? record.label ?? record.value ?? record.id,
       );
-      return { value: text, label: text };
+      const url =
+        typeof record.url === "string" && record.url.trim()
+          ? record.url.trim()
+          : record.url === null
+            ? null
+            : undefined;
+      const row: { value: string; label: string; url?: string | null } = {
+        value: mcRowValueForAnswer(text, record, url, correctAnswer),
+        label: text,
+      };
+      if (url !== undefined) row.url = url;
+      return row;
     });
   }
 
@@ -120,7 +158,18 @@ function extractMcChoices(
         const text = toText(
           record.text ?? record.label ?? record.value ?? record.id,
         );
-        return { value: text, label: text };
+        const url =
+          typeof record.url === "string" && record.url.trim()
+            ? record.url.trim()
+            : record.url === null
+              ? null
+              : undefined;
+        const row: { value: string; label: string; url?: string | null } = {
+          value: mcRowValueForAnswer(text, record, url, correctAnswer),
+          label: text,
+        };
+        if (url !== undefined) row.url = url;
+        return row;
       },
     );
   }
@@ -313,7 +362,11 @@ export function useLessonGame(lessonId: string, userId: string) {
       return shuffle(normalized);
     }
     if (isMcOptions(parsedOptions))
-      return shuffle(sanitizeChoices(extractMcChoices(parsedOptions)));
+      return shuffle(
+        sanitizeChoices(
+          extractMcChoices(parsedOptions, currentTask.correctAnswer),
+        ),
+      );
     if (currentTask.type === "MATCH" && isMatchOptions(parsedOptions)) {
       const leftChoices = extractMatchSideItems(parsedOptions.leftSide).map(
         (item) => ({ value: `L:${item.id}`, label: item.text }),
@@ -367,11 +420,13 @@ export function useLessonGame(lessonId: string, userId: string) {
       const shouldCountForReview = currentTask.type !== "MATCH";
       if (shouldCountForReview) totalRef.current += 1;
 
+      const selectedNorm = (s.selected ?? "").trim();
+      const answerNorm = (currentTask.correctAnswer ?? "").trim();
       const isCorrect =
         !skip &&
         (currentTask.type === "MATCH"
           ? isMatchSelectionCorrect(currentTask, s.selected)
-          : s.selected === currentTask.correctAnswer);
+          : selectedNorm === answerNorm);
 
       if (isCorrect && shouldCountForReview) correctRef.current += 1;
       if (isCorrect) {
