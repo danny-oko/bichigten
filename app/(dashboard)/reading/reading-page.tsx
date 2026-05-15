@@ -56,7 +56,7 @@ export const ReadingPage = () => {
   }, [searchParams]);
 
   return (
-    <main className="min-h-screen w-full overflow-x-hidden px-4 pt-5 pb-[calc(7rem+env(safe-area-inset-bottom))] text-stone-900 md:pb-8 lg:px-10">
+    <main className="min-h-screen w-full overflow-x-hidden bg-[#faf7f2] px-4 pt-5 pb-[calc(7rem+env(safe-area-inset-bottom))] text-stone-900 md:pb-8 lg:px-10 dark:bg-[#0f1419] dark:text-[#e8e4dc]">
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-5 md:gap-6">
         <ReadingHeader
           title="Минутын уншлага"

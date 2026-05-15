@@ -30,11 +30,11 @@ export const ReadingGrid = ({ readings }: ReadingGridProps) => {
         return (
           <section key={difficulty} className="flex flex-col gap-4 md:gap-5">
             <div className="flex items-center gap-3 md:gap-4">
-              <h2 className="text-xl font-black text-[#2A2118] md:text-2xl">
+              <h2 className="text-xl font-black text-[#2A2118] md:text-2xl dark:text-[#f0ebe3]">
                 {difficultyLabels[difficulty]}
               </h2>
 
-              <div className="h-px flex-1 bg-[#D9C7A3]" />
+              <div className="h-px flex-1 bg-[#D9C7A3] dark:bg-[#334155]" />
             </div>
 
             <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2 md:gap-5 xl:grid-cols-3">
@@ -50,30 +50,30 @@ export const ReadingGrid = ({ readings }: ReadingGridProps) => {
 };
 
 const ReadingCardSkeleton = () => (
-  <article className="flex min-h-56 animate-pulse flex-col rounded-2xl border-3 border-[#E8920A]/70 bg-[#fff8ec] p-4 shadow-[0_10px_28px_rgba(232,146,10,0.08)] md:min-h-64 md:p-5 dark:border-[#84d8ff]/40">
+  <article className="flex min-h-56 animate-pulse flex-col rounded-2xl border-3 border-[#E8920A]/70 bg-[#fff8ec] p-4 shadow-[0_10px_28px_rgba(232,146,10,0.08)] md:min-h-64 md:p-5 dark:border-[#84d8ff]/40 dark:bg-[#1e293b]/70 dark:shadow-[0_10px_28px_rgba(0,0,0,0.35)]">
     <div className="flex items-start justify-between gap-3">
-      <div className="h-7 w-24 rounded-full bg-amber-200/70" />
-      <div className="h-4 w-12 rounded-full bg-amber-100" />
+      <div className="h-7 w-24 rounded-full bg-amber-200/70 dark:bg-slate-600/80" />
+      <div className="h-4 w-12 rounded-full bg-amber-100 dark:bg-slate-600/50" />
     </div>
     <div className="mt-5 space-y-3">
-      <div className="h-6 w-3/4 rounded-full bg-amber-200/70" />
-      <div className="h-4 w-full rounded-full bg-amber-100" />
-      <div className="h-4 w-5/6 rounded-full bg-amber-100" />
+      <div className="h-6 w-3/4 rounded-full bg-amber-200/70 dark:bg-slate-600/80" />
+      <div className="h-4 w-full rounded-full bg-amber-100 dark:bg-slate-600/50" />
+      <div className="h-4 w-5/6 rounded-full bg-amber-100 dark:bg-slate-600/50" />
     </div>
-    <div className="mt-5 rounded-2xl border-2 border-[#E8920A]/15 bg-[#fffaf2] p-3">
-      <div className="h-4 w-24 rounded-full bg-amber-200/70" />
+    <div className="mt-5 rounded-2xl border-2 border-[#E8920A]/15 bg-[#fffaf2] p-3 dark:border-[#475569]/60 dark:bg-[#0f172a]/50">
+      <div className="h-4 w-24 rounded-full bg-amber-200/70 dark:bg-slate-600/80" />
       <div className="mt-4 space-y-4">
-        <div className="h-2 rounded-full bg-amber-100" />
-        <div className="h-2 rounded-full bg-amber-100" />
+        <div className="h-2 rounded-full bg-amber-100 dark:bg-slate-600/50" />
+        <div className="h-2 rounded-full bg-amber-100 dark:bg-slate-600/50" />
       </div>
       <div className="mt-4 flex gap-2">
-        <div className="h-7 w-24 rounded-full bg-amber-100" />
-        <div className="h-7 w-28 rounded-full bg-amber-100" />
+        <div className="h-7 w-24 rounded-full bg-amber-100 dark:bg-slate-600/50" />
+        <div className="h-7 w-28 rounded-full bg-amber-100 dark:bg-slate-600/50" />
       </div>
     </div>
     <div className="mt-auto flex items-center justify-between gap-3 pt-5">
-      <div className="h-4 w-28 rounded-full bg-amber-100" />
-      <div className="h-10 w-20 rounded-full bg-amber-200/70" />
+      <div className="h-4 w-28 rounded-full bg-amber-100 dark:bg-slate-600/50" />
+      <div className="h-10 w-20 rounded-full bg-amber-200/70 dark:bg-sky-600/60" />
     </div>
   </article>
 );
@@ -86,8 +86,8 @@ export const ReadingGridSkeleton = () => {
       {sections.map((difficulty) => (
         <section key={difficulty} className="flex flex-col gap-4 md:gap-5">
           <div className="flex items-center gap-3 md:gap-4">
-            <div className="h-7 w-24 animate-pulse rounded-full bg-amber-200/70" />
-            <div className="h-px flex-1 bg-[#D9C7A3]" />
+            <div className="h-7 w-24 animate-pulse rounded-full bg-amber-200/70 dark:bg-slate-600/80" />
+            <div className="h-px flex-1 bg-[#D9C7A3] dark:bg-[#334155]" />
           </div>
 
           <div className="grid w-full grid-cols-1 gap-4 md:grid-cols-2 md:gap-5 xl:grid-cols-3">
