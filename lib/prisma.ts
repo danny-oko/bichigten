@@ -1,6 +1,7 @@
 import { existsSync, statSync } from "node:fs";
 import path from "node:path";
 
+import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "@prisma/client";
 import { withAccelerate } from "@prisma/extension-accelerate";
 
@@ -9,6 +10,26 @@ const globalForPrisma = globalThis as unknown as {
   /** Bust stale PrismaClient in dev after `prisma generate` without restarting the server. */
   prismaDevFingerprint?: string;
 };
+
+function isAccelerateDatabaseUrl(url: string | undefined): url is string {
+  if (!url) return false;
+  return url.startsWith("prisma://") || url.startsWith("prisma+postgres://");
+}
+
+/**
+ * `pg-connection-string` emits a deprecation warning when `sslmode` resolves to
+ * `prefer` | `require` | `verify-ca`. Set `verify-full` explicitly so `pg` parses a single mode.
+ */
+function connectionStringWithExplicitSsl(raw: string | undefined): string | undefined {
+  if (!raw) return raw;
+  try {
+    const url = new URL(raw);
+    url.searchParams.set("sslmode", "verify-full");
+    return url.toString();
+  } catch {
+    return raw;
+  }
+}
 
 function prismaClientFingerprint(): string {
   if (process.env.NODE_ENV === "production") return "prod";
@@ -19,16 +40,36 @@ function prismaClientFingerprint(): string {
       root,
       "node_modules/.prisma/client/package.json",
     );
+    const prismaModulePath = path.join(root, "lib/prisma.ts");
     if (!existsSync(schemaPath) || !existsSync(generatedMarker))
       return "unknown";
-    return `${statSync(schemaPath).mtimeMs}:${statSync(generatedMarker).mtimeMs}`;
+    const prismaModuleMtime = existsSync(prismaModulePath)
+      ? statSync(prismaModulePath).mtimeMs
+      : 0;
+    // Include prisma module mtime so HMR busts the singleton when client wiring changes.
+    return `${prismaModuleMtime}:${statSync(schemaPath).mtimeMs}:${statSync(generatedMarker).mtimeMs}`;
   } catch {
     return "unknown";
   }
 }
 
 function createPrismaClient(): PrismaClient {
-  return new PrismaClient({ accelerateUrl: process.env.DATABASE_URL }).$extends(withAccelerate()) as unknown as PrismaClient;
+  const databaseUrl = process.env.DATABASE_URL?.trim();
+
+  if (isAccelerateDatabaseUrl(databaseUrl)) {
+    return new PrismaClient({
+      accelerateUrl: connectionStringWithExplicitSsl(databaseUrl),
+    }).$extends(withAccelerate()) as unknown as PrismaClient;
+  }
+
+  if (!databaseUrl) {
+    throw new Error("DATABASE_URL is not set.");
+  }
+
+  const adapter = new PrismaPg({
+    connectionString: connectionStringWithExplicitSsl(databaseUrl),
+  });
+  return new PrismaClient({ adapter });
 }
 
 function getPrismaClient(): PrismaClient {

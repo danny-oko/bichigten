@@ -54,10 +54,37 @@ export const mnProfile = {
   notificationsOn: "Асаалттай",
   notificationsOff: "Унтраалттай",
 
-  helpTitle: "Тусламж",
-  helpBody:
-    "Хичээл эсвэл бүртгэлтэй холбоотой асуудал байвал бидэнтэй холбогдоно уу.",
-  helpEmailCta: "И-мэйл илгээх",
+  helpTitle: "Яагаад Мазаалай гэж?",
+  helpAppIntro:
+    "Mazaalai Learn нь монгол бичгийн үсгийг, video хичээл тоглоомжуулсан контентоор дамжуулан суралцах платформ.\n\nДоорх хэсгүүдээс багийн мэдээлэл, төсөл эхэлсэн шалтгаан болон ашиглагдсан технологийн талаар харж болно.",
+  helpAccordionTeamTitle: "Mazaalai learn team",
+  helpAccordionWhyTitle: "Яагаад? — Үндсэн шалтгаан",
+  helpAccordionChallengesTitle: "Хэрхэн шийдвэрлэсэн бэ?",
+  helpChallengesWinBadge: "Амжилт!",
+  helpChallengesBullets: [
+    "🧱 Эхний долоо хоног: Brain storming , Төлөвлөгөө",
+    "🪄 2дахь 7 хоног : Төлөвлөгөө, Task хуваарьлалт. Гүйцэтгэл болон харилцаан дээр жижиг асуудлууд гарсан.",
+    "🧪 3дахь 7 хоног : Stand-in уулзалтуудаа идэвхтэй хийж эхэлсэн. Task хуваарилалт ойлгомжтой асуудлаа үр бүтээлтэй шийдэж эхэлсэн.",
+    "🎉 4 дэх 7хоног: Wrapping up . Everyone's focused determined .... :D",
+  ] as const,
+  helpAccordionTechTitle: "Tech stack",
+  helpTechStackIntro:
+    "Next.js App Router, Tailwind CSS дээр суурилсан — доорх нь ашигласан гол технологиуд (жагсаалт өргөжих боломжтой).",
+  helpTechGroupEngine: "Engine",
+  helpTechGroupAi: "AI & Logic",
+  helpTechGroupManagement: "Management",
+  helpTeamNoContribution: "Одоогоор тодорхой хэсэг заагаагүй байна.",
+  helpRootCauseLead: "",
+  helpRootCauseParagraphs: [
+    "Монгол Улс 2025 оноос хос бичигтэн болох зорилт тавьж, хуулиараа дэмжигдэн хэрэгжиж эхэлсэн ч сургалтын чанар жигд бус, хэрэглээ бага хэвээр. Тиймээс одоог хүртэл сурагчид болон насанд хүрэгчдийн дийлэнх нь монгол бичгээр чөлөөтэй уншиж бичиж сураагүй.",
+    "2025 онд шалгалт өгөх хүрээ өргөжиж, 10–12-р ангийн сурагчид хамрагдах болсноор шалгалт өгөгчдийн тоо 83,374 хүрсөн. Гэвч үүнээс 12,964 нь босго оноо болох 400 оноог давж чадсангүй.",
+    "2026 оны хаврын шалгалтад 87 мянга гаруй сурагч оролцож, 10 гаруй хувь нь буюу 8,700 орчим хүүхэд мөн адил босго оноогоо давж чадсангүй.",
+  ] as const,
+  helpChartExamTitle: "Шалгалтын оролцоо ба босгоо давсангүй (тоо)",
+  helpChartExamCaption:
+    "Үзүүлэлт нь нийтлэл, мэдээллийн эх сурвалжид тулгуурласан ойлголт — график нь чиг хандлагыг харуулах зориулалттай.",
+  helpChartLegendParticipants: "Оролцогч",
+  helpChartLegendBelow: "400 оноо давж чадаагүй",
 
   accountSectionTitle: "Бүртгэлийн мэдээлэл",
   displayName: "Хэрэглэгчийн нэр",
@@ -150,6 +177,4 @@ export const mnProfile = {
   settingAppearanceDesc: "Загвар, үсгийн хэмжээ, харанхуй горим",
   settingNotificationsLabel: "Мэдэгдэл",
   settingNotificationsDesc: "Cануулах цаг",
-  settingHelpLabel: "Тусламж",
-  settingHelpDesc: "Түгээмэл асуулт, холбоо барих",
 } as const;
