@@ -25,17 +25,18 @@ export const SideBar = ({ menuLabels, menuPaths }: HeaderClientProps) => {
       aria-label="Main navigation"
     >
       <nav className="flex flex-1 flex-col gap-3 md:px-1 lg:p-4">
-        <div className="flex w-full shrink-0 items-center justify-center pb-0.5 md:min-h-[56px] lg:justify-start lg:pb-2">
+        <div className="flex w-full shrink-0 items-center justify-center pb-0.5 md:min-h-[48px] lg:pb-2">
           <Link
             href="/home"
-            className="flex h-10 w-20 shrink-0 items-center justify-center md:h-11 md:w-19 lg:block lg:h-auto lg:w-full lg:max-w-none"
+            className="flex h-9 w-10 shrink-0 items-center justify-center md:h-10 md:w-11 lg:h-auto lg:w-auto lg:max-w-[176px]"
+            aria-label="Нүүр хуудас — Mazaalai Learn"
           >
             <img
               src="/logo.png"
-              alt="Mazaalai Learn"
-              width={360}
-              height={120}
-              className="h-full w-full max-h-10 object-contain object-center drop-shadow-[0_1px_2px_rgba(59,47,47,0.08)] md:max-h-11 lg:h-auto lg:w-full lg:max-h-34 lg:object-contain lg:object-left dark:drop-shadow-[0_1px_2px_rgba(0,0,0,0.25)]"
+              alt=""
+              width={454}
+              height={184}
+              className="h-auto w-full max-h-7 object-contain object-center md:max-h-8 lg:max-h-[72px]"
             />
           </Link>
         </div>

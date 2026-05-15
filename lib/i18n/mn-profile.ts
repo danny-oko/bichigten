@@ -57,7 +57,7 @@ export const mnProfile = {
   helpTitle: "Яагаад Mazaalai-Learn гэж?",
   helpAppIntro:
     "Mazaalai Learn нь монгол бичгийн үсгийг, video хичээл тоглоомжуулсан контентоор дамжуулан суралцах платформ.\n\nДоорх хэсгүүдээс багийн мэдээлэл, төсөл эхэлсэн шалтгаан болон ашиглагдсан технологийн талаар харж болно.",
-  helpAccordionTeamTitle: "Mazaalai learn team",
+  helpAccordionTeamTitle: "Team Bichigten",
   helpAccordionWhyTitle: "Яагаад? — Үндсэн шалтгаан",
   helpAccordionChallengesTitle: "Хэрхэн шийдвэрлэсэн бэ?",
   helpChallengesWinBadge: "",
