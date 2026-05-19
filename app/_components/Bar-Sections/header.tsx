@@ -1,5 +1,7 @@
 import type { StreakDayDot } from "@/app/(dashboard)/profile/common/types";
 import { buildLast7StreakDots } from "@/lib/server/build-profile-user";
+
+import CountUp from "./CountUp";
 import { StreakNavHover } from "./StreakNavHover";
 
 type HeaderProps = {
@@ -68,14 +70,17 @@ export const Header = ({
                 width={30}
               />
             )}
-            <span
+            <CountUp
+              from={0}
+              to={safeHeartsRemaining}
+              direction="up"
+              duration={1}
+              delay={0}
               className={[
                 statText,
                 isOutOfHearts ? "text-slate-500" : "text-red-500",
               ].join(" ")}
-            >
-              {safeHeartsRemaining}
-            </span>
+            />
           </div>
           <div className="shrink-0">
             <StreakNavHover
@@ -91,11 +96,16 @@ export const Header = ({
               height={30}
               width={30}
             />
-            <span
+            <CountUp
+              from={0}
+              to={totalXp}
+              separator=","
+              direction="up"
+              duration={1}
+              delay={0}
+              suffix=" XP"
               className={`min-w-0 max-md:truncate md:text-right md:whitespace-nowrap ${statText}`}
-            >
-              {totalXp.toLocaleString()} XP
-            </span>
+            />
           </div>
         </div>
       </div>

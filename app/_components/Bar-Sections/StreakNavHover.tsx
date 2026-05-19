@@ -14,6 +14,8 @@ import {
 } from "@/components/ui/dialog";
 import { mnProfile } from "@/lib/i18n/mn-profile";
 
+import CountUp from "./CountUp";
+
 function subscribePointerCoarse(onChange: () => void) {
   const mq = window.matchMedia("(pointer: coarse)");
   mq.addEventListener("change", onChange);
@@ -123,16 +125,19 @@ function StreakTriggerFace({
           height={20}
         />
       )}
-      <span
+      <CountUp
+        from={0}
+        to={streak}
+        direction="up"
+        duration={1}
+        delay={0}
         className={[
           "text-md font-black tabular-nums sm:text-lg",
           isStreakLost
             ? "text-muted-foreground"
             : "text-[#c77a0a] dark:text-amber-300",
         ].join(" ")}
-      >
-        {streak}
-      </span>
+      />
     </span>
   );
 }
