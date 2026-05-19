@@ -1,9 +1,15 @@
+"use client";
+
+import { useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import {
   Field,
   FieldError,
   FieldGroup,
   FieldLabel,
+  FieldSeparator,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { mnAuth, mnLabels } from "@/lib/i18n/mn-copy";
@@ -69,6 +75,9 @@ function LoadingSpinner() {
   );
 }
 
+const inputClassName =
+  "h-11 rounded-xl border-border/80 bg-background text-sm shadow-none transition-colors focus-visible:border-primary focus-visible:ring-primary/20 sm:h-12";
+
 export function SignInForm({
   isLoaded,
   isSigningIn,
@@ -76,30 +85,36 @@ export function SignInForm({
   onGoogleSignIn,
   onSubmit,
 }: SignInFormProps) {
+  const [showPassword, setShowPassword] = useState(false);
   const busy = !isLoaded || isSigningIn;
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     await onSubmit(new FormData(event.currentTarget));
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-3">
-      <FieldGroup className="gap-3 sm:gap-4">
-        <div className="flex justify-center">
-          <Button
-            type="button"
-            onClick={onGoogleSignIn}
-            disabled={busy}
-            className="h-10 w-full max-w-xs rounded-2xl border border-amber-300 bg-white text-sm text-amber-900 hover:border-[#E8920A] hover:bg-[#E8920A] hover:text-white sm:h-11"
-          >
-            <GoogleLogo />
-            {mnUi.googleSignIn}
-          </Button>
-        </div>
+    <form onSubmit={handleSubmit} className="space-y-5">
+      <Button
+        type="button"
+        variant="outline"
+        onClick={onGoogleSignIn}
+        disabled={busy}
+        className="h-11 w-full gap-2.5 rounded-xl border-border bg-background text-sm font-medium text-foreground shadow-none hover:bg-muted/60 hover:text-foreground sm:h-12"
+      >
+        <GoogleLogo />
+        {mnUi.googleSignIn}
+      </Button>
+
+      <FieldSeparator className="my-1 [&_[data-slot=field-separator-content]]:bg-card">
+        {mnUi.orContinueWithEmail}
+      </FieldSeparator>
+
+      <FieldGroup className="gap-4">
         <Field>
           <FieldLabel
             htmlFor="email"
-            className="text-sm font-semibold tracking-wide text-[#E8920A]"
+            className="text-sm font-medium text-foreground"
           >
             {mnLabels.email}
           </FieldLabel>
@@ -111,33 +126,51 @@ export function SignInForm({
             required
             disabled={busy}
             placeholder={mnAuth.emailPlaceholder}
-            className="h-11 rounded-2xl border-amber-300/80 bg-[#F8F4E3] text-sm sm:h-12 sm:text-base disabled:opacity-60"
+            className={inputClassName}
           />
         </Field>
+
         <Field>
           <FieldLabel
             htmlFor="password"
-            className="text-sm font-semibold tracking-wide text-[#E8920A]"
+            className="text-sm font-medium text-foreground"
           >
             {mnLabels.password}
           </FieldLabel>
-          <Input
-            id="password"
-            name="password"
-            type="password"
-            autoComplete="current-password"
-            required
-            disabled={busy}
-            placeholder={mnAuth.passwordPlaceholder}
-            className="h-11 rounded-2xl border-amber-300/80 bg-[#F8F4E3] text-sm sm:h-12 sm:text-base disabled:opacity-60"
-          />
+          <div className="relative">
+            <Input
+              id="password"
+              name="password"
+              type={showPassword ? "text" : "password"}
+              autoComplete="current-password"
+              required
+              disabled={busy}
+              placeholder={mnAuth.passwordPlaceholder}
+              className={`${inputClassName} pr-11`}
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword((prev) => !prev)}
+              disabled={busy}
+              aria-label={showPassword ? mnUi.hidePassword : mnUi.showPassword}
+              className="absolute top-1/2 right-3 -translate-y-1/2 rounded-md p-1 text-muted-foreground transition-colors hover:text-foreground disabled:opacity-50"
+            >
+              {showPassword ? (
+                <EyeOff className="size-4" aria-hidden="true" />
+              ) : (
+                <Eye className="size-4" aria-hidden="true" />
+              )}
+            </button>
+          </div>
         </Field>
+
         <FieldError>{error}</FieldError>
         <div id="clerk-captcha" />
+
         <Button
           type="submit"
           disabled={busy}
-          className="h-11 w-full rounded-2xl bg-[#E8920A] text-sm text-white hover:bg-[#cf7d09] sm:h-12 sm:text-base"
+          className="h-11 w-full rounded-xl text-sm font-semibold shadow-none sm:h-12"
         >
           {isSigningIn ? (
             <>

@@ -189,19 +189,21 @@ export default function SignInPage() {
     <AuthShell>
       <AuthHeader />
       {secondFactorEmailAddressId ? (
-        <form action={onSecondFactorSubmit} className="space-y-4">
-          <p className="text-center text-sm text-amber-900/90">
+        <form action={onSecondFactorSubmit} className="space-y-5">
+          <p className="text-center text-sm leading-relaxed text-muted-foreground">
             {mnAuth.signIn2faBeforeClientTrust}
             <span className="whitespace-nowrap">{mnAuth.signIn2faClientTrust}</span>
             {mnAuth.signIn2faAfterClientTrustBeforeCode}
-            <code className="rounded bg-amber-100 px-1">424242</code>
+            <code className="rounded-md bg-muted px-1.5 py-0.5 font-mono text-xs text-foreground">
+              424242
+            </code>
             {mnAuth.signIn2faAfterCode}
           </p>
-          <FieldGroup className="gap-3">
+          <FieldGroup className="gap-4">
             <Field>
               <FieldLabel
                 htmlFor="sign-in-2fa-code"
-                className="text-sm font-semibold tracking-wide text-[#E8920A]"
+                className="text-sm font-medium text-foreground"
               >
                 {mnLabels.verificationCode}
               </FieldLabel>
@@ -213,7 +215,7 @@ export default function SignInPage() {
                 autoComplete="one-time-code"
                 required
                 disabled={isSecondFactorBusy}
-                className="h-11 rounded-2xl border-amber-300/80 bg-[#F8F4E3] text-sm sm:h-12 sm:text-base disabled:opacity-60"
+                className="h-11 rounded-xl border-border/80 bg-background text-sm shadow-none focus-visible:border-primary focus-visible:ring-primary/20 sm:h-12 disabled:opacity-60"
                 placeholder={mnAuth.verificationCodePlaceholder}
               />
             </Field>
@@ -221,7 +223,7 @@ export default function SignInPage() {
             <Button
               type="submit"
               disabled={isSecondFactorBusy}
-              className="h-11 w-full rounded-2xl bg-[#E8920A] text-sm text-white hover:bg-[#cf7d09] sm:h-12 sm:text-base"
+              className="h-11 w-full rounded-xl text-sm font-semibold shadow-none sm:h-12"
             >
               {isSecondFactorBusy ? mnUi.verifying : mnUi.continue}
             </Button>
@@ -230,7 +232,7 @@ export default function SignInPage() {
               variant="outline"
               onClick={onResendSecondFactor}
               disabled={isSecondFactorBusy}
-              className="w-full rounded-xl border-amber-300 text-sm"
+              className="h-11 w-full rounded-xl border-border text-sm shadow-none sm:h-12"
             >
               {mnUi.resendCode}
             </Button>
@@ -246,11 +248,11 @@ export default function SignInPage() {
         />
       )}
 
-      <p className="text-center text-xs text-amber-900/80 sm:text-sm">
+      <p className="text-center text-sm text-muted-foreground">
         {mnUi.noAccountYet}{" "}
         <Link
           href="/sign-up"
-          className="font-semibold text-amber-800 hover:text-amber-900 hover:underline"
+          className="font-medium text-primary hover:underline"
         >
           {mnUi.signUp}
         </Link>
