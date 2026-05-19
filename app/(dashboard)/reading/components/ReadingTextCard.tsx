@@ -23,6 +23,18 @@ const MetadataChip = ({ label }: { label: string }) => (
   </span>
 );
 
+const ReadingReminder = ({ className }: { className?: string }) => (
+  <p
+    className={cn(
+      "rounded-xl border border-red-200/90 bg-red-50 px-3 py-2 text-xs font-medium leading-relaxed text-red-700 dark:border-red-500/35 dark:bg-red-950/45 dark:text-red-300",
+      className,
+    )}
+  >
+    Уншиж байхдаа сул үг хэрэглэхгүй байх байвал онооны хэмжүүрт эерэг
+    нөлөөтэй.
+  </p>
+);
+
 export const ReadingTextCard = ({
   canStart,
   durationSec,
@@ -39,7 +51,7 @@ export const ReadingTextCard = ({
 }: ReadingTextCardProps) => {
   const mobileButtonText =
     status === "recording"
-      ? "Болчихлоо!"
+      ? "Болсон!"
       : status === "transcribing"
         ? "Хөрвүүлж байна..."
         : status === "done"
@@ -55,7 +67,7 @@ export const ReadingTextCard = ({
 
       <div className="mb-3 pr-16 md:hidden">
         <p className="text-sm font-semibold text-amber-800 dark:text-[#fcd34d]">
-          Уншлагын дасгал
+          Минутаар унших
         </p>
         <h2 className="mt-1.5 text-xl font-semibold text-stone-950 dark:text-[#f0ebe3]">
           {isStarted ? "Уншиж байна..." : "Бэлэн үү?"}
@@ -65,6 +77,7 @@ export const ReadingTextCard = ({
             ? "Тогтуун хэмнэлээр, тод дуудаж уншаарай."
             : "Эхлэх дарсны дараа эх тодорч, 60 секундийн тоолуур эхэлнэ."}
         </p>
+        {!isStarted && <ReadingReminder className="mt-2" />}
       </div>
 
       <div className="mb-3 hidden items-center justify-between gap-4 md:mb-4 md:flex">
@@ -94,6 +107,7 @@ export const ReadingTextCard = ({
               <p className="mt-2 text-sm font-medium text-stone-600 dark:text-[#b8b0a4]">
                 Бэлэн болсон үедээ Эхлэх товч дээр дараад уншлагаа эхлүүлээрэй.
               </p>
+              <ReadingReminder className="mt-3 text-left" />
             </div>
           </div>
         )}
