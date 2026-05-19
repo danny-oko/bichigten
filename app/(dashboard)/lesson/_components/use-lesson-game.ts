@@ -285,24 +285,20 @@ export function useLessonGame(lessonId: string, userId: string) {
     totalRef.current = 0;
     awardedXpTasksRef.current = new Set();
 
-    Promise.all([
-      fetch(`/api/lesson-contents?lessonId=${lessonId}`).then((r) => r.json()),
-      fetch(`/api/tasks?lessonId=${lessonId}`).then((r) => r.json()),
-      fetch(`/api/users/${userId}`).then((r) => (r.ok ? r.json() : null)),
-    ])
+    fetch(`/api/lessons/${lessonId}/session`)
+      .then((r) => (r.ok ? r.json() : Promise.reject(new Error(String(r.status)))))
       .then(
-        ([contents, tasks, userData]: [
-          LessonContent[],
-          Task[],
-          { heartsRemaining: number } | null,
-        ]) => {
-          const heartsFromUser = userData?.heartsRemaining ?? 5;
+        (data: {
+          contents: LessonContent[];
+          tasks: Task[];
+          heartsRemaining: number;
+        }) => {
           startRef.current = Date.now();
           setState((s) => ({
             ...s,
-            contents: contents.sort((a, b) => a.order - b.order),
-            tasks: tasks.sort((a, b) => a.order - b.order),
-            hearts: Math.max(0, Math.min(5, heartsFromUser)),
+            contents: data.contents,
+            tasks: data.tasks,
+            hearts: Math.max(0, Math.min(5, data.heartsRemaining)),
             loading: false,
           }));
         },

@@ -5,6 +5,7 @@ import { calculateReadingResult } from "@/app/(dashboard)/reading/lib/calculateR
 import prisma from "@/lib/prisma";
 import { CACHE_REVALIDATE_SECONDS } from "@/lib/server/cache";
 import { CACHE_TAG_SPEECH, cacheTagUser } from "@/lib/server/cache-tags";
+import { ACCELERATE_INTERACTIVE_TX_OPTIONS } from "@/lib/server/prisma-transaction";
 
 const RETRYABLE_TRANSACTION_CODES = new Set(["P2002", "P2028", "P2034"]);
 
@@ -48,6 +49,35 @@ const isRetryableTransactionError = (error: unknown): boolean => {
   );
 };
 
+async function maybeMarkLessonCompleteFromSpeech(
+  userId: string,
+  lessonId: string,
+  existingCompletedAt: Date | null | undefined,
+) {
+  const [requiredTargets, passedTargets] = await Promise.all([
+    prisma.speechTarget.count({
+      where: { lessonId, isRequired: true },
+    }),
+    prisma.speechTarget.count({
+      where: {
+        lessonId,
+        isRequired: true,
+        progress: { some: { userId, isPassed: true } },
+      },
+    }),
+  ]);
+
+  if (requiredTargets > 0 && passedTargets === requiredTargets) {
+    await prisma.userLessonProgress.update({
+      where: { userId_lessonId: { userId, lessonId } },
+      data: {
+        status: "COMPLETED",
+        completedAt: existingCompletedAt ?? new Date(),
+      },
+    });
+  }
+}
+
 const calculateEarnedXp = (finalScore: number, xpReward: number): number => {
   const reward = Math.max(0, xpReward);
 
@@ -78,7 +108,7 @@ export const submitSpeechAttempt = async ({
 
   for (let attemptNumber = 1; attemptNumber <= 3; attemptNumber += 1) {
     try {
-      return await prisma.$transaction(
+      const txResult = await prisma.$transaction(
         async (tx) => {
           const target = await tx.speechTarget.findUnique({
             where: { id: targetId },
@@ -106,7 +136,13 @@ export const submitSpeechAttempt = async ({
             where: { userId_targetId: { userId, targetId } },
             update: { updatedAt: new Date() },
             create: { userId, targetId },
-            select: { id: true, isPassed: true, xpEarned: true },
+            select: {
+              id: true,
+              isPassed: true,
+              xpEarned: true,
+              bestAttemptId: true,
+              bestAccuracy: true,
+            },
           });
 
           const lessonProgress = target.lessonId
@@ -154,23 +190,20 @@ export const submitSpeechAttempt = async ({
             },
           });
 
-          const bestAttempt = await tx.speechAttempt.findFirst({
-            where: { userId, targetId },
-            orderBy: [
-              { finalScore: "desc" },
-              { accuracy: "desc" },
-              { createdAt: "desc" },
-            ],
-            select: { id: true, accuracy: true, finalScore: true },
-          });
+          const previousBest = targetProgress.bestAccuracy ?? 0;
+          const isNewBest = result.accuracy >= previousBest;
+          const bestAttemptId = isNewBest
+            ? speechAttempt.id
+            : (targetProgress.bestAttemptId ?? speechAttempt.id);
+          const bestAccuracy = Math.max(previousBest, result.accuracy);
 
           await tx.userSpeechTargetProgress.update({
             where: { id: targetProgress.id },
             data: {
               latestAttemptId: speechAttempt.id,
-              bestAttemptId: bestAttempt?.id ?? speechAttempt.id,
+              bestAttemptId,
               latestAccuracy: result.accuracy,
-              bestAccuracy: bestAttempt?.finalScore ?? result.accuracy,
+              bestAccuracy,
               isPassed: targetProgress.isPassed || isPassed,
               passedAt:
                 !targetProgress.isPassed && isPassed ? speechAttempt.createdAt : undefined,
@@ -192,39 +225,27 @@ export const submitSpeechAttempt = async ({
             }
           }
 
-          if (target.lessonId && isPassed) {
-            const [requiredTargets, passedTargets] = await Promise.all([
-              tx.speechTarget.count({
-                where: { lessonId: target.lessonId, isRequired: true },
-              }),
-              tx.speechTarget.count({
-                where: {
-                  lessonId: target.lessonId,
-                  isRequired: true,
-                  progress: { some: { userId, isPassed: true } },
-                },
-              }),
-            ]);
-
-            if (requiredTargets > 0 && passedTargets === requiredTargets) {
-              await tx.userLessonProgress.update({
-                where: { userId_lessonId: { userId, lessonId: target.lessonId } },
-                data: {
-                  status: "COMPLETED",
-                  completedAt: lessonProgress?.completedAt ?? new Date(),
-                },
-              });
-            }
-          }
-
-          return speechAttempt;
+          return {
+            speechAttempt,
+            lessonId: target.lessonId,
+            isPassed,
+            lessonCompletedAt: lessonProgress?.completedAt,
+          };
         },
-        {
-          isolationLevel: Prisma.TransactionIsolationLevel.Serializable,
-          maxWait: 10_000,
-          timeout: 20_000,
-        },
+        ACCELERATE_INTERACTIVE_TX_OPTIONS,
       );
+
+      const { speechAttempt, lessonId, isPassed, lessonCompletedAt } = txResult;
+
+      if (lessonId && isPassed) {
+        await maybeMarkLessonCompleteFromSpeech(
+          userId,
+          lessonId,
+          lessonCompletedAt,
+        );
+      }
+
+      return speechAttempt;
     } catch (error) {
       if (attemptNumber < 3 && isRetryableTransactionError(error)) {
         continue;
@@ -280,93 +301,41 @@ async function getReadingCardsForUserUncached({
   }
 
   const targetIds = targets.map((target) => target.id);
-  const [latestAttempts, bestScoreRows, attemptProgressRows] = await Promise.all([
-    prisma.speechAttempt.findMany({
-      where: { userId, targetId: { in: targetIds } },
-      select: { targetId: true, ...attemptSummarySelect },
-      distinct: ["targetId"],
-      orderBy: [{ createdAt: "desc" }, { id: "desc" }],
-    }),
-    prisma.speechAttempt.groupBy({
-      by: ["targetId"],
-      where: { userId, targetId: { in: targetIds } },
-      _max: { finalScore: true },
-    }),
-    prisma.speechAttempt.groupBy({
-      by: ["targetId", "isPassed"],
-      where: { userId, targetId: { in: targetIds } },
-      _sum: { xpEarned: true },
-    }),
-  ]);
+  const progressRows = await prisma.userSpeechTargetProgress.findMany({
+    where: { userId, targetId: { in: targetIds } },
+    select: {
+      targetId: true,
+      isPassed: true,
+      xpEarned: true,
+      bestAccuracy: true,
+      latestAttempt: { select: attemptSummarySelect },
+      bestAttempt: { select: attemptSummarySelect },
+    },
+  });
 
-  const bestAttemptFilters = bestScoreRows.flatMap((row) =>
-    row._max.finalScore === null
-      ? []
-      : [{ targetId: row.targetId, finalScore: row._max.finalScore }],
+  const progressByTargetId = new Map(
+    progressRows.map((row) => [row.targetId, row]),
   );
-
-  const bestAttempts =
-    bestAttemptFilters.length > 0
-      ? await prisma.speechAttempt.findMany({
-          where: { userId, OR: bestAttemptFilters },
-          select: { targetId: true, ...attemptSummarySelect },
-          orderBy: [
-            { finalScore: "desc" },
-            { accuracy: "desc" },
-            { createdAt: "desc" },
-            { id: "desc" },
-          ],
-        })
-      : [];
-
-  const latestAttemptByTargetId = new Map(
-    latestAttempts.map((attempt) => [attempt.targetId, attempt]),
-  );
-  const bestScoreByTargetId = new Map(
-    bestScoreRows.map((row) => [row.targetId, row._max.finalScore ?? 0]),
-  );
-  const bestAttemptByTargetId = new Map<
-    string,
-    (typeof bestAttempts)[number]
-  >();
-  const xpEarnedByTargetId = new Map<string, number>();
-  const passedTargetIds = new Set<string>();
-
-  for (const attempt of bestAttempts) {
-    if (!bestAttemptByTargetId.has(attempt.targetId)) {
-      bestAttemptByTargetId.set(attempt.targetId, attempt);
-    }
-  }
-
-  for (const row of attemptProgressRows) {
-    xpEarnedByTargetId.set(
-      row.targetId,
-      (xpEarnedByTargetId.get(row.targetId) ?? 0) + (row._sum.xpEarned ?? 0),
-    );
-
-    if (row.isPassed) {
-      passedTargetIds.add(row.targetId);
-    }
-  }
 
   return targets.map((target) => {
-    const latestAttempt = latestAttemptByTargetId.get(target.id) ?? null;
-    const bestAttempt = bestAttemptByTargetId.get(target.id) ?? null;
+    const progress = progressByTargetId.get(target.id);
+    const latestAttempt = progress?.latestAttempt ?? null;
+    const bestAttemptRecord = progress?.bestAttempt ?? null;
     const bestScore = Math.max(
-      bestScoreByTargetId.get(target.id) ?? 0,
+      progress?.bestAccuracy ?? 0,
       latestAttempt?.finalScore ?? 0,
     );
-    const isPassed = passedTargetIds.has(target.id);
+    const isPassed = progress?.isPassed ?? false;
 
     return {
       ...target,
       latestAttempt,
       bestAttempt: latestAttempt
-        ? { ...(bestAttempt ?? latestAttempt), finalScore: bestScore }
+        ? { ...(bestAttemptRecord ?? latestAttempt), finalScore: bestScore }
         : null,
       completed: isPassed,
       isPassed,
-      xpEarned: xpEarnedByTargetId.get(target.id) ?? 0,
+      xpEarned: progress?.xpEarned ?? 0,
     };
   });
 }

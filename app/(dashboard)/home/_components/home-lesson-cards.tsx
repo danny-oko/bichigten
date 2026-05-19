@@ -157,14 +157,15 @@ export const useLessons = () => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    Promise.all([
-      fetch("/api/lessons").then((res) => {
+    fetch("/api/home/path")
+      .then((res) => {
         if (!res.ok) throw new Error(`HTTP error: ${res.status}`);
-        return res.json();
-      }),
-      fetch("/api/progress").then((res) => (res.ok ? res.json() : [])),
-    ])
-      .then(([lessonsData, progressData]: [Lesson[], ProgressItem[]]) => {
+        return res.json() as Promise<{
+          lessons: Lesson[];
+          progress: ProgressItem[];
+        }>;
+      })
+      .then(({ lessons: lessonsData, progress: progressData }) => {
         if (!Array.isArray(lessonsData)) return;
         const nextCompletedUpTo = resolveCompletedUpTo(
           lessonsData,

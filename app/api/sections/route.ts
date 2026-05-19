@@ -10,8 +10,24 @@ export const GET = async () => {
   const sections = await unstable_cache(
     async () =>
       prisma.section.findMany({
-        include: { lessons: true },
         orderBy: { order: "asc" },
+        select: {
+          id: true,
+          title: true,
+          order: true,
+          lessons: {
+            orderBy: { order: "asc" },
+            select: {
+              id: true,
+              title: true,
+              description: true,
+              order: true,
+              levelId: true,
+              videoUrl: true,
+              isCompleted: true,
+            },
+          },
+        },
       }),
     ["api-sections-get"],
     { revalidate: CACHE_REVALIDATE_SECONDS, tags: [CACHE_TAG_CATALOG] },

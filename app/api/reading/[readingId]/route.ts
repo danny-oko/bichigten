@@ -111,10 +111,20 @@ export const GET = async (_req: NextRequest, context: ReadingRouteContext) => {
       async () =>
         prisma.speechTarget.findUnique({
           where: { id: readingId },
-          include: {
-            _count: {
-              select: { attempts: true },
-            },
+          select: {
+            id: true,
+            createdAt: true,
+            updatedAt: true,
+            lessonId: true,
+            title: true,
+            description: true,
+            difficulty: true,
+            requiredAccuracy: true,
+            xpReward: true,
+            isRequired: true,
+            wordsCount: true,
+            cyrillicText: true,
+            traditionalText: true,
           },
         }),
       ["api-reading-readingId-get", readingId],

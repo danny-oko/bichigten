@@ -63,6 +63,7 @@ model LessonContent {
   animationCss String?
   lesson       Lesson  @relation(fields: [lessonId], references: [id])
 
+  @@index([lessonId, order])
   @@map("lesson_contents_table")
 }
 
@@ -78,6 +79,7 @@ model Task {
   order         Int
   lesson        Lesson         @relation(fields: [lessonId], references: [id])
 
+  @@index([lessonId, order])
   @@map("tasks_table")
 }
 
@@ -116,6 +118,7 @@ model SpeechTarget {
   progress         UserSpeechTargetProgress[]
 
   @@index([lessonId])
+  @@index([difficulty, createdAt(sort: Desc)])
   @@map("speech_targets")
 }
 

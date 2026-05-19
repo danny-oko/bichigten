@@ -5,6 +5,8 @@ import { PrismaPg } from "@prisma/adapter-pg";
 import { PrismaClient } from "@prisma/client";
 import { withAccelerate } from "@prisma/extension-accelerate";
 
+import { ACCELERATE_INTERACTIVE_TX_OPTIONS } from "@/lib/server/prisma-transaction";
+
 const globalForPrisma = globalThis as unknown as {
   prisma?: PrismaClient;
   /** Bust stale PrismaClient in dev after `prisma generate` without restarting the server. */
@@ -59,6 +61,10 @@ function createPrismaClient(): PrismaClient {
   if (isAccelerateDatabaseUrl(databaseUrl)) {
     return new PrismaClient({
       accelerateUrl: connectionStringWithExplicitSsl(databaseUrl),
+      transactionOptions: {
+        maxWait: ACCELERATE_INTERACTIVE_TX_OPTIONS.maxWait,
+        timeout: ACCELERATE_INTERACTIVE_TX_OPTIONS.timeout,
+      },
     }).$extends(withAccelerate()) as unknown as PrismaClient;
   }
 

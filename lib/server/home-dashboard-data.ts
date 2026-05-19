@@ -11,35 +11,25 @@ import { calculateDailyStreak, toUtcDateOnly } from "@/lib/server/daily-streak";
 import { ensureUser } from "@/lib/server/ensure-user";
 
 async function loadHomeProgressSidebarQueries(userId: string) {
-  const [
-    completionRows,
-    distinctLessons,
-    totalLessons,
-    inProgressLesson,
-    firstLesson,
-  ] = await Promise.all([
-    prisma.userLessonProgress.findMany({
-      where: { userId, status: "COMPLETED", completedAt: { not: null } },
-      select: { completedAt: true },
-    }),
-    prisma.userLessonProgress.groupBy({
-      by: ["lessonId"],
-      where: { userId, status: "COMPLETED", completedAt: { not: null } },
-    }),
-    prisma.lesson.count(),
-    prisma.userLessonProgress.findFirst({
-      where: { userId, status: "IN_PROGRESS" },
-      select: { lesson: { select: { id: true, title: true } } },
-    }),
-    prisma.lesson.findFirst({
-      orderBy: { order: "asc" },
-      select: { id: true, title: true },
-    }),
-  ]);
+  const [completionRows, totalLessons, inProgressLesson, firstLesson] =
+    await Promise.all([
+      prisma.userLessonProgress.findMany({
+        where: { userId, status: "COMPLETED", completedAt: { not: null } },
+        select: { completedAt: true },
+      }),
+      prisma.lesson.count(),
+      prisma.userLessonProgress.findFirst({
+        where: { userId, status: "IN_PROGRESS" },
+        select: { lesson: { select: { id: true, title: true } } },
+      }),
+      prisma.lesson.findFirst({
+        orderBy: [{ level: { order: "asc" } }, { order: "asc" }],
+        select: { id: true, title: true },
+      }),
+    ]);
 
   return {
     completionRows,
-    distinctLessons,
     totalLessons,
     inProgressLesson,
     firstLesson,
@@ -62,13 +52,8 @@ export const loadHomeProgressSidebar = cache(async (userId: string) => {
     select: { totalXp: true, heartsRemaining: true },
   });
 
-  const {
-    completionRows,
-    distinctLessons,
-    totalLessons,
-    inProgressLesson,
-    firstLesson,
-  } = await unstable_cache(
+  const { completionRows, totalLessons, inProgressLesson, firstLesson } =
+    await unstable_cache(
     () => loadHomeProgressSidebarQueries(userId),
     ["loadHomeProgressSidebar", userId],
     {
@@ -85,7 +70,7 @@ export const loadHomeProgressSidebar = cache(async (userId: string) => {
     completedAtDates.map((d) => toUtcDateOnly(d).getTime()),
   );
   const streakWeekDays = buildLast7StreakDots(completionMidnightSet);
-  const completedLessonsCount = distinctLessons.length;
+  const completedLessonsCount = completionRows.length;
   const nextLesson = inProgressLesson?.lesson ?? firstLesson;
   let nextLessonHref = "/dictionary";
   let nextLessonTitle = "Explore Dictionary";

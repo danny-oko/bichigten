@@ -16,7 +16,18 @@ export const GET = async (
     async () =>
       prisma.lesson.findUnique({
         where: { id },
-        include: { content: true, tasks: true, userProgress: true, level: true },
+        select: {
+          id: true,
+          title: true,
+          description: true,
+          order: true,
+          levelId: true,
+          videoUrl: true,
+          isCompleted: true,
+          content: { orderBy: { order: "asc" } },
+          tasks: { orderBy: { order: "asc" } },
+          level: { select: { id: true, title: true, order: true } },
+        },
       }),
     ["api-lessons-id-get", id],
     { revalidate: CACHE_REVALIDATE_SECONDS, tags: [CACHE_TAG_CATALOG] },
